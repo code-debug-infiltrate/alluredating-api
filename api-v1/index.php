@@ -1,6 +1,6 @@
 <?php
 
-$BASE_URI = "/orienteddating-api/";
+$BASE_URI = "/api-v1/";
 $endpoints = array();
 $requestData = array();
 
