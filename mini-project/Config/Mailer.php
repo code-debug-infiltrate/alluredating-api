@@ -66,11 +66,11 @@ class Mailer {
      * @param $name The name of Mail should be case sensitive.
      */
 
-      public static function mailer($name)
-      {
-            $class = '.\Mails\\'.$name;
-            return new $class;
-      }
+      // public static function mailer($name)
+      // {
+      //       $class = '.\Mails\\'.$name;
+      //       return new $class;
+      // }
 
 
 

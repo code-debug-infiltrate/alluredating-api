@@ -8,7 +8,6 @@
 **/
 
 //Required Files
-	//require __DIR__.'/../../Config/Db.php';
 	require __DIR__.'/../../Models/Register.php';
 
 
@@ -32,62 +31,50 @@
             $chars = getenv('COMBINATION');
             $code = substr(str_shuffle(trim($chars)), 0, $length);
             $uniqueid = trim('uid').trim($code);
-                
-            //Check Variables
-            if ((empty($params['fname'])) || (empty($params['lname'])) || (empty($params['email'])) || (empty($params['dob']))  || (empty($params['gender']))  || (empty($params['user_agent']))) { 
-                
-                $data = array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "One Or More Fields Cannot Be Empty, Fill All Fields To Continue",
-                );
 
-                return $data;
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => $uniqueid,
+                'fname' => htmlspecialchars($params['fname']),
+                'lname' => htmlspecialchars($params['lname']),
+                'username' => htmlspecialchars(substr($params['fname'], 0,3).substr($params['lname'], 0,3)),
+                'email' => htmlspecialchars($params['email']),
+                'gender' => htmlspecialchars($params['gender']),
+                'dob' => htmlspecialchars($params['dob']),
+                'password' => substr(htmlspecialchars($params['lname']), 0,3).substr($hash, 0,7),
+                'code' => $code,
+                'hash' => $hash,
+                'ip' => htmlspecialchars($params['ip']),
+                'user_agent' => htmlspecialchars($params['user_agent']),
+            );
+
+            //Model Function Call
+            $member = $model_connect->new_member($fillable);
+
+            if ($member == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Congratulations, You Are Successfully Registered. Check Your Email Ibox, Spam Or Junk Folder To Continue.",
+                        ),
+                    );
 
             } else {
 
-                //User Account Parameters
-                $fillable = array(
-                    'uniqueid' => $uniqueid,
-                    'fname' => htmlspecialchars($params['fname']),
-                    'lname' => htmlspecialchars($params['lname']),
-                    'username' => htmlspecialchars($params['fname'].$code),
-                    'email' => htmlspecialchars($params['email']),
-                    'gender' => htmlspecialchars($params['gender']),
-                    'dob' => htmlspecialchars($params['dob']),
-                    'password' => htmlspecialchars($params['lname']).$code,
-                    'code' => $code,
-                    'hash' => $hash,
-                    'ip' => $params['ip'],
-                    'user_agent' => $params['user_agent'],
-                );
-
-                //Model Function Call
-                $member = $model_connect->new_member($fillable);
-
-                if ($member == true) {
-
-                    $data = array(
-                        'code' => "200",
-                        'type' => "success",
-                        'message' => "Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder To Continue",
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support To Continue.",
+                        ),
                     );
-        
-                    return $data;
-
-                } else {
-
-                    $data = array(
-                        'code' => "401",
-                        'type' => "error",
-                        'message' => "Declined. Credentials Are ALready In Use, Login To Continue",
-                    );
-        
-                    return $data;
-                }
-
             }
-                
+            
+            return $data; 
         }
 
 

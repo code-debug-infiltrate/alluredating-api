@@ -40,13 +40,12 @@ class Admin
     {
         try {
             
-            $query = "INSERT INTO ". $this->act_table ." (id, username, category, details) VALUES (:id, :username, :category, :details)";
+            $query = "INSERT INTO ". $this->act_table ." (uniqueid, username, category, details) VALUES (:uniqueid, :username, :category, :details)";
             $stmt = $this->con->prepare($query);
-            $stmt->bindParam(':id', $params['id']);
-            $stmt->bindParam(':username', $params['username']);
-            $stmt->bindParam(':category', $params['category']);
-            $stmt->bindParam(':details', $params['details']);
-            $stmt->execute(); 
+            foreach ($params as $key => &$value) {
+                $stmt->bindParam($key, $value, PDO::PARAM_STR);
+            }
+            $stmt->execute($params); 
 
         } catch (Exception $e) {
 
@@ -64,7 +63,7 @@ class Admin
     {
         try {
             
-            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = 'Active' LIMIT 1";
+            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = 'Publish' LIMIT 1";
             $stmt = $this->con->prepare($query);
             //$stmt->bindParam(':status', "Active");
             $stmt->execute();

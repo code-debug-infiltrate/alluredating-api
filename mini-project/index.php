@@ -125,6 +125,17 @@ $endpoints["create-user"] = function (array $requestData): void {
                 ),
             );
 
+    } elseif (strlen($requestData['fname']) < "5" || strlen($requestData['lname']) < "5") { 
+
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "First Or Last Name Field Is Too Short, Must Be 5 Or More Characters To Continue",
+                ),
+            );
+
     } else {
 
         //Connect to Controller

@@ -1,5 +1,6 @@
 SetEnv APP_NAME Oriented-Dating
-SetEnv baseURL orienteddating-api.test
+SetEnv API_URL orienteddating-api.test/
+SetEnv MAIN_APP_URL orienteddating.test/
 SetEnv COMBINATION 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 SetEnv APP_EMAIL no-reply@test.com
 SetEnv COY_EMAIL contact@test.com

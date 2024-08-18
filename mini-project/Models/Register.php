@@ -8,26 +8,20 @@
 **/
 
 //Required Files
+
+//Models
 require 'Admin.php';
+//DB
 require_once './Config/Db.php';
+//Mails
 require './Mails/RegistrationAlert.php';
+
 
 
 
 class Register
 
 {
-    //User Properties
-    public $uniqueid;
-    public $fname;
-    public $lname;
-    public $username;
-    public $email;
-    public $password;
-    public $code;
-    public $hash;
-    public $ip;
-    public $user_agent;
 
     //Tables In Use
     protected $u_table = "app_users"; //Users Table
@@ -49,49 +43,48 @@ class Register
         $db = $database->db_Connect();
         //Admin Model
         $admin_model = new Admin($db);
+        $send_mail = new RegistrationAlert();
+        //Fetch Company Details For Email
+        $coy_info = $admin_model->coy_info();
+        
+        $newParams = array('uniqueid' => $params['uniqueid'], 'email' => $params['email'], );
+        $newParams1 = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'email' => $params['email'], 'password' => password_hash($params['password'], PASSWORD_DEFAULT), 'code' => $params['code'], 'hash' => $params['hash'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
+        $newParams2 = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], );
 
         try {
 
         	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid || email = :email LIMIT 1";
             $stmt = $this->con->prepare($query);
-            $stmt->bindParam(':uniqueid', $params['uniqueid']);
-            $stmt->bindParam(':email', $params['email']);
-            $stmt->execute();
+            //var_dump($newParams);
+            foreach ($newParams as $key => &$value) {
+                $stmt->bindParam($key, $value, PDO::PARAM_STR);
+            }
+            $stmt->execute($newParams);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);    
             $RowCount = $stmt->rowCount();
 
             // Checking all User credentials...
             if ($RowCount === 0) {
-
-                $newPass = password_hash($params['password'], PASSWORD_DEFAULT);
                 
-	            $query = "INSERT INTO ". $this->u_table ." (uniqueid, username, email, password, code, hash, ip, user_agent) VALUES (:uniqueid, :username, :email, :password, :code, :hash, :ip, :user_agent)";
+                $query = "INSERT INTO ". $this->u_table ." (uniqueid, username, email, password, code, hash, ip, user_agent) VALUES (:uniqueid, :username, :email, :password, :code, :hash, :ip, :user_agent)";
                 $stmt = $this->con->prepare($query);
-                $stmt->bindParam(':uniqueid', $params['uniqueid']);
-                $stmt->bindParam(':username', $params['username']);
-                $stmt->bindParam(':email', $params['email']);
-                $stmt->bindParam(':password',  $newPass);
-                $stmt->bindParam(':code', $params['code']);
-                $stmt->bindParam(':hash', $params['hash']);
-                $stmt->bindParam(':ip', $params['ip']);
-                $stmt->bindParam(':user_agent', $params['user_agent']);
-                $stmt->execute();
+                foreach ($newParams1 as $key => &$value) {
+                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
+                }
+                $stmt->execute($newParams1);
 
 	            $query1 = "INSERT INTO ". $this->p_table ." (uniqueid, fname, lname) VALUES (:uniqueid, :fname, :lname)";
                 $stmt = $this->con->prepare($query1);
-                $stmt->bindParam(':uniqueid', $params['uniqueid']);
-                $stmt->bindParam(':fname', $params['fname']);
-                $stmt->bindParam(':lname', $params['lname']);
-                $stmt->execute(); 
-
-                //Fetch Company Details For Email
-                $coy_info = $admin_model->coy_info();
+                foreach ($newParams2 as $key => &$value) {
+                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
+                }
+                $stmt->execute($newParams2);
+                
 			    //Send Email Alert To User
-	            Mailer::mailer('RegistrationAlert')->newmember_alert($params, $coy_info);
-
+	            $send_mail->newmember_alert($params, $coy_info);
 			    //Record Activity
-	            $info = array('id' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Registered", ); 
-	            $admin_model->record_activity($info);
+	            $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Registered", ); 
+                $admin_model->record_activity($info);
 
 	            return true;
 
