@@ -1,8 +1,11 @@
 <?php
+//Required Files
+require __DIR__.'/Controllers/v1/NewMember.php';
 
-$BASE_URI = "/api-v1/";
+$BASE_URI = "/mini-project/";
 $endpoints = array();
 $requestData = array();
+
 
 //collect incoming parameters
 switch ($_SERVER['REQUEST_METHOD']) {
@@ -52,8 +55,9 @@ if (empty($endpointName)) {
  * @return void
  */
 $endpoints["/"] = function (array $requestData): void {
-
-    echo json_encode("Welcome to my API!");
+    $app_name = getenv('APP_NAME');
+    //var_dump($_SERVER['BASE_URL']);
+    echo json_encode("You're Welcome To ". $app_name ." API End-Points!", JSON_FORCE_OBJECT);
 };
 
 /**
@@ -68,8 +72,8 @@ $endpoints["sayhello"] = function (array $requestData): void {
     if (!isset($requestData["name"])) {
         $requestData["name"] = "Misterious masked individual";
     }
-
-    echo json_encode("hello! " . $requestData["name"]);
+    
+    echo json_encode("hello! " . $requestData["name"], JSON_FORCE_OBJECT);
 };
 
 /**
@@ -80,8 +84,70 @@ $endpoints["sayhello"] = function (array $requestData): void {
  */
 $endpoints["404"] = function ($requestData): void {
 
-    echo json_encode("Endpoint " . $requestData["endpointName"] . " not found.");
+    echo json_encode("Endpoint " . $requestData["endpointName"] . " not found.", JSON_FORCE_OBJECT);
 };
+
+
+
+
+/**
+ * prints a greeting message with the name specified in the $requestData["name"] item.
+ * if the variable is empty a default name is used.
+ * @param array $requestData this array must contain an item with key "name" 
+ *                           if you want to display a custom name in the greeting.
+ * @return void
+ */
+$endpoints["create-user"] = function (array $requestData): void {
+
+    if ((!isset($requestData["fname"])) || (!isset($requestData["lname"])) || (!isset($requestData["email"]))) {
+        $info = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                        ),
+                    );
+    } else {
+
+        //Connect to Controller
+        $api_connect = new NewMember();
+        $info = $api_connect->new_member($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * checks if the token is valid, and prevents the execution of 
@@ -105,14 +171,14 @@ $endpoints["checktoken"] = function ($requestData): void {
     );
 
     if (!isset($requestData["token"])) {
-        echo json_encode("No token was received to authorize the operation. Verify the information sent");
+        echo json_encode("No token was received to authorize the operation. Verify the information sent", JSON_FORCE_OBJECT);
 
         exit;
     }
 
     if (!isset($tokens[$requestData["token"]])) {
         echo json_encode("The token  " . $requestData["token"] . 
-        " does not exists or is not authorized to perform this operation.");
+        " does not exists or is not authorized to perform this operation.", JSON_FORCE_OBJECT);
         
         exit;
     }

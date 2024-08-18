@@ -1,3 +1,8 @@
+SetEnv APP_NAME Oriented-Dating
+SetEnv BASE_URL orienteddating-api.test
+SetEnv COMBINATION 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+
+
 <Files "*.php">
     Require ip 127.0.0.1
 </Files>
@@ -16,7 +21,7 @@ RewriteEngine On
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
-RewriteBase /api-v1/
+RewriteBase /mini-project/
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ index.php [QSA,L]

@@ -1,5 +1,5 @@
 <?php
-/** API For Work From Home 
+/** API Model For Registration
  *  Version 1.0.0
  *  March 2024
  *--------------------------------------------------------------------
@@ -8,7 +8,7 @@
 **/
 
 //Required Files
-require '/Config/Db.php';
+require './Config/Db.php';
 
 
 
@@ -40,7 +40,7 @@ class Register
     }
 
     //Method to register new user account
-    public function register_member($params)
+    public function new_member($params)
     {
 
         //Check User Info Parameters
