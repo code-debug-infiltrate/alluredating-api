@@ -8,7 +8,9 @@
 **/
 
 //Required Files
-require './Config/Db.php';
+require 'Admin.php';
+require_once './Config/Db.php';
+require './Mails/RegistrationAlert.php';
 
 
 
@@ -42,63 +44,58 @@ class Register
     //Method to register new user account
     public function new_member($params)
     {
-
-        //Check User Info Parameters
-        $checkvalue = array(
-            $this->uniqueid => $params['uniqueid'],
-            $this->email => $params['email'],
-        );
-
-        //Profile Parameters
-        $fill = array(
-            $this->uniqueid => $params['uniqueid'],
-            $this->fname => $params['fname'],
-            $this->lname => $params['lname'],
-        );
-
-        //User Account Parameters
-        $fillable = array(
-            $this->uniqueid => $params['uniqueid'],
-            $this->username => $params['username'],
-            $this->email => $params['email'],
-            $this->password => password_hash($params['password'], PASSWORD_DEFAULT),
-            $this->code => $params['code'],
-            $this->hash => $params['hash'],
-            $this->ip => $params['ip'],
-            $this->user_agent => $params['user_agent']
-        );
+        //open database connection
+        $database = new Db();
+        $db = $database->db_Connect();
+        //Admin Model
+        $admin_model = new Admin($db);
 
         try {
 
         	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid || email = :email LIMIT 1";
-
             $stmt = $this->con->prepare($query);
-            $check = $stmt->execute($checkvalue);
+            $stmt->bindParam(':uniqueid', $params['uniqueid']);
+            $stmt->bindParam(':email', $params['email']);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);    
+            $RowCount = $stmt->rowCount();
 
-	        if ($check == false) {
+            // Checking all User credentials...
+            if ($RowCount === 0) {
 
+                $newPass = password_hash($params['password'], PASSWORD_DEFAULT);
+                
 	            $query = "INSERT INTO ". $this->u_table ." (uniqueid, username, email, password, code, hash, ip, user_agent) VALUES (:uniqueid, :username, :email, :password, :code, :hash, :ip, :user_agent)";
-
-	               $this->con->prepare($query);
-                   $stmt->execute($fillable);
+                $stmt = $this->con->prepare($query);
+                $stmt->bindParam(':uniqueid', $params['uniqueid']);
+                $stmt->bindParam(':username', $params['username']);
+                $stmt->bindParam(':email', $params['email']);
+                $stmt->bindParam(':password',  $newPass);
+                $stmt->bindParam(':code', $params['code']);
+                $stmt->bindParam(':hash', $params['hash']);
+                $stmt->bindParam(':ip', $params['ip']);
+                $stmt->bindParam(':user_agent', $params['user_agent']);
+                $stmt->execute();
 
 	            $query1 = "INSERT INTO ". $this->p_table ." (uniqueid, fname, lname) VALUES (:uniqueid, :fname, :lname)";
-	               $this->con->prepare($query1);
-                   $stmt->execute($fill);            
+                $stmt = $this->con->prepare($query1);
+                $stmt->bindParam(':uniqueid', $params['uniqueid']);
+                $stmt->bindParam(':fname', $params['fname']);
+                $stmt->bindParam(':lname', $params['lname']);
+                $stmt->execute(); 
 
-			/*//Send Email Alert To User
-	            $alert = new RegistrationAlert();
-	            $alert->new_member($params, $hash, $uniqueid);
+                //Fetch Company Details For Email
+                $coy_info = $admin_model->coy_info();
+			    //Send Email Alert To User
+	            Mailer::mailer('RegistrationAlert')->newmember_alert($params, $coy_info);
 
-			//Record Activity
-	            $info = array('id' => $uniqueid, 'username' => $params['username'], 'details' => $params['username']." Just Registered", ); 
-
-	            $activity = new Admin();
-	            $activity->record_activity($info);*/
+			    //Record Activity
+	            $info = array('id' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Registered", ); 
+	            $admin_model->record_activity($info);
 
 	            return true;
 
-	        } else{
+	        } else {
 
 	            return false;
 	        }

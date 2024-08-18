@@ -33,6 +33,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 }
 
+
+
+
+
 //If the token is sent in a header X-API-KEY
 if (isset($_SERVER["HTTP_X_API_KEY"])) {
     $requestData["token"] = $_SERVER["HTTP_X_API_KEY"];
@@ -49,6 +53,10 @@ if (empty($endpointName)) {
 // I know, this can be improved with some OOP but this is a basic example, 
 // don't do this at home, well, or if you want to do it, don't feel judged.
 
+
+
+
+
 /**
  * prints a default message if the API base path is queried.
  * @param array $requestData contains the parameters sent in the request, for this endpoint they are ignored.
@@ -59,6 +67,9 @@ $endpoints["/"] = function (array $requestData): void {
     //var_dump($_SERVER['BASE_URL']);
     echo json_encode("You're Welcome To ". $app_name ." API End-Points!", JSON_FORCE_OBJECT);
 };
+
+
+
 
 /**
  * prints a greeting message with the name specified in the $requestData["name"] item.
@@ -75,6 +86,10 @@ $endpoints["sayhello"] = function (array $requestData): void {
     
     echo json_encode("hello! " . $requestData["name"], JSON_FORCE_OBJECT);
 };
+
+
+
+
 
 /**
  * prints a default message if the endpoint path does not exist.
@@ -100,14 +115,16 @@ $endpoints["404"] = function ($requestData): void {
 $endpoints["create-user"] = function (array $requestData): void {
 
     if ((!isset($requestData["fname"])) || (!isset($requestData["lname"])) || (!isset($requestData["email"]))) {
+        
         $info = array(
-                    'result_info' => 
-                        array(
-                            'code' => "401",
-                            'type' => "error",
-                            'message' => "Declined. One Or More Required Fields Cannot Be Empty",
-                        ),
-                    );
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
     } else {
 
         //Connect to Controller

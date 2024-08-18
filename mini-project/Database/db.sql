@@ -209,7 +209,7 @@ INSERT INTO `app_profile` (`id`, `uniqueid`, `fname`, `lname`) VALUES (1, 'REDfT
 --
 -- Dumping data for table `Company Profile`
 --
-INSERT INTO `app_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `address`, `img`, `status`) VALUES (1, 'GistVille','Connecting You To Your Soulmate', 'hello@GistVille.com', '', '+20111111111', '', 'GistVille', 'GistVille', 'GistVille', 'GistVille', 'No 17, Kudeti Avenue, Flambush', 'favicon.png', 'Publish'); 
+INSERT INTO `app_coy_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `address`, `img`, `status`) VALUES (1, 'GistVille','Connecting You To Your Soulmate', 'hello@GistVille.com', '', '+20111111111', '', 'GistVille', 'GistVille', 'GistVille', 'GistVille', 'No 17, Kudeti Avenue, Flambush', 'favicon.png', 'Publish'); 
 
 
 
