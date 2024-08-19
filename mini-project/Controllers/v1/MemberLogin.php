@@ -16,6 +16,148 @@
     {
 
 
+
+
+
+        
+
+
+
+
+        //Method to Login user to Dashboard
+        public function confirm_login($params)
+        {
+            //open database connection
+            $database = new Db();
+            $db = $database->db_Connect();
+            //Register Model
+            $model_connect = new Login($db);
+
+             //User Account Parameters
+            $fillable = array(
+                'email' => htmlspecialchars($params['email']),
+                'password' => htmlspecialchars($params['password']),
+            );
+
+            //Model Function Call
+            $result = $model_connect->confirm_login($fillable);
+
+            if ($result === 1) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, Your Account Has Technical Issues. Kindly Contact Support.",
+                        ),
+                    );
+            } elseif ($result === 2) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, Your Account Password Is Incorrect. Try Again Later",
+                        ),
+                    );
+            } elseif ($result === 3) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "A One-Time Code Has Been Sent To Your Provided Email, Check Your Inbox, Spam Or Junk Folder To Continue.",
+                        ),
+                    );
+            } elseif ($result === false) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, This Credentials Does Not Exist In Our Records. Register To Become a Member.",
+                        ),
+                    );
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Congratulations, You're Successfully Logged In.",
+                            'userInfo' => $result,
+                        ),
+                    );
+
+            }
+            
+            return $data; 
+        }
+
+
+
+
+        
+
+
+
+
+        //Method to Unlock user account (2FA Auth)
+        public function unlock_account($params)
+        {
+            //open database connection
+            $database = new Db();
+            $db = $database->db_Connect();
+            //Register Model
+            $model_connect = new Login($db);
+
+             //User Account Parameters
+            $fillable = array(
+                'email' => htmlspecialchars($params['email']),
+                'code' => htmlspecialchars($params['key']),
+            );
+
+            //Model Function Call
+            $result = $model_connect->unlock_account($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Congratulations, You're Successfully Logged In.",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials. Retry After Sometime.",
+                        ),
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+
+
+
         //Method to Check Email For Password Reset
         public function check_member($params)
         {
