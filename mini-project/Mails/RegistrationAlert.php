@@ -33,9 +33,9 @@ class RegistrationAlert
                      <img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
                 </head>
 
-                <h3 style="margin: 20px; text-align: center;">Member Registration Details On '.getenv('APP_NAME').'</h3>
+                <h3 style="margin: 10px; text-align: center;">Member Registration Details On '.getenv('APP_NAME').'</h3>
                 <h3 style="margin: 10px;"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Body/network.png" alt="Banner" border="0" width="100%"> </h3>
-                <p style="margin: 50px; font-size: 16px;">
+                <p style="margin: 10px; font-size: 16px;">
                 Hello '.$data['username'].',
                 <br>
                 Welcome To '.getenv('APP_NAME').'
@@ -65,7 +65,7 @@ class RegistrationAlert
                 <i style="font-size: 12px; color: darkred;">If You Found This Email In Your Spam Or Junk Folder, Move To Inbox Or Mark As Not Spam For Future Notifications.</i>
                 </p>
 
-                <p style="font-size: 11px; text-align: left; padding: 20px;">
+                <p style="font-size: 11px; text-align: left; padding: 10px;">
                     Learn More About Us:
                     <br>
                      <a href="'.rtrim(getenv('MAIN_APP_URL')).'earn-money/" target="_blank" title="Earn Money">Earn Money</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'index/#how-it-works" target="_blank" title="How It Works">How It Works</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'post-task/" target="_blank" title="Post Task">Post a Task</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
@@ -100,7 +100,7 @@ class RegistrationAlert
             </html>
             ';
 
-            $sendMail->send();
+        $sendMail->send();
     }
 
 
@@ -116,22 +116,22 @@ class RegistrationAlert
     {
         $sendMail = new Mailer();
 
-    //Send Email TO User    
-            $sendMail->to = $data['email'];
-            $sendMail->from = getenv('APP_NAME');
-            $sendMail->replyto = getenv('APP_EMAIL');
-            $sendMail->subject = 'Account Confirmation';
+        //Send Email TO User    
+        $sendMail->to = $data['email'];
+        $sendMail->from = getenv('APP_NAME');
+        $sendMail->replyto = getenv('APP_EMAIL');
+        $sendMail->subject = 'Account Confirmation';
         // To send HTML mail, the Content-type header must be set
-            $sendMail->message_body = '
+        $sendMail->message_body = '
             <html>
                 <body>
                 <head>
                     <img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
                 </head>
 
-                <h3 style="margin: 20px; text-align: center;">Account Confirmation  On '.getenv('APP_NAME').'</h3>
+                <h3 style="margin: 10px; text-align: center;">Account Confirmation  On '.getenv('APP_NAME').'</h3>
                 <h3 style="margin: 10px;"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Body/network.png" alt="Banner" border="0" width="100%"> </h3>
-                <p style="margin: 50px; font-size: 16px;">
+                <p style="margin: 10px; font-size: 16px;">
                 Hello '.$data['username'].',
                 <br><br>
                 Your Email Has Been Confirmed And Account Verified. 
@@ -147,7 +147,7 @@ class RegistrationAlert
                 <i style="font-size: 12px; color: darkred;">If You Found This Email In Your Spam Or Junk Folder, Move To Inbox Or Mark As Not Spam For Future Notifications.</i>
                 </p>
 
-                <p style="font-size: 11px; text-align: left; padding: 20px;">
+                <p style="font-size: 11px; text-align: left; padding: 10px;">
                     Learn More About Us:
                     <br>
                     <a href="'.rtrim(getenv('MAIN_APP_URL')).'earn-money/" target="_blank" title="Earn Money">Earn Money</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'index/#how-it-works" target="_blank" title="How It Works">How It Works</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'post-task/" target="_blank" title="Post Task">Post a Task</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
@@ -182,7 +182,7 @@ class RegistrationAlert
             </html>
             ';
 
-            $sendMail->send();
+        $sendMail->send();
     }
 
 

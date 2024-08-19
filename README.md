@@ -19,11 +19,11 @@ Set Basic Info in the htaccess file
 ### Endpoints
 [/] index page
 [sayhello] Test Connection
-[create-user] Create User
-[confirm-email] Confirm Email ID
-[forgot-password] Forgot Password
-[reset-password] Reset Password
-[unlock-dashboard] Unlock User Dashboard
-[confirm-login] User Login to Dashboard
+[create-user] Create User (fname, lname, email, gender, dob, ip, user_agent)
+[confirm-email] Confirm Email ID (uniqueid, key)
+[forgot-password] Forgot Password (email)
+[reset-password] Reset Password (email, key, password)
+[unlock-dashboard] Unlock User Dashboard (email, code)
+[confirm-login] User Login to Dashboard (email, password)
 
 

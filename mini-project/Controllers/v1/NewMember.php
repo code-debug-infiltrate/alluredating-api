@@ -118,7 +118,7 @@
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, Action Aborted Untimely, Login Or Contact Support To Continue.",
+                            'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials, Contact Support For Help.",
                         ),
                     );
             }

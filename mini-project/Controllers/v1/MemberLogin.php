@@ -16,14 +16,14 @@
     {
 
 
-        //Method to Check Email For Password
+        //Method to Check Email For Password Reset
         public function check_member($params)
         {
             //open database connection
             $database = new Db();
             $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Register($db);
+            $model_connect = new Login($db);
 
             //User Account Parameters
             $fillable = array('email' => htmlspecialchars($params['email']),  );
@@ -49,7 +49,7 @@
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, This Credentials Does Not Exist In Our Records, Create Your Account To Continue.",
+                            'message' => "Sorry, This Credentials Does Not Exist In Our Records, Create An Account To Continue.",
                         ),
                     );
             }
@@ -62,23 +62,24 @@
 
 
 
-        //Method to Verify new user account
-        public function verify_email($params)
+        //Method to Reset user account Password
+        public function reset_password($params)
         {
             //open database connection
             $database = new Db();
             $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Register($db);
+            $model_connect = new Login($db);
 
              //User Account Parameters
             $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-                'hash' => htmlspecialchars($params['key']),
+                'email' => htmlspecialchars($params['email']),
+                'password' => htmlspecialchars($params['password']),
+                'code' => htmlspecialchars($params['key']),
             );
 
             //Model Function Call
-            $result = $model_connect->verify_email($fillable);
+            $result = $model_connect->reset_password($fillable);
 
             if ($result == true) {
 
@@ -87,7 +88,7 @@
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, Your Email Has Been Verified And Your Account Activated For Full Membership Freebies.",
+                            'message' => "Congratulations, Your Account Password Was Reset Successfully.",
                         ),
                     );
 
@@ -98,7 +99,7 @@
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, Action Aborted Untimely, Login Or Contact Support To Continue.",
+                            'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials. Retry After Sometime.",
                         ),
                     );
             }

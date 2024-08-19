@@ -120,11 +120,11 @@ class Register
         //Fetch Company Details For Email
         $coy_info = $admin_model->coy_info();
 
-        $newParams = array('uniqueid' => $params['uniqueid'], 'hash' => $params['hash'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'hash' => $params['hash'], 'status' => "New",  );
         
         try {
 
-        	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid AND hash = :hash LIMIT 1";
+        	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid AND hash = :hash AND status = :status LIMIT 1";
             $stmt = $this->con->prepare($query);
             //var_dump($newParams);
             foreach ($newParams as $key => &$value) {
@@ -132,9 +132,8 @@ class Register
             }
             $stmt->execute($newParams);
             $user = $stmt->fetch(PDO::FETCH_ASSOC); 
-
             // Checking all User credentials...
-            if ($user['status'] == "New") {
+            if ($user != NULL) {
                 
                 $newParams1 = array('uniqueid' => $params['uniqueid'], 'status' => "Activated", );
                 $query = "UPDATE ". $this->u_table ." SET `status` = :status WHERE uniqueid = :uniqueid LIMIT 1";
