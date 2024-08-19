@@ -92,12 +92,94 @@ class Register
 
 	            return false;
 	        }
-        	
+
+        	$db->db_close();
+
         } catch (Exception $e) {
 
         	return "There is some errors: " . $e->getMessage();
         }
     }
+
+
+
+
+
+
+
+
+    //Method to verify new user account
+    public function verify_email($params)
+    {
+        //open database connection
+        $database = new Db();
+        $db = $database->db_Connect();
+        //Admin Model
+        $admin_model = new Admin($db);
+        $send_mail = new RegistrationAlert();
+        //Fetch Company Details For Email
+        $coy_info = $admin_model->coy_info();
+
+        $newParams = array('uniqueid' => $params['uniqueid'], 'hash' => $params['hash'], );
+        
+        try {
+
+        	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid AND hash = :hash LIMIT 1";
+            $stmt = $this->con->prepare($query);
+            //var_dump($newParams);
+            foreach ($newParams as $key => &$value) {
+                $stmt->bindParam($key, $value, PDO::PARAM_STR);
+            }
+            $stmt->execute($newParams);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+
+            // Checking all User credentials...
+            if ($user['status'] == "New") {
+                
+                $newParams1 = array('uniqueid' => $params['uniqueid'], 'status' => "Activated", );
+                $query = "UPDATE ". $this->u_table ." SET `status` = :status WHERE uniqueid = :uniqueid LIMIT 1";
+                $stmt = $this->con->prepare($query);
+                foreach ($newParams1 as $key => &$value) {
+                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
+                }
+                $stmt->execute($newParams1);
+                
+			    //Send Email Alert To User
+	            $send_mail->verification_alert($user, $coy_info);
+			    //Record Activity
+	            $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Registration", 'details' => $user['username']." Verified Account.", ); 
+                $admin_model->record_activity($info);
+
+	            return true;
+
+	        } else {
+
+	            return false;
+	        }
+
+        	$db->db_close();
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

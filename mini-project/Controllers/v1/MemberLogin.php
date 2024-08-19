@@ -8,16 +8,16 @@
 **/
 
 //Required Files
-	require __DIR__.'/../../Models/Register.php';
+	require __DIR__.'/../../Models/Login.php';
 
 
 
-    class NewMember
+    class MemberLogin
     {
 
 
-        //Method to register new user account
-        public function new_member($params)
+        //Method to Check Email For Password
+        public function check_member($params)
         {
             //open database connection
             $database = new Db();

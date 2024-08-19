@@ -1,6 +1,7 @@
 <?php
 //Required Files
 require __DIR__.'/Controllers/v1/NewMember.php';
+require __DIR__.'/Controllers/v1/MemberLogin.php';
 
 $BASE_URI = "/mini-project/";
 $endpoints = array();
@@ -145,6 +146,103 @@ $endpoints["create-user"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+
+
+
+/**
+ * prints a greeting message with the name specified in the $requestData["name"] item.
+ * if the variable is empty a default name is used.
+ * @param array $requestData this array must contain an item with key "name" 
+ *                           if you want to display a custom name in the greeting.
+ * @return void
+ */
+$endpoints["confirm-email"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["key"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new NewMember();
+        $info = $api_connect->verify_email($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+/**
+ * prints a greeting message with the name specified in the $requestData["name"] item.
+ * if the variable is empty a default name is used.
+ * @param array $requestData this array must contain an item with key "name" 
+ *                           if you want to display a custom name in the greeting.
+ * @return void
+ */
+$endpoints["forgot-password"] = function (array $requestData): void {
+
+    if (!isset($requestData["email"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Email Is a Required Field & Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->check_member($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
