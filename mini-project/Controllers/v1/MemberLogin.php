@@ -25,40 +25,20 @@
             //Register Model
             $model_connect = new Register($db);
 
-            // Generate the UniqueID, Hash and Code
-            $hash = md5(rand(0,1000));
-            $length = 5;
-            $chars = getenv('COMBINATION');
-            $code = substr(str_shuffle(trim($chars)), 0, $length);
-            $uniqueid = trim('uid').trim($code);
-
             //User Account Parameters
-            $fillable = array(
-                'uniqueid' => $uniqueid,
-                'fname' => htmlspecialchars($params['fname']),
-                'lname' => htmlspecialchars($params['lname']),
-                'username' => htmlspecialchars(substr($params['fname'], 0,3).substr($params['lname'], 0,3)),
-                'email' => htmlspecialchars($params['email']),
-                'gender' => htmlspecialchars($params['gender']),
-                'dob' => htmlspecialchars($params['dob']),
-                'password' => substr(htmlspecialchars($params['lname']), 0,3).substr($hash, 0,7),
-                'code' => $code,
-                'hash' => $hash,
-                'ip' => htmlspecialchars($params['ip']),
-                'user_agent' => htmlspecialchars($params['user_agent']),
-            );
+            $fillable = array('email' => htmlspecialchars($params['email']),  );
 
             //Model Function Call
-            $member = $model_connect->new_member($fillable);
+            $checker = $model_connect->check_member($fillable);
 
-            if ($member == true) {
+            if ($checker == true) {
 
                 $data = array(
                     'result_info' => 
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, You Are Successfully Registered. Check Your Email Ibox, Spam Or Junk Folder To Continue.",
+                            'message' => "A One-Time Code Has Been Sent To The Provided Email. Check Your Email Inbox, Spam Or Junk Folder To Continue.",
                         ),
                     );
 
@@ -69,7 +49,7 @@
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support To Continue.",
+                            'message' => "Sorry, This Credentials Does Not Exist In Our Records, Create Your Account To Continue.",
                         ),
                     );
             }

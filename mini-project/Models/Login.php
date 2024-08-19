@@ -10,11 +10,11 @@
 //Required Files
 
 //Models
-require 'Admin.php';
+require_once 'Admin.php';
 //DB
 require_once './Config/Db.php';
 //Mails
-require './Mails/LoginAlert.php';
+require_once './Mails/LoginAlert.php';
 
 
 
@@ -38,8 +38,8 @@ class Login
 
 
 
-    //Method to register new user account
-    public function new_member($params)
+    //Method for forgot password
+    public function check_member($params)
     {
         //open database connection
         $database = new Db();

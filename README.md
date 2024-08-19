@@ -1,5 +1,5 @@
 # Web Application For Dating Services
-  Oriented Dating
+  Oriented Dating API
 
 ### Changelog
 
@@ -15,3 +15,15 @@ PHP >= 5.6
 
 ### Setup
 Set Basic Info in the htaccess file
+
+### Endpoints
+[/] index page
+[sayhello] Test Connection
+[create-user] Create User
+[confirm-email] Confirm Email ID
+[forgot-password] Forgot Password
+[reset-password] Reset Password
+[unlock-dashboard] Unlock User Dashboard
+[confirm-login] User Login to Dashboard
+
+

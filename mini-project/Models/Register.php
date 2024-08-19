@@ -10,11 +10,11 @@
 //Required Files
 
 //Models
-require 'Admin.php';
+require_once 'Admin.php';
 //DB
 require_once './Config/Db.php';
 //Mails
-require './Mails/RegistrationAlert.php';
+require_once './Mails/RegistrationAlert.php';
 
 
 
