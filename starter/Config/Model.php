@@ -37,6 +37,7 @@ abstract class Model
        } catch (Exception $e) {
            return $e;         
        }
+       $db_close();
     }
 
 
@@ -59,6 +60,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;    
         }
+        $db_close();
     }
 
 
@@ -74,10 +76,13 @@ abstract class Model
             $stmt->execute($data);
             $info = $stmt->fetch(PDO::FETCH_ASSOC);
         
-            return $info;  
+            return $info; 
+
            } catch (Exception $e) {
-             return $e;  
-        }   
+            
+            return $e;  
+        }  
+        $db_close(); 
     }
 
 
@@ -86,7 +91,7 @@ abstract class Model
     public function fetch_all($query)
     {   
         try {
-            $stmt = $this->dbcon->query($query);
+            $stmt = $this->dbcon->prepare($query);
             $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($row as $value) {
                 return $row;
@@ -95,6 +100,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;  
         }  
+        
     }
 
 
@@ -116,6 +122,7 @@ abstract class Model
         } catch (Exception $e) {
              return $e;       
         }    
+        
     }
 
 
@@ -131,6 +138,7 @@ abstract class Model
         } catch (Exception $e) {
            return $e;                         
         }
+        $db_close();
     }
 
 
@@ -149,6 +157,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;
         }
+        $db_close();
     }
 
 
@@ -165,6 +174,7 @@ abstract class Model
         } catch (Exception $e) {
            return $e; 
         }
+        $db_close();
     }
     
     
@@ -180,6 +190,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;   
         }
+        $db_close();
     }
 
 
@@ -198,6 +209,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;
         }
+        $db_close();
     }
 
 
@@ -216,6 +228,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;
         }
+        $db_close();
     }
 
 
@@ -233,6 +246,7 @@ abstract class Model
         } catch (Exception $e) {
             return $e;
         }
+        $db_close();
     }
 
 
@@ -253,6 +267,7 @@ abstract class Model
         } catch (Exception $e) {
            return $e;                         
         }
+        $db_close();
     }
 
 

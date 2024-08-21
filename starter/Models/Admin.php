@@ -3,22 +3,14 @@
 namespace Models;
 
 require 'vendor/autoload.php';
-/** API Model For Admins
- *  Version 1.0.0
- *  March 2024
- *--------------------------------------------------------------------
- *  Model Configuration
- *---------------------------------------------------------------------
-**/
+
 
 //Required Files
-use PDO;
-use Config\Db;
-//require_once './Config/Db.php';
+use Config\Model;
 
 
 
-class Admin
+class Admin extends Model
 {
 
     //Tables In Use
@@ -33,13 +25,13 @@ class Admin
     protected $v_table = "app_visitors";  //Visitors Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
 
-    //Database Connection
-    private $con;
 
-    //Function to construct pdo interface for connection
-    public function __construct($db){
-        $this->con = $db;
-    }
+
+
+
+
+
+
 
     //Record Activity
     public function record_activity($params)
@@ -47,11 +39,7 @@ class Admin
         try {
             
             $query = "INSERT INTO ". $this->act_table ." (uniqueid, username, category, details) VALUES (:uniqueid, :username, :category, :details)";
-            $stmt = $this->con->prepare($query);
-            foreach ($params as $key => &$value) {
-                $stmt->bindParam($key, $value, PDO::PARAM_STR);
-            }
-            $stmt->execute($params); 
+            $result = $this->insert($params, $query); 
 
         } catch (Exception $e) {
 
@@ -62,19 +50,13 @@ class Admin
 
 
 
-
-
     //Company Record
     public function coy_info()
     {
         try {
-            
-            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = 'Publish' LIMIT 1";
-            $stmt = $this->con->prepare($query);
-            //$stmt->bindParam(':status', "Active");
-            $stmt->execute();
-            $coy = $stmt->fetch(PDO::FETCH_ASSOC); 
-            
+            $data = array('status' => "Publish");
+            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = :status LIMIT 1";
+            $coy = $this->fetch_row($data, $query);
             return $coy;
 
         } catch (Exception $e) {

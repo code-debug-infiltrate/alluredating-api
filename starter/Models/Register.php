@@ -3,27 +3,16 @@ namespace Models;
 
 require 'vendor/autoload.php';
 
-/** API Model For Registration
- *  Version 1.0.0
- *  March 2024
- *--------------------------------------------------------------------
- *  Model Configuration
- *---------------------------------------------------------------------
-**/
 
 //Required Files
-
-//Models
-require_once 'Admin.php';
-//DB
-require_once './Config/Db.php';
-//Mails
-require_once './Mails/RegistrationAlert.php';
+use Config\Model;
+use Models\Admin;
+use Mails\RegistrationAlert;
 
 
 
 
-class Register
+class Register extends Model
 
 {
 
@@ -31,22 +20,12 @@ class Register
     protected $u_table = "app_users"; //Users Table
     protected $p_table = "app_profile";  //Profile Table
 
-    //Database Connection
-    private $con;
-
-    //Function to construct pdo interface for connection
-    public function __construct($db){
-        $this->con = $db;
-    }
 
     //Method to register new user account
     public function new_member($params)
     {
-        //open database connection
-        $database = new Db();
-        $db = $database->db_Connect();
         //Admin Model
-        $admin_model = new Admin($db);
+        $admin_model = new Admin();
         $send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
         $coy_info = $admin_model->coy_info();
