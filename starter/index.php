@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 
 //Required Files
 use function PHPSTORM_META\type;
-use Controllers\v1\NewMember;
+use Controllers\v1\NewMember as NewMember;
 use Controllers\v1\MemberLogin;
 
 // require __DIR__.'/Controllers/v1/NewMember.php';

@@ -1,4 +1,8 @@
 <?php
+
+namespace Models;
+
+require 'vendor/autoload.php';
 /** API Model For Admins
  *  Version 1.0.0
  *  March 2024
@@ -8,7 +12,9 @@
 **/
 
 //Required Files
-require_once './Config/Db.php';
+use PDO;
+use Config\Db;
+//require_once './Config/Db.php';
 
 
 

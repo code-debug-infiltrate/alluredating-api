@@ -1,6 +1,6 @@
 <?php
 
-namespace Mails\LoginAlert;
+namespace Mails;
 
 require 'vendor/autoload.php';
 

@@ -1,6 +1,6 @@
 <?php 
 
-namespace Controllers\v1\MemberLogin;
+namespace Controllers\v1;
 
 require 'vendor/autoload.php';
 
@@ -14,7 +14,7 @@ require 'vendor/autoload.php';
 
 //Required Files
 use Models\Login;
-	require __DIR__.'/../../Models/Login.php';
+//require __DIR__.'/../../Models/Login.php';
 
 
 

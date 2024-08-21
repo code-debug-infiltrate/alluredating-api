@@ -1,6 +1,6 @@
 <?php 
 
-namespace Controllers\v1\NewMember;
+namespace Controllers\v1;
 
 require 'vendor/autoload.php';
 

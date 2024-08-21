@@ -1,9 +1,11 @@
 <?php
 
-namespace Config\Db;
+namespace Config;
 
 require 'vendor/autoload.php';
 
+
+use PDO;
 
 /**
  * 	API For Oriented Dating Application

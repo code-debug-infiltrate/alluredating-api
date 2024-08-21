@@ -1,6 +1,6 @@
 <?php
 
-namespace Mails\RegistrationAlert;
+namespace Mails;
 
 require 'vendor/autoload.php';
 /** API Model For Mails

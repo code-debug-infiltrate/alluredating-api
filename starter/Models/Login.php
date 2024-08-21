@@ -1,4 +1,7 @@
 <?php
+namespace Models;
+
+require 'vendor/autoload.php';
 /** API Model For Registration
  *  Version 1.0.0
  *  March 2024

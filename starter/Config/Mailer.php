@@ -1,6 +1,6 @@
 <?php
 
-namespace Config\Mailer;
+namespace Config;
 
 require 'vendor/autoload.php';
 
