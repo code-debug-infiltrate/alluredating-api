@@ -1,13 +1,7 @@
 <?php
-namespace Models;
-
-require 'vendor/autoload.php';
-
 
 //Required Files
-use Config\Model;
-use Models\Admin;
-use Mails\LoginAlert;
+require __DIR__.'/../../Config/Model.php';
 
 
 

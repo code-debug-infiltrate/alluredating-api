@@ -1,12 +1,7 @@
 <?php 
 
-namespace Controllers\v1;
-
-require_once '/../../vendor/autoload.php';
-
 //Required Files
-use Models\Register;
-//require __DIR__.'/../../Models/Register.php';
+require_once __DIR__.'/../../App/Models/Register.php';
 
 
 

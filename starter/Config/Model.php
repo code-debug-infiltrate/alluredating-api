@@ -1,19 +1,17 @@
 <?php
-namespace Config;
-require 'vendor/autoload.php';
 
-use PDO;
-use Config\Db;
+//Required Files
+//require_once __DIR__.'/../Config/Db.php';
 
 abstract class Model 
 
 { 
   
-//Database dbconnection
+    //Database dbconnection
     private $dbcon;
 
 
-//Function to dbconstruct pdo interface for dbconnection
+    //Function to dbconstruct pdo interface for dbconnection
     public function __construct()
     {
         //open database dbconnection
@@ -24,7 +22,7 @@ abstract class Model
 
 
 
-//Insert Entries Into Database
+    //Insert Entries Into Database
     public function insert($data, $query)
     {
        try {
@@ -42,7 +40,7 @@ abstract class Model
 
 
 
-//Check Database Entries If Data Exists
+    //Check Database Entries If Data Exists
     public function checker($data, $query)
     {
         try {
@@ -195,7 +193,7 @@ abstract class Model
 
 
 
-//Count Specific Entries
+    //Count Specific Entries
     public function counter_spec($data, $query)
     {
         try {
@@ -214,7 +212,7 @@ abstract class Model
 
 
 
-//Delete Entry
+    //Delete Entry
     public function delete($data, $query)
     {
         try {
@@ -223,8 +221,9 @@ abstract class Model
                 $stmt->bindParam($key, $val, PDO::PARAM_STR);
             }
             $stmt->execute($data);
-            //$o = $stmt->fetch(PDO::FETCH_ASSOC);
+
             return true;
+
         } catch (Exception $e) {
             return $e;
         }
@@ -233,7 +232,7 @@ abstract class Model
 
 
 
-//Logout User
+    //Logout User
     public function logout($data, $query)
     {   
         try {
@@ -256,7 +255,7 @@ abstract class Model
 
 
 
-//Perform Some Other Actions
+    //Perform Some Other Actions
     public function others($query)
     {
         try {
@@ -269,6 +268,23 @@ abstract class Model
         }
         $db_close();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

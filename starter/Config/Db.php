@@ -1,22 +1,8 @@
 <?php
 
-namespace Config;
-
-require 'vendor/autoload.php';
-
-
-use PDO;
-
-/**
- * 	API For Oriented Dating Application
- * 	July 2022
- *  Class for database connection
-* --------------------------------------------------------------------
-     * Database Connection 
-* ---------------------------------------------------------------------
-*/
 class Db
 {
+    
 //Define connection variables
     private $server = "mysql:host=localhost;dbname=orienteddating";
     private $user = "root";

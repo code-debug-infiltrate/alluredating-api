@@ -1,12 +1,7 @@
 <?php
 
-namespace Models;
-
-require 'vendor/autoload.php';
-
-
 //Required Files
-use Config\Model;
+require __DIR__.'/../../Config/Model.php';
 
 
 

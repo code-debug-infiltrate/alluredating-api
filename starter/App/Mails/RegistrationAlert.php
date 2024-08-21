@@ -1,24 +1,18 @@
 <?php
 
-namespace Mails;
+namespace App\Mails;
 
 require 'vendor/autoload.php';
-/** API Model For Mails
- *  Version 1.0.0
- *  March 2024
- *--------------------------------------------------------------------
- *  Mails Configuration
- *---------------------------------------------------------------------
-**/
 
 //Required Files
 use Config\Mailer;
 //require_once './Config/Mailer.php';
 
+
+
+
 class RegistrationAlert
 {
-
-
 
     //Mail to register new user account
     public function newmember_alert($data, $coyInfo)

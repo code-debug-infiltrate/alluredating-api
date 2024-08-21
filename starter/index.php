@@ -1,13 +1,8 @@
 <?php
-require_once '../vendor/autoload.php';
 
 //Required Files
-use function PHPSTORM_META\type;
-use Controllers\v1\NewMember;
-use Controllers\v1\MemberLogin;
-
-// require __DIR__.'/Controllers/v1/NewMember.php';
-// require __DIR__.'/Controllers/v1/MemberLogin.php';
+require_once __DIR__.'../App/Controllers/NewMember.php';
+require_once __DIR__.'../App/Controllers/MemberLogin.php';
 
 $BASE_URI = "/starter/";
 $endpoints = array();
@@ -90,7 +85,7 @@ $endpoints["sayhello"] = function (array $requestData): void {
         $requestData["name"] = "Misterious masked individual";
     }
     
-    echo json_encode("hello! " . $requestData["name"], JSON_FORCE_OBJECT);
+    echo json_encode("Hello! " . $requestData["name"], JSON_FORCE_OBJECT);
 };
 
 
@@ -323,82 +318,6 @@ $endpoints["unlock-dashboard"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

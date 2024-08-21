@@ -1,10 +1,7 @@
 <?php
 
-namespace Config;
-
-require 'vendor/autoload.php';
-
-class Mailer {
+class Mailer 
+{
       /**
        * Name of attachment (ex: test.txt)
        *

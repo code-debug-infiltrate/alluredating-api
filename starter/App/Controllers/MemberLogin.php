@@ -1,12 +1,7 @@
 <?php 
 
-namespace Controllers\v1;
-
-require '/../../vendor/autoload.php';
-
 //Required Files
-use Models\Login;
-//require __DIR__.'/../../Models/Login.php';
+require_once __DIR__.'/../../App/Models/Login.php';
 
 
 
