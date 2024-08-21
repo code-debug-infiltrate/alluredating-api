@@ -1,7 +1,7 @@
 <?php
 
 //Required Files
-//require_once __DIR__.'/../Config/Db.php';
+require_once __DIR__.'/../Config/Db.php';
 
 abstract class Model 
 

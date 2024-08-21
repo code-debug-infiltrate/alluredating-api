@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Mails;
-
-require 'vendor/autoload.php';
 
 //Required Files
-use Config\Mailer;
-//require_once './Config/Mailer.php';
+require_once __DIR__.'/../../Config/Mailer.php';
 
 
 
