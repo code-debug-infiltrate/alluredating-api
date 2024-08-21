@@ -1,4 +1,10 @@
 <?php
+
+namespace Config\Db;
+
+require 'vendor/autoload.php';
+
+
 /**
  * 	API For Oriented Dating Application
  * 	July 2022

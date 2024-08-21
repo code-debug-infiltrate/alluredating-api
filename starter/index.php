@@ -1,9 +1,16 @@
 <?php
-//Required Files
-require __DIR__.'/Controllers/v1/NewMember.php';
-require __DIR__.'/Controllers/v1/MemberLogin.php';
 
-$BASE_URI = "/mini-project/";
+require 'vendor/autoload.php';
+
+//Required Files
+use function PHPSTORM_META\type;
+use Controllers\v1\NewMember;
+use Controllers\v1\MemberLogin;
+
+// require __DIR__.'/Controllers/v1/NewMember.php';
+// require __DIR__.'/Controllers/v1/MemberLogin.php';
+
+$BASE_URI = "/starter/";
 $endpoints = array();
 $requestData = array();
 
@@ -133,7 +140,7 @@ $endpoints["create-user"] = function (array $requestData): void {
                 array(
                     'code' => "401",
                     'type' => "error",
-                    'message' => "First Or Last Name Field Is Too Short, Must Be 5 Or More Characters To Continue",
+                    'message' => "First Or Last Name Field Is Too Short, Must Be 5 Or More Characters.",
                 ),
             );
 

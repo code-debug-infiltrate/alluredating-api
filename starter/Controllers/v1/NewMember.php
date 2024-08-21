@@ -1,4 +1,9 @@
 <?php 
+
+namespace Controllers\v1\NewMember;
+
+require 'vendor/autoload.php';
+
 /** API For Registration
  *  Version 1.0.0
  *  March 2024
@@ -8,7 +13,8 @@
 **/
 
 //Required Files
-	require __DIR__.'/../../Models/Register.php';
+use Models\Register;
+//require __DIR__.'/../../Models/Register.php';
 
 
 
@@ -58,7 +64,7 @@
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, You Are Successfully Registered. Check Your Email Ibox, Spam Or Junk Folder To Continue.",
+                            'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder.",
                         ),
                     );
 
@@ -69,7 +75,7 @@
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support To Continue.",
+                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support.",
                         ),
                     );
             }

@@ -49,7 +49,7 @@ class Register
         
         $newParams = array('uniqueid' => $params['uniqueid'], 'email' => $params['email'], );
         $newParams1 = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'email' => $params['email'], 'password' => password_hash($params['password'], PASSWORD_DEFAULT), 'code' => $params['code'], 'hash' => $params['hash'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
-        $newParams2 = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], );
+        $newParams2 = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], 'dob' => $params['dob'], 'gender' => $params['gender'],  );
 
         try {
 
@@ -73,7 +73,7 @@ class Register
                 }
                 $stmt->execute($newParams1);
 
-	            $query1 = "INSERT INTO ". $this->p_table ." (uniqueid, fname, lname) VALUES (:uniqueid, :fname, :lname)";
+	            $query1 = "INSERT INTO ". $this->p_table ." (uniqueid, fname, lname, dob, gender) VALUES (:uniqueid, :fname, :lname, :dob, :gender)";
                 $stmt = $this->con->prepare($query1);
                 foreach ($newParams2 as $key => &$value) {
                     $stmt->bindParam($key, $value, PDO::PARAM_STR);

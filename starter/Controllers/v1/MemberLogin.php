@@ -1,4 +1,9 @@
 <?php 
+
+namespace Controllers\v1\MemberLogin;
+
+require 'vendor/autoload.php';
+
 /** API For Registration
  *  Version 1.0.0
  *  March 2024
@@ -8,19 +13,13 @@
 **/
 
 //Required Files
+use Models\Login;
 	require __DIR__.'/../../Models/Login.php';
 
 
 
     class MemberLogin
     {
-
-
-
-
-
-        
-
 
 
 

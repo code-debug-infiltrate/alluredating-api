@@ -1,4 +1,8 @@
 <?php
+
+namespace Mails\RegistrationAlert;
+
+require 'vendor/autoload.php';
 /** API Model For Mails
  *  Version 1.0.0
  *  March 2024
@@ -8,7 +12,8 @@
 **/
 
 //Required Files
-require_once './Config/Mailer.php';
+use Config\Mailer;
+//require_once './Config/Mailer.php';
 
 class RegistrationAlert
 {

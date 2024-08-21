@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php": ">=5.3.2"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "starter\\": "starter/Config/, starter/Controllers/, starter/Mails/, starter/Models/"
+        }
+    }
+}

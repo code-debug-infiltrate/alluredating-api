@@ -1,6 +1,8 @@
 <?php
 
-//require 'vendor/autoload.php';
+namespace Config\Mailer;
+
+require 'vendor/autoload.php';
 
 class Mailer {
       /**

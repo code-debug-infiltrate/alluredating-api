@@ -167,7 +167,6 @@ class Login
 
             // Checking all User credentials...
             if ($user != NULL) {
-
 			    //Record Activity
 	            $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Authentication", 'details' => $user['username']." Successfully Logged In", ); 
                 $admin_model->record_activity($info);
