@@ -2,15 +2,7 @@
 
 namespace Controllers\v1;
 
-require 'vendor/autoload.php';
-
-/** API For Registration
- *  Version 1.0.0
- *  March 2024
- *--------------------------------------------------------------------
- *  New Member Controller Configuration
- *---------------------------------------------------------------------
-**/
+require_once '/../../vendor/autoload.php';
 
 //Required Files
 use Models\Register;

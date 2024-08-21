@@ -1,10 +1,9 @@
 <?php
-
-require 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 //Required Files
 use function PHPSTORM_META\type;
-use Controllers\v1\NewMember as NewMember;
+use Controllers\v1\NewMember;
 use Controllers\v1\MemberLogin;
 
 // require __DIR__.'/Controllers/v1/NewMember.php';
@@ -72,7 +71,6 @@ if (empty($endpointName)) {
  */
 $endpoints["/"] = function (array $requestData): void {
     $app_name = getenv('APP_NAME');
-    //var_dump($_SERVER['BASE_URL']);
     echo json_encode("You're Welcome To ". $app_name ." API End-Points!", JSON_FORCE_OBJECT);
 };
 

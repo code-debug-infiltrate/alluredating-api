@@ -35,33 +35,16 @@ class Register extends Model
         $newParams2 = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], 'dob' => $params['dob'], 'gender' => $params['gender'],  );
 
         try {
-
         	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid || email = :email LIMIT 1";
-            $stmt = $this->con->prepare($query);
-            //var_dump($newParams);
-            foreach ($newParams as $key => &$value) {
-                $stmt->bindParam($key, $value, PDO::PARAM_STR);
-            }
-            $stmt->execute($newParams);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);    
-            $RowCount = $stmt->rowCount();
+            $RowCount = $this->fetch_row($newParams, $query); 
 
             // Checking all User credentials...
             if ($RowCount === 0) {
-                
                 $query = "INSERT INTO ". $this->u_table ." (uniqueid, username, email, password, code, hash, ip, user_agent) VALUES (:uniqueid, :username, :email, :password, :code, :hash, :ip, :user_agent)";
-                $stmt = $this->con->prepare($query);
-                foreach ($newParams1 as $key => &$value) {
-                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
-                }
-                $stmt->execute($newParams1);
+                $this->insert($newParams1, $query); 
 
 	            $query1 = "INSERT INTO ". $this->p_table ." (uniqueid, fname, lname, dob, gender) VALUES (:uniqueid, :fname, :lname, :dob, :gender)";
-                $stmt = $this->con->prepare($query1);
-                foreach ($newParams2 as $key => &$value) {
-                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
-                }
-                $stmt->execute($newParams2);
+                $this->insert($newParams2, $query1); 
                 
 			    //Send Email Alert To User
 	            $send_mail->newmember_alert($params, $coy_info);
@@ -75,8 +58,6 @@ class Register extends Model
 
 	            return false;
 	        }
-
-        	$db->db_close();
 
         } catch (Exception $e) {
 
@@ -94,11 +75,8 @@ class Register extends Model
     //Method to verify new user account
     public function verify_email($params)
     {
-        //open database connection
-        $database = new Db();
-        $db = $database->db_Connect();
         //Admin Model
-        $admin_model = new Admin($db);
+        $admin_model = new Admin();
         $send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
         $coy_info = $admin_model->coy_info();
@@ -106,26 +84,13 @@ class Register extends Model
         $newParams = array('uniqueid' => $params['uniqueid'], 'hash' => $params['hash'], 'status' => "New",  );
         
         try {
-
         	$query = "SELECT * FROM " . $this->u_table ." WHERE uniqueid = :uniqueid AND hash = :hash AND status = :status LIMIT 1";
-            $stmt = $this->con->prepare($query);
-            //var_dump($newParams);
-            foreach ($newParams as $key => &$value) {
-                $stmt->bindParam($key, $value, PDO::PARAM_STR);
-            }
-            $stmt->execute($newParams);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+            $user = $this->fetch_row($newParams, $query); 
             // Checking all User credentials...
             if ($user != NULL) {
-                
                 $newParams1 = array('uniqueid' => $params['uniqueid'], 'status' => "Activated", );
                 $query = "UPDATE ". $this->u_table ." SET `status` = :status WHERE uniqueid = :uniqueid LIMIT 1";
-                $stmt = $this->con->prepare($query);
-                foreach ($newParams1 as $key => &$value) {
-                    $stmt->bindParam($key, $value, PDO::PARAM_STR);
-                }
-                $stmt->execute($newParams1);
-                
+                $this->update($newParams1, $query); 
 			    //Send Email Alert To User
 	            $send_mail->verification_alert($user, $coy_info);
 			    //Record Activity
@@ -138,8 +103,6 @@ class Register extends Model
 
 	            return false;
 	        }
-
-        	$db->db_close();
 
         } catch (Exception $e) {
 

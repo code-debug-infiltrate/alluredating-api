@@ -1,6 +1,22 @@
 {
-    "require": {
-        "php": ">=5.3.2"
+    "name": "oriented/api",
+	"type": "api",	
+	"description": "API For Oriented Dating",
+	"tag": "v1.0.0",
+	"license": "MIT",
+	"author(s)": [
+		{
+			"Name": "Olu Ben",
+			"Email": "olubeno@itm-network.com"	
+		}
+	],
+
+	"require": {
+		"php": ">=5.4"
+	},
+
+	"config": {
+        "optimize-autoloader": true
     },
 
     "autoload": {
