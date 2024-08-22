@@ -2,8 +2,8 @@
 
 //Required Files
 require_once __DIR__.'/../../Config/Model.php';
-require_once __DIR__.'/../../App/Models/Admin.php';
-require_once __DIR__.'/../../App/Mails/RegistrationAlert.php';
+require_once __DIR__.'/../Models/Admin.php';
+require_once __DIR__.'/../Mails/RegistrationAlert.php';
 
 
 class Register extends Model

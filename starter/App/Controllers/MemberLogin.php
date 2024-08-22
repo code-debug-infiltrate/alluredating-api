@@ -13,11 +13,8 @@ require_once __DIR__.'/../../App/Models/Login.php';
         //Method to Login user to Dashboard
         public function confirm_login($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Login($db);
+            $model_connect = new Login();
 
              //User Account Parameters
             $fillable = array(
@@ -96,11 +93,8 @@ require_once __DIR__.'/../../App/Models/Login.php';
         //Method to Unlock user account (2FA Auth)
         public function unlock_account($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Login($db);
+            $model_connect = new Login();
 
              //User Account Parameters
             $fillable = array(
@@ -147,11 +141,8 @@ require_once __DIR__.'/../../App/Models/Login.php';
         //Method to Check Email For Password Reset
         public function check_member($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Login($db);
+            $model_connect = new Login();
 
             //User Account Parameters
             $fillable = array('email' => htmlspecialchars($params['email']),  );
@@ -193,11 +184,8 @@ require_once __DIR__.'/../../App/Models/Login.php';
         //Method to Reset user account Password
         public function reset_password($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Login($db);
+            $model_connect = new Login();
 
              //User Account Parameters
             $fillable = array(

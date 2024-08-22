@@ -2,6 +2,7 @@
 
 //Required Files
 require_once __DIR__.'/../../Config/Model.php';
+require_once __DIR__.'/../Mails/LoginAlert.php';
 
 
 

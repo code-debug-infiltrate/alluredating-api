@@ -6,7 +6,6 @@ require_once __DIR__.'/../Config/Db.php';
 abstract class Model 
 
 { 
-  
     //Database dbconnection
     private $dbcon;
 
@@ -90,15 +89,16 @@ abstract class Model
     {   
         try {
             $stmt = $this->dbcon->prepare($query);
-            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($row as $value) {
-                return $row;
-            } 
             $stmt->execute(); 
+            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $row;
+
         } catch (Exception $e) {
             return $e;  
         }  
-        
+
+        $db_close();
     }
 
 
@@ -113,14 +113,13 @@ abstract class Model
             }
             $stmt->execute($data);
             $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($row as $value) {
+            
+            return $row;
 
-                return $row;
-            }
         } catch (Exception $e) {
              return $e;       
         }    
-        
+        $db_close();
     }
 
 

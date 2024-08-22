@@ -1,8 +1,9 @@
 <?php
 
+
 //Required Files
-require_once __DIR__.'../App/Controllers/NewMember.php';
-require_once __DIR__.'../App/Controllers/MemberLogin.php';
+require_once __DIR__.'/App/Controllers/NewMember.php';
+require_once __DIR__.'/App/Controllers/MemberLogin.php';
 
 $BASE_URI = "/starter/";
 $endpoints = array();
@@ -346,7 +347,7 @@ $endpoints["checktoken"] = function ($requestData): void {
 
     //authorized tokens
     $tokens = array(
-        "fa3b2c9c-a96d-48a8-82ad-0cb775dd3e5d" => ""
+        "c9cfa3b2-a96dc9c-48c9ca8-82c9cad-0cbdd3e5d" => ""
     );
 
     if (!isset($requestData["token"])) {
