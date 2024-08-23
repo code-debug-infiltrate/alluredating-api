@@ -33,7 +33,7 @@ class Register extends Model
             $RowCount = $this->fetch_row($newParams, $query); 
 
             // Checking all User credentials...
-            if ($RowCount === 0) {
+            if (!$RowCount) {
                 $query = "INSERT INTO ". $this->u_table ." (uniqueid, username, email, password, code, hash, ip, user_agent) VALUES (:uniqueid, :username, :email, :password, :code, :hash, :ip, :user_agent)";
                 $this->insert($newParams1, $query); 
 

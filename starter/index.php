@@ -4,6 +4,7 @@
 //Required Files
 require_once __DIR__.'/App/Controllers/NewMember.php';
 require_once __DIR__.'/App/Controllers/MemberLogin.php';
+require_once __DIR__.'/App/Controllers/MemberDashboard.php';
 
 $BASE_URI = "/starter/";
 $endpoints = array();
@@ -320,6 +321,40 @@ $endpoints["unlock-dashboard"] = function (array $requestData): void {
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
 
+
+
+
+
+
+/**
+ * prints a greeting message with the name specified in the $requestData["name"] item.
+ * if the variable is empty a default name is used.
+ * @param array $requestData this array must contain an item with key "name" 
+ *                           if you want to display a custom name in the greeting.
+ * @return void
+ */
+$endpoints["user-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberDashboard();
+        $info = $api_connect->user_dashboard($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
 
 
 

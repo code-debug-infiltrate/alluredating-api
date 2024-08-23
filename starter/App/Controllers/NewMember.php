@@ -1,7 +1,7 @@
 <?php 
 
 //Required Files
-require_once __DIR__.'/../../App/Models/Register.php';
+require_once __DIR__.'/../Models/Register.php';
 
 
 
@@ -12,11 +12,8 @@ require_once __DIR__.'/../../App/Models/Register.php';
         //Method to register new user account
         public function new_member($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Register($db);
+            $model_connect = new Register();
 
             // Generate the UniqueID, Hash and Code
             $hash = md5(rand(0,1000));
@@ -51,7 +48,7 @@ require_once __DIR__.'/../../App/Models/Register.php';
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder.",
+                            'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Login Credentials.",
                         ),
                     );
 
@@ -78,13 +75,9 @@ require_once __DIR__.'/../../App/Models/Register.php';
         //Method to Verify new user account
         public function verify_email($params)
         {
-            //open database connection
-            $database = new Db();
-            $db = $database->db_Connect();
             //Register Model
-            $model_connect = new Register($db);
-
-             //User Account Parameters
+            $model_connect = new Register();
+            //User Account Parameters
             $fillable = array(
                 'uniqueid' => htmlspecialchars($params['uniqueid']),
                 'hash' => htmlspecialchars($params['key']),

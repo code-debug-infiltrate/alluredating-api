@@ -17,8 +17,11 @@ PHP >= 5.6
 Set Basic Info in the htaccess file
 
 ### Endpoints
+## Test Connection
 [/] index page
 [sayhello] Test Connection
+
+## Registration & Login
 [create-user] Create User (fname, lname, email, gender, dob, ip, user_agent)
 [confirm-email] Confirm Email ID (uniqueid, key)
 [forgot-password] Forgot Password (email)
@@ -26,4 +29,14 @@ Set Basic Info in the htaccess file
 [unlock-dashboard] Unlock User Dashboard (email, code)
 [confirm-login] User Login to Dashboard (email, password)
 
+## User Dashboard
+[user-info] User Credentails (uniqueid)
+[user-profile] User Profile (fname, lname, email, gender, dob, about)
 
+
+
+
+
+
+## Admin Dashboard
+[user-info] User Credentails (uniqueid)

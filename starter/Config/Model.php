@@ -79,7 +79,7 @@ abstract class Model
             
             return $e;  
         }  
-        $db_close(); 
+        
     }
 
 

@@ -110,10 +110,12 @@ class LoginAlert
                 <p style="margin: 10px;">
                 Hello '.$data['username'].',
                 <br>
-                There is a password reset attempt on your account. If this is initiated by you, complete your password reset with the code below.
-                <br>
-                <i style="font-size: 26px; color: darkred;">'.$data['code'].' </i>
-                <br>
+                There is a password reset attempt on your account. If this is initiated by you, complete your password reset with the link and code below.
+                <br><br>
+                <a href="'.rtrim(getenv('MAIN_APP_URL')).'reset-password/?id='.$data['email'].'&otp='.$data['code'].'&uid='.$data['username'].'">Click This Link </a> Or Copy The Link Below Into A Browser.
+                <br><br>
+                '.rtrim(getenv('MAIN_APP_URL')).'reset-password/?id='.$data['email'].'&otp='.$data['code'].'&uid='.$data['username'].'
+                <br><br>
                 If not, kindly ignore this message for safety.
                 <br><br>
                 Security Team
@@ -192,7 +194,7 @@ class LoginAlert
                 <br>
                 This is a notification to let you know that the password for your '.getenv('APP_NAME').' account '.$data['username'].' has been changed.
                 <br>
-                If this was not done by you, you can login now to change your password and also secure your account.
+                If this was not done by you, change your password immediately to secure your account.
                 <br><br>
                 Security Team
                 <br>

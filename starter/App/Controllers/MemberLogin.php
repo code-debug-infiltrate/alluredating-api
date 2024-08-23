@@ -1,7 +1,7 @@
 <?php 
 
 //Required Files
-require_once __DIR__.'/../../App/Models/Login.php';
+require_once __DIR__.'/../Models/Login.php';
 
 
 
@@ -50,7 +50,7 @@ require_once __DIR__.'/../../App/Models/Login.php';
                 $data = array(
                     'result_info' => 
                         array(
-                            'code' => "200",
+                            'code' => "202",
                             'type' => "success",
                             'message' => "A One-Time Code Has Been Sent To Your Provided Email, Check Your Inbox, Spam Or Junk Folder To Continue.",
                         ),
@@ -204,7 +204,7 @@ require_once __DIR__.'/../../App/Models/Login.php';
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, Your Account Password Was Reset Successfully.",
+                            'message' => "Congratulations, Your Account Password Was Reset Successfully. You Can Now Login.",
                         ),
                     );
 
