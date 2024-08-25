@@ -118,6 +118,50 @@ require_once __DIR__.'/../Models/Register.php';
 
 
 
+        //Method to Verify new user account
+        public function user_subscriber($params)
+        {
+            //Register Model
+            $model_connect = new Register();
+            //User Account Parameters
+            $fillable = array(
+                'email' => htmlspecialchars($params['email']),
+            );
+
+            //Model Function Call
+            $result = $model_connect->user_subscriber($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Congratulations, Your Email Has Been Subscribed To Newsletter.",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials.",
+                        ),
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+
 
 
 

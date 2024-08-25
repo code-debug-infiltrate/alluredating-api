@@ -361,6 +361,47 @@ $endpoints["user-info"] = function (array $requestData): void {
 
 
 
+/**
+ * prints a greeting message with the name specified in the $requestData["name"] item.
+ * if the variable is empty a default name is used.
+ * @param array $requestData this array must contain an item with key "name" 
+ *                           if you want to display a custom name in the greeting.
+ * @return void
+ */
+$endpoints["confirm-subscriber"] = function (array $requestData): void {
+
+    if (!isset($requestData["email"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new NewMember();
+        $info = $api_connect->user_subscriber($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

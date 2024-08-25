@@ -13,6 +13,7 @@ class Register extends Model
     //Tables In Use
     protected $u_table = "app_users"; //Users Table
     protected $p_table = "app_profile";  //Profile Table
+    protected $sub_table = "app_subscribe";  //Subscribe Table
 
 
     //Method to register new user account
@@ -104,6 +105,75 @@ class Register extends Model
         }
 
     }
+
+
+
+
+
+
+
+
+
+    //Method to verify new user account
+    public function user_subscriber($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $send_mail = new RegistrationAlert();
+        //Fetch Company Details For Email
+        $coy_info = $admin_model->coy_info();
+
+        $newParams = array('email' => $params['email'], );
+        
+        try {
+        	$query = "SELECT * FROM " . $this->sub_table ." WHERE email = :email LIMIT 1";
+            $user = $this->fetch_row($newParams, $query); 
+            // Checking all User credentials...
+            if ($user) {
+
+                if ($user['status'] == "Unactive") {
+
+                    $newParams1 = array('email' => $params['email'], 'status' => "Active", );
+                    $query = "UPDATE ". $this->sub_table ." SET `status` = :status WHERE email = :email LIMIT 1";
+                    $this->update($newParams1, $query);
+                    
+                    //Record Activity
+                    $info = array('uniqueid' => $user['email'], 'username' => $user['username'], 'category' => "Newsletter", 'details' => $user['email']." Reactivated Subscriber Alert.", ); 
+                    $admin_model->record_activity($info);
+    
+                    return true;
+                }
+
+            } else {
+
+                $newParams0 = array('email' => $params['email'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
+                $query = "INSERT INTO ". $this->sub_table ." (email, ip, user_agent) VALUES (:email, :ip, :user_agent)";
+                $this->insert($newParams0, $query); 
+                //Send Email Alert To User
+	            $send_mail->subscriber_alert($user, $coy_info);
+			    //Record Activity
+	            $info = array('uniqueid' => $user['email'], 'username' => $user['username'], 'category' => "Newsletter", 'details' => $user['email']." Verified Account.", ); 
+                $admin_model->record_activity($info);
+
+	            return true;
+
+            }
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
