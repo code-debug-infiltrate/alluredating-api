@@ -150,9 +150,9 @@ class Register extends Model
                 $query = "INSERT INTO ". $this->sub_table ." (email, ip, user_agent) VALUES (:email, :ip, :user_agent)";
                 $this->insert($newParams0, $query); 
                 //Send Email Alert To User
-	            $send_mail->subscriber_alert($user, $coy_info);
+	            $send_mail->subscriber_alert($newParams0, $coy_info);
 			    //Record Activity
-	            $info = array('uniqueid' => $user['email'], 'username' => $user['username'], 'category' => "Newsletter", 'details' => $user['email']." Verified Account.", ); 
+	            $info = array('uniqueid' => $newParams0['email'], 'username' => $newParams0['email'], 'category' => "Newsletter", 'details' => $newParams0['email']." Subscribed To Newsletter.", ); 
                 $admin_model->record_activity($info);
 
 	            return true;

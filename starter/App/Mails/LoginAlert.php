@@ -25,7 +25,7 @@ class LoginAlert
             <html>
                 <body>
                 <head>
-                    <img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
+                    <img src="'.rtrim(getenv('APP_URL/')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
                 </head>
 
                 <h3 style="margin: 10px;">There Is a Login Attempt On Your Account</h3>
@@ -48,7 +48,7 @@ class LoginAlert
                 <p style="font-size: 11px; text-align: left; padding: 10px;">
                     Learn More About Us:
                     <br>
-                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'earn-money/" target="_blank" title="Earn Money">Earn Money</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'index/#how-it-works" target="_blank" title="How It Works">How It Works</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'post-task/" target="_blank" title="Post Task">Post a Task</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
+                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'blog/" target="_blank" title="Read Our Articles">Read Our Articles</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'faqs/" target="_blank" title="FAQs">FAQs</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'register/" target="_blank" title="Find a Match">Find a Match</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
                     <br><br> 
                     This message is intended for '.$data['email'].', you are receiving this message because you are using one or more of '.getenv('APP_NAME').' service. 
 
@@ -58,13 +58,13 @@ class LoginAlert
                     
                     <br> 
                     <center style="font-size: 12px;>
-                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
                     <br><br> 
                         '.$coyInfo['address'].'
@@ -82,6 +82,8 @@ class LoginAlert
 
         $sendMail->send();
     }
+
+
 
 
 
@@ -103,10 +105,11 @@ class LoginAlert
             <html>
                 <body>
                 <head>
-                    <img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
+                    <img src="'.rtrim(getenv('APP_URL/')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
                 </head>
 
                 <h3 style="margin: 10px;">Password Reset Attempt On Your Account</h3>
+
                 <p style="margin: 10px;">
                 Hello '.$data['username'].',
                 <br>
@@ -128,7 +131,7 @@ class LoginAlert
                 <p style="font-size: 11px; text-align: left; padding: 10px;">
                     Learn More About Us:
                     <br>
-                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'earn-money/" target="_blank" title="Earn Money">Earn Money</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'index/#how-it-works" target="_blank" title="How It Works">How It Works</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'post-task/" target="_blank" title="Post Task">Post a Task</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
+                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'blog/" target="_blank" title="Read Our Articles">Read Our Articles</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'faqs/" target="_blank" title="FAQs">FAQs</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'register/" target="_blank" title="Find a Match">Find a Match</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
                     <br><br> 
                     This message is intended for '.$data['email'].', you are receiving this message because you are using one or more of '.getenv('APP_NAME').' service. 
 
@@ -138,13 +141,13 @@ class LoginAlert
                     
                     <br> 
                     <center style="font-size: 12px;>
-                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
                     <br><br> 
                         '.$coyInfo['address'].'
@@ -162,6 +165,9 @@ class LoginAlert
 
         $sendMail->send();
     }
+
+
+
 
 
 
@@ -185,7 +191,7 @@ class LoginAlert
             <html>
                 <body>
                 <head>
-                    <img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
+                    <img src="'.rtrim(getenv('APP_URL/')).'Images/Logo/favicon.png" alt="Logo" border="0"  style="margin: 20px; width:70px; height: 90px;"> 
                 </head>
 
                 <h3 style="margin: 10px;">Password Changed Successfully</h3>
@@ -206,7 +212,7 @@ class LoginAlert
                 <p style="font-size: 11px; text-align: left; padding: 10px;">
                     Learn More About Us:
                     <br>
-                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'earn-money/" target="_blank" title="Earn Money">Earn Money</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'index/#how-it-works" target="_blank" title="How It Works">How It Works</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'post-task/" target="_blank" title="Post Task">Post a Task</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
+                    <a href="'.rtrim(getenv('MAIN_APP_URL')).'blog/" target="_blank" title="Read Our Articles">Read Our Articles</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'faqs/" target="_blank" title="FAQs">FAQs</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'register/" target="_blank" title="Find a Match">Find a Match</a> | <a href="'.rtrim(getenv('MAIN_APP_URL')).'unsubscribe/" target="_blank" title="Unsubscribe">Unsubscribe</a> | 
                     <br><br> 
                     This message is intended for '.$data['email'].', you are receiving this message because you are using one or more of '.getenv('APP_NAME').' service. 
 
@@ -216,13 +222,13 @@ class LoginAlert
                     
                     <br> 
                     <center style="font-size: 12px;>
-                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                        <a href="https://facebook.com/'.$coyInfo['facebook'].'" target="_blank" title="Facebook"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/facebook.png" alt="Facebook" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://instagram.com/'.$coyInfo['instagram'].'" target="_blank" title="Instagram" class="instagram"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/instagram.png" alt="Instagram" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://linkedin.com/'.$coyInfo['linkedin'].'" target="_blank" title="Linkedin"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/linkedin.png" alt="LinkedIn" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
-                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('MAIN_APP_URL')).'Images/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
+                    <a href="https://twitter.com/'.$coyInfo['twitter'].'" target="_blank" title="twitter"><img src="'.rtrim(getenv('APP_URL/')).'Images/Socials/twitter.png" alt="Twitter" border="0"  style="padding-right: 20px; width:20px; height: 20px;"></a>
 
                     <br><br> 
                         '.$coyInfo['address'].'
@@ -240,6 +246,7 @@ class LoginAlert
 
         $sendMail->send();
     }
+
 
 
 
