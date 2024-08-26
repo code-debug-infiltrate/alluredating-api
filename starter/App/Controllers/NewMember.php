@@ -50,6 +50,7 @@ class NewMember
                         'type' => "success",
                         'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Login Credentials.",
                     ),
+                'user_info' => $fillable,
                 );
 
         } else {

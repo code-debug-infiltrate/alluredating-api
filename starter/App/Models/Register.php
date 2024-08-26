@@ -23,7 +23,7 @@ class Register extends Model
         $admin_model = new Admin();
         $send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
         
         $newParams = array('uniqueid' => $params['uniqueid'], 'email' => $params['email'], );
         $newParams1 = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'email' => $params['email'], 'password' => password_hash($params['password'], PASSWORD_DEFAULT), 'code' => $params['code'], 'hash' => $params['hash'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
@@ -42,7 +42,7 @@ class Register extends Model
                 $this->insert($newParams2, $query1); 
                 
 			    //Send Email Alert To User
-	            $send_mail->newmember_alert($params, $coy_info);
+	            //$send_mail->newmember_alert($params, $coy_info);
 			    //Record Activity
 	            $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Registered", ); 
                 $admin_model->record_activity($info);
