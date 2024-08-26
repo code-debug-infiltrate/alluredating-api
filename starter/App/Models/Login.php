@@ -2,7 +2,7 @@
 
 //Required Files
 require_once __DIR__.'/../../Config/Model.php';
-require_once __DIR__.'/../Mails/LoginAlert.php';
+//require_once __DIR__.'/../Mails/LoginAlert.php';
 
 
 
@@ -21,9 +21,9 @@ class Login extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new LoginAlert();
+        //$send_mail = new LoginAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
 
         try {
             $newParams = array('email' => $params['email'], );
@@ -53,7 +53,7 @@ class Login extends Model
                         if ($user['notify'] === "On") {
                             //Send Email Alert To User
                             $emailInfo = array('username' => $user['username'], 'email' => $user['email'], 'code' => $code, );
-                            $send_mail->unlockcode_alert($emailInfo, $coy_info);
+                            //$send_mail->unlockcode_alert($emailInfo, $coy_info);
                             //Record Activity
                             $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Authentication", 'details' => $user['username']." Requested 2FA Unlock Code", ); 
                             $admin_model->record_activity($info);
@@ -136,9 +136,9 @@ class Login extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new LoginAlert();
+        //$send_mail = new LoginAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
 
         $newParams = array('email' => $params['email'], );
 
@@ -159,8 +159,8 @@ class Login extends Model
                 $this->update($newParams1, $query); 
 
 			    //Send Email Alert To User
-                $emailInfo = array('username' => $user['username'], 'email' => $user['email'], 'code' => $code, );
-	            $send_mail->passcode_alert($emailInfo, $coy_info);
+                //$emailInfo = array('username' => $user['username'], 'email' => $user['email'], 'code' => $code, );
+	            //$send_mail->passcode_alert($emailInfo, $coy_info);
 			    //Record Activity
 	            $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Authentication", 'details' => $user['username']." Requested Password Reset Code", ); 
                 $admin_model->record_activity($info);
@@ -188,9 +188,9 @@ class Login extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new LoginAlert();
+        //$send_mail = new LoginAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
 
         $newParams = array('email' => $params['email'], 'code' => $params['code'], );
 
@@ -211,8 +211,8 @@ class Login extends Model
                 $this->update($newParams1, $query); 
 
 			    //Send Email Alert To User
-                $emailInfo = array('username' => $user['username'], 'email' => $user['email'], );
-	            $send_mail->passreset_alert($emailInfo, $coy_info);
+                //$emailInfo = array('username' => $user['username'], 'email' => $user['email'], );
+	            //$send_mail->passreset_alert($emailInfo, $coy_info);
 			    //Record Activity
 	            $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Authentication", 'details' => $user['username']." Changed Password.", ); 
                 $admin_model->record_activity($info);

@@ -3,7 +3,7 @@
 //Required Files
 require_once __DIR__.'/../../Config/Model.php';
 require_once __DIR__.'/../Models/Admin.php';
-require_once __DIR__.'/../Mails/RegistrationAlert.php';
+//require_once __DIR__.'/../Mails/RegistrationAlert.php';
 
 
 class Register extends Model
@@ -21,7 +21,7 @@ class Register extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new RegistrationAlert();
+        //$send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
         //$coy_info = $admin_model->coy_info();
         
@@ -72,9 +72,9 @@ class Register extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new RegistrationAlert();
+        //$send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
 
         $newParams = array('uniqueid' => $params['uniqueid'], 'hash' => $params['hash'], 'status' => "New",  );
         
@@ -87,7 +87,7 @@ class Register extends Model
                 $query = "UPDATE ". $this->u_table ." SET `status` = :status WHERE uniqueid = :uniqueid LIMIT 1";
                 $this->update($newParams1, $query); 
 			    //Send Email Alert To User
-	            $send_mail->verification_alert($user, $coy_info);
+	            //$send_mail->verification_alert($user, $coy_info);
 			    //Record Activity
 	            $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Registration", 'details' => $user['username']." Verified Account.", ); 
                 $admin_model->record_activity($info);
@@ -119,9 +119,9 @@ class Register extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $send_mail = new RegistrationAlert();
+        //$send_mail = new RegistrationAlert();
         //Fetch Company Details For Email
-        $coy_info = $admin_model->coy_info();
+        //$coy_info = $admin_model->coy_info();
 
         $newParams = array('email' => $params['email'], );
         
@@ -150,7 +150,7 @@ class Register extends Model
                 $query = "INSERT INTO ". $this->sub_table ." (email, ip, user_agent) VALUES (:email, :ip, :user_agent)";
                 $this->insert($newParams0, $query); 
                 //Send Email Alert To User
-	            $send_mail->subscriber_alert($newParams0, $coy_info);
+	            //$send_mail->subscriber_alert($newParams0, $coy_info);
 			    //Record Activity
 	            $info = array('uniqueid' => $newParams0['email'], 'username' => $newParams0['email'], 'category' => "Newsletter", 'details' => $newParams0['email']." Subscribed To Newsletter.", ); 
                 $admin_model->record_activity($info);
