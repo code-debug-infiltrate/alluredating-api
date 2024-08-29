@@ -5,7 +5,7 @@ require_once __DIR__.'/../../Config/Model.php';
 
 
 
-class User extends Model
+class Members extends Model
 {
 
     //Tables In Use

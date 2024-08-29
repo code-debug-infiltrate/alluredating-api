@@ -2,7 +2,7 @@
 
 
 //Required Files
-require_once __DIR__.'/App/Controllers/NewMember.php';
+require_once __DIR__.'/App/Controllers/MemberRegister.php';
 require_once __DIR__.'/App/Controllers/MemberLogin.php';
 require_once __DIR__.'/App/Controllers/MemberDashboard.php';
 
@@ -142,7 +142,7 @@ $endpoints["create-user"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new NewMember();
+        $api_connect = new MemberRegister();
         $info = $api_connect->new_member($requestData);
     }
 
@@ -177,7 +177,7 @@ $endpoints["confirm-email"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new NewMember();
+        $api_connect = new MemberRegister();
         $info = $api_connect->verify_email($requestData);
     }
 
@@ -384,7 +384,7 @@ $endpoints["confirm-subscriber"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new NewMember();
+        $api_connect = new MemberRegister();
         $info = $api_connect->user_subscriber($requestData);
     }
 

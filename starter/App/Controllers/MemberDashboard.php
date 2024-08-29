@@ -1,7 +1,7 @@
 <?php 
 
 //Required Files
-require_once __DIR__.'/../Models/User.php';
+require_once __DIR__.'/../Models/Members.php';
 
 
 
@@ -14,7 +14,7 @@ require_once __DIR__.'/../Models/User.php';
         public function user_dashboard($params)
         {
             //User Model
-            $model_connect = new User();
+            $model_connect = new Members();
             //User Account Parameters
             $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
 

@@ -142,21 +142,35 @@ class Register extends Model
                     $admin_model->record_activity($info);
     
                     return true;
+                } else {
+
+                    return false;
                 }
 
             } else {
 
-                $newParams0 = array('email' => $params['email'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
-                $query = "INSERT INTO ". $this->sub_table ." (email, ip, user_agent) VALUES (:email, :ip, :user_agent)";
-                $this->insert($newParams0, $query); 
-                //Send Email Alert To User
-	            //$send_mail->subscriber_alert($newParams0, $coy_info);
-			    //Record Activity
-	            $info = array('uniqueid' => $newParams0['email'], 'username' => $newParams0['email'], 'category' => "Newsletter", 'details' => $newParams0['email']." Subscribed To Newsletter.", ); 
-                $admin_model->record_activity($info);
+                $ch = array("ip" => $params['ip'], "user_agent" => $params['user_agent'], );
+                $query = "SELECT count(*) FROM " . $this->sub_table ." WHERE ip = :ip OR user_agent = :user_agent";
+                $location = $this->counter_spec($ch, $query);
 
-	            return true;
+                if ($location < 3) {
 
+                    $newParams0 = array('email' => $params['email'], 'ip' => $params['ip'], 'user_agent' => $params['user_agent'], );
+                    $query = "INSERT INTO ". $this->sub_table ." (email, ip, user_agent) VALUES (:email, :ip, :user_agent)";
+                    $this->insert($newParams0, $query); 
+                    //Send Email Alert To User
+                    //$send_mail->subscriber_alert($newParams0, $coy_info);
+                    //Record Activity
+                    $info = array('uniqueid' => $newParams0['email'], 'username' => $newParams0['email'], 'category' => "Newsletter", 'details' => $newParams0['email']." Subscribed To Newsletter.", ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+
+                }
             }
 
         } catch (Exception $e) {
