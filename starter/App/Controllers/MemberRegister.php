@@ -166,6 +166,64 @@ class MemberRegister
 
 
 
+    //Method to Send Contact Form Details
+    public function contact_us($params)
+    {
+        //Register Model
+        $model_connect = new Register();
+        //User Account Parameters
+        $fillable = array(
+            'fname' => htmlspecialchars($params['fname']),
+            'lname' => htmlspecialchars($params['lname']),
+            'email' => htmlspecialchars($params['email']),
+            'phone' => htmlspecialchars($params['phone']),
+            'subject' => htmlspecialchars($params['subject']),
+            'details' => htmlspecialchars($params['details']),
+            'ip' => htmlspecialchars($params['ip']),
+            'user_agent' => htmlspecialchars($params['user_agent']),
+        );
+
+        //Model Function Call
+        $result = $model_connect->contact_us($fillable);
+
+        if ($result == true) {
+
+            $data = array(
+                'result_info' => 
+                    array(
+                        'code' => "200",
+                        'type' => "success",
+                        'message' => "Congratulations, Your Message Report Has Been Sent Successfully.",
+                    ),
+                );
+
+        } else {
+
+            $data = array(
+                'result_info' => 
+                    array(
+                        'code' => "401",
+                        'type' => "error",
+                        'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials.",
+                    ),
+                );
+        }
+        
+        return $data; 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

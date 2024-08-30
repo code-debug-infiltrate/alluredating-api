@@ -55,15 +55,15 @@ PRIMARY KEY  (`id`)
 -- Table structure for msg report `msgreport` 
 CREATE TABLE IF NOT EXISTS `app_msgreport` ( 
 `id` INT(11) AUTO_INCREMENT,
-`msgid` VARCHAR(100) NOT NULL,
-`uniqueid` VARCHAR(100) NOT NULL,
-`username` VARCHAR(100) NOT NULL,
+`fname` VARCHAR(50) NOT NULL,
+`lname` VARCHAR(50) NOT NULL,
 `email` VARCHAR(100) NOT NULL,
-`dept` VARCHAR(100) NOT NULL,
-`issue` VARCHAR(100) NOT NULL,
+`phone` VARCHAR(20) NOT NULL,
 `subject` VARCHAR(100) NOT NULL,
 `details` longtext NOT NULL,
 `status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
+`ip` VARCHAR(50) NOT NULL,
+`user_agent` VARCHAR(250) NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;

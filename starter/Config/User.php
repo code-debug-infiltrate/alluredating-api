@@ -92,8 +92,7 @@ class User
     {
         $_SESSION['userInfo'] = array();
         $result = false;
-
-
+        
     }
 
 

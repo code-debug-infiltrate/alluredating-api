@@ -28,6 +28,8 @@ Set Basic Info in the htaccess file
 [reset-password] Reset Password (email, key, password)
 [unlock-dashboard] Unlock User Dashboard (email, code)
 [confirm-login] User Login to Dashboard (email, password)
+[confirm-subscriber] Subscribe To Newsletter (email, ip, user_agent)
+[contact-us] Send Contact Form (fname, lname, email, phone, subject, details, ip, user_agent)
 
 ## User Dashboard
 [user-info] User Credentails (uniqueid)
