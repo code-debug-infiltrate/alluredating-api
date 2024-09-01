@@ -1,5 +1,5 @@
 # Web Application For Dating Services
-  Oriented Dating API
+  Allure Dating API
 
 ### Changelog
 
@@ -17,28 +17,36 @@ PHP >= 5.6
 Set Basic Info in the htaccess file
 
 ### Endpoints
-## Test Connection
+
+## Test
 [/] index page
 [sayhello] Test Connection
+
+## App Information
+[coy-info] Company Information ()
 
 ## Registration & Login
 [create-user] Create User (fname, lname, email, gender, dob, ip, user_agent)
 [confirm-email] Confirm Email ID (uniqueid, key)
 [forgot-password] Forgot Password (email)
+[get-user-passcode] Send User Info (email)
 [reset-password] Reset Password (email, key, password)
 [unlock-dashboard] Unlock User Dashboard (email, code)
 [confirm-login] User Login to Dashboard (email, password)
 [confirm-subscriber] Subscribe To Newsletter (email, ip, user_agent)
 [contact-us] Send Contact Form (fname, lname, email, phone, subject, details, ip, user_agent)
 
+
 ## User Dashboard
-[user-info] User Credentails (uniqueid)
-[user-profile] User Profile (fname, lname, email, gender, dob, about)
-
-
-
-
-
+[all-ads] User Posts ()
+[ads-comments] Post Comments (postid)
+[add-comment] Add a Comment (postid, details)
 
 ## Admin Dashboard
+[admin-info] User Credentails (uniqueid)
+
+## General
 [user-info] User Credentails (uniqueid)
+[user-profile] User Profile (fname, lname, email, gender, dob, about)
+[user-activity] User Profile (uniqueid)
+[end-session] Log Users Out (uniqueid)

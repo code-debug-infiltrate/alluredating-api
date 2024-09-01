@@ -228,6 +228,78 @@ require_once __DIR__.'/../Models/Login.php';
 
 
 
+        //Method to Reset user account Password
+        public function get_user_passcode($params)
+        {
+            //Register Model
+            $model_connect = new Login();
+
+             //User Account Parameters
+            $fillable = array('email' => htmlspecialchars($params['email']), );
+
+            //Model Function Call
+            $result = $model_connect->get_user_passcode($fillable);
+            
+            $data = array(
+                'result_info' => 
+                    array(
+                        'code' => "200",
+                        'type' => "success",
+                        'message' => "Successful",
+                    ),
+                'user_info' => $result,
+                );
+            
+            return $data; 
+        }
+
+
+
+
+
+        //Method to End User Session
+        public function end_session($params)
+        {
+            //Register Model
+            $model_connect = new Login();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $result = $model_connect->end_session($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "You are Successfully Logged Out.",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials. Retry After Sometime.",
+                        ),
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+
+
+
 
 
 

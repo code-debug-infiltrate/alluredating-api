@@ -5,6 +5,7 @@
 require_once __DIR__.'/App/Controllers/MemberRegister.php';
 require_once __DIR__.'/App/Controllers/MemberLogin.php';
 require_once __DIR__.'/App/Controllers/MemberDashboard.php';
+require_once __DIR__.'/App/Controllers/HomeController.php';
 
 $BASE_URI = "/starter/";
 $endpoints = array();
@@ -59,6 +60,368 @@ if (empty($endpointName)) {
 
 
 
+//Create New User
+$endpoints["create-user"] = function (array $requestData): void {
+
+    if ((!isset($requestData["fname"])) || (!isset($requestData["lname"])) || (!isset($requestData["email"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberRegister();
+        $info = $api_connect->new_member($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+//COnfirm Registration Email
+$endpoints["confirm-email"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["key"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberRegister();
+        $info = $api_connect->verify_email($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+//Forgot password
+$endpoints["forgot-password"] = function (array $requestData): void {
+
+    if (!isset($requestData["email"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Email Is a Required Field & Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->check_member($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Reset Password
+$endpoints["reset-password"] = function (array $requestData): void {
+
+    if ((!isset($requestData["email"])) || (!isset($requestData["password"])) || (!isset($requestData["key"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->reset_password($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//User Login 
+$endpoints["confirm-login"] = function (array $requestData): void {
+
+    if ((!isset($requestData["email"])) || (!isset($requestData["password"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->confirm_login($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Unlock User Dashboard
+$endpoints["unlock-dashboard"] = function (array $requestData): void {
+
+    if ((!isset($requestData["email"])) || (!isset($requestData["key"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->unlock_account($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//LoggedIn User Credentials
+$endpoints["user-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberDashboard();
+        $info = $api_connect->user_dashboard($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+//LoggedIn User Credentials
+$endpoints["get-user-passcode"] = function (array $requestData): void {
+
+    if (!isset($requestData["email"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->get_user_passcode($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Contact Us
+$endpoints["contact-us"] = function (array $requestData): void {
+
+    if ((!isset($requestData["email"])) || (!isset($requestData["phone"])) || (!isset($requestData["details"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberRegister();
+        $info = $api_connect->contact_us($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Subscriber
+$endpoints["confirm-subscriber"] = function (array $requestData): void {
+
+    if (!isset($requestData["email"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberRegister();
+        $info = $api_connect->user_subscriber($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+//Subscriber
+$endpoints["coy-info"] = function (array $requestData): void {
+
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->coy_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+//Logout
+$endpoints["end-session"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new MemberLogin();
+        $info = $api_connect->end_session($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
@@ -104,336 +467,6 @@ $endpoints["404"] = function ($requestData): void {
 
     echo json_encode("Endpoint " . $requestData["endpointName"] . " not found.", JSON_FORCE_OBJECT);
 };
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["create-user"] = function (array $requestData): void {
-
-    if ((!isset($requestData["fname"])) || (!isset($requestData["lname"])) || (!isset($requestData["email"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } elseif (strlen($requestData['fname']) < "5" || strlen($requestData['lname']) < "5") { 
-
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "First Or Last Name Field Is Too Short, Must Be 5 Or More Characters.",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberRegister();
-        $info = $api_connect->new_member($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["confirm-email"] = function (array $requestData): void {
-
-    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["key"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberRegister();
-        $info = $api_connect->verify_email($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["forgot-password"] = function (array $requestData): void {
-
-    if (!isset($requestData["email"])) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Email Is a Required Field & Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberLogin();
-        $info = $api_connect->check_member($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["reset-password"] = function (array $requestData): void {
-
-    if ((!isset($requestData["email"])) || (!isset($requestData["password"])) || (!isset($requestData["key"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberLogin();
-        $info = $api_connect->reset_password($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["confirm-login"] = function (array $requestData): void {
-
-    if ((!isset($requestData["email"])) || (!isset($requestData["password"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberLogin();
-        $info = $api_connect->confirm_login($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["unlock-dashboard"] = function (array $requestData): void {
-
-    if ((!isset($requestData["email"])) || (!isset($requestData["key"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberLogin();
-        $info = $api_connect->unlock_account($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["user-info"] = function (array $requestData): void {
-
-    if (!isset($requestData["uniqueid"])) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberDashboard();
-        $info = $api_connect->user_dashboard($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["contact-us"] = function (array $requestData): void {
-
-    if ((!isset($requestData["email"])) || (!isset($requestData["phone"])) || (!isset($requestData["details"]))) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberRegister();
-        $info = $api_connect->contact_us($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-/**
- * prints a greeting message with the name specified in the $requestData["name"] item.
- * if the variable is empty a default name is used.
- * @param array $requestData this array must contain an item with key "name" 
- *                           if you want to display a custom name in the greeting.
- * @return void
- */
-$endpoints["confirm-subscriber"] = function (array $requestData): void {
-
-    if (!isset($requestData["email"])) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberRegister();
-        $info = $api_connect->user_subscriber($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
-
-
-
-
-
-
-
-
 
 
 

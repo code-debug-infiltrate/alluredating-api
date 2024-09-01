@@ -16,7 +16,7 @@ require_once __DIR__.'/../Models/Members.php';
             //User Model
             $model_connect = new Members();
             //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'email' => htmlspecialchars($params['email']), );
 
             //Model Function Call
             $userInfo = $model_connect->user_info($fillable);

@@ -2,6 +2,7 @@
 
 //Required Files
 require_once __DIR__.'/../../Config/Model.php';
+require_once __DIR__.'/../Models/Admin.php';
 //require_once __DIR__.'/../Mails/LoginAlert.php';
 
 
@@ -229,6 +230,70 @@ class Login extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
+
+
+
+
+
+
+
+    //Method for Getting User Passcode
+    public function get_user_passcode($params)
+    {
+        $newParams = array('email' => $params['email'], );
+
+        try {
+        	$query = "SELECT * FROM " . $this->u_table ." WHERE email = :email LIMIT 1";
+            $user = $this->fetch_row($newParams, $query); 
+	        
+            return $user;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+
+
+
+//Login method For All Users
+public function end_session($params)
+{
+    $admin_model = new Admin();
+    $d = array('uniqueid' => $params['uniqueid'], );
+    $e = array('uniqueid' => $params['uniqueid'], 'login_status' => "Logged_out", 'log_session' => "End Session", );
+
+    try {
+
+        $query = "SELECT * FROM ". $this->u_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+        $user = $this->fetch_row($d, $query);
+        
+        $query0 = "UPDATE ". $this->u_table ." SET `login_status` = :login_status, `log_session` = :log_session WHERE `uniqueid` = :uniqueid LIMIT 1";
+        $this->logout($e, $query0);
+        //Record Activity
+        $info = array('uniqueid' => $user['uniqueid'], 'username' => $user['username'], 'category' => "Authentication", 'details' => $user['username']." Logged Out", ); 
+        $admin_model->record_activity($info);
+
+        unset($params['uniqueid']);
+        
+        return true;
+
+    } catch (Exception $e) {
+
+        $data = array(
+            "type" => "error",
+            "message" => $e,
+        );
+
+        return $data;          
+    }
+}
 
 
 

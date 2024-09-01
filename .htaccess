@@ -1,9 +1,9 @@
-SetEnv APP_NAME Oriented-Dating
-SetEnv API_URL http://orienteddating-api.test
-SetEnv MAIN_APP_URL http://orienteddating.test/
+SetEnv APP_NAME Allure-Dating
+SetEnv API_URL http://alluredating-api.test
+SetEnv MAIN_APP_URL http://alluredating.test/
 SetEnv COMBINATION 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
-SetEnv APP_EMAIL no-reply@orienteddating.test
-SetEnv COY_EMAIL contact@orienteddating.test
+SetEnv APP_EMAIL no-reply@alluredating.test
+SetEnv COY_EMAIL contact@alluredating.test
 
 
 <Files "*.php">
