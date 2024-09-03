@@ -24,6 +24,8 @@ Set Basic Info in the htaccess file
 
 ## App Information
 [coy-info] Company Information ()
+[visitor-info] Track Visitor Information (ip, user_agent, date, time)
+
 
 ## Registration & Login
 [create-user] Create User (fname, lname, email, gender, dob, ip, user_agent)
@@ -48,5 +50,10 @@ Set Basic Info in the htaccess file
 ## General
 [user-info] User Credentails (uniqueid)
 [user-profile] User Profile (fname, lname, email, gender, dob, about)
+[user-album] User Photo & Video Album (uniqueid)
 [user-activity] User Profile (uniqueid)
+[user-interests] User Interests (uniqueid)
+[user-preference] User Prefences (uniqueid)
+[user-language] User Language (uniqueid)
+[user-workeducation] User Work & Education (uniqueid)
 [end-session] Log Users Out (uniqueid)

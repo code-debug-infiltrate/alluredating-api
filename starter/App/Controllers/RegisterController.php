@@ -5,7 +5,7 @@ require_once __DIR__.'/../Models/Register.php';
 
 
 
-class MemberRegister
+class RegisterController
 {
 
 

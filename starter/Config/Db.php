@@ -4,7 +4,7 @@ class Db
 {
     
 //Define connection variables
-    private $server = "mysql:host=localhost;dbname=orienteddating";
+    private $server = "mysql:host=localhost;dbname=alluredating";
     private $user = "root";
     private $pass = "";
     private $options = array(

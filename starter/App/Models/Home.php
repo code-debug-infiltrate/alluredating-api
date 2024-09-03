@@ -44,6 +44,57 @@ class Home extends Model
 
 
 
+    
+
+
+    //Capture Visitors
+    public function visitor_info($data)
+    {
+        $d = array('vdate' => $data['date'], 'details' => $data['user_agent'], ); 
+
+        try {
+
+            $query = "SELECT * FROM ". $this->v_table ." WHERE details = :details AND vdate = :vdate LIMIT 1";
+
+            $check = $this->fetch_row($d, $query);
+
+            if ($check) {
+            
+                $e = array('vdate' => $data['date'], 'count' => $check['count'] + 1, 'details' => $check['details'], );
+
+                $query = "UPDATE ". $this->v_table ." SET `count` = :count WHERE `details` = :details AND vdate = :vdate LIMIT 1";
+
+                $this->update($e, $query);
+
+                return true;
+
+            } else {
+
+                $fill = array('ip' => $data['ip'], 'vdate' => $data['date'], 'vtime' => $data['time'], 'count' => "1", 'details' => $data['user_agent'], ); 
+
+                $query1 = "INSERT INTO ". $this->v_table ." (ip, vdate, vtime, count, details) VALUES (:ip, :vdate, :vtime, :count, :details)";
+
+                $this->insert($fill, $query1);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+
+
+
 
 
 

@@ -5,7 +5,7 @@ require_once __DIR__.'/../Models/Login.php';
 
 
 
-    class MemberLogin
+    class LoginController
     {
 
 

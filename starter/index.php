@@ -2,9 +2,9 @@
 
 
 //Required Files
-require_once __DIR__.'/App/Controllers/MemberRegister.php';
-require_once __DIR__.'/App/Controllers/MemberLogin.php';
-require_once __DIR__.'/App/Controllers/MemberDashboard.php';
+require_once __DIR__.'/App/Controllers/RegisterController.php';
+require_once __DIR__.'/App/Controllers/LoginController.php';
+require_once __DIR__.'/App/Controllers/UserController.php';
 require_once __DIR__.'/App/Controllers/HomeController.php';
 
 $BASE_URI = "/starter/";
@@ -60,6 +60,38 @@ if (empty($endpointName)) {
 
 
 
+
+
+
+
+
+
+//Subscriber
+$endpoints["visitor-info"] = function (array $requestData): void {
+
+    if ((!isset($requestData["ip"])) || (!isset($requestData["user_agent"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+    
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->visitor_info($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
 //Create New User
 $endpoints["create-user"] = function (array $requestData): void {
 
@@ -77,14 +109,12 @@ $endpoints["create-user"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberRegister();
+        $api_connect = new RegisterController();
         $info = $api_connect->new_member($requestData);
     }
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
 
 
 
@@ -106,15 +136,12 @@ $endpoints["confirm-email"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberRegister();
+        $api_connect = new RegisterController();
         $info = $api_connect->verify_email($requestData);
     }
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
-
 
 
 
@@ -135,7 +162,7 @@ $endpoints["forgot-password"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->check_member($requestData);
     }
 
@@ -162,7 +189,7 @@ $endpoints["reset-password"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->reset_password($requestData);
     }
 
@@ -189,7 +216,7 @@ $endpoints["confirm-login"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->confirm_login($requestData);
     }
 
@@ -217,42 +244,12 @@ $endpoints["unlock-dashboard"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->unlock_account($requestData);
     }
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
-
-
-
-//LoggedIn User Credentials
-$endpoints["user-info"] = function (array $requestData): void {
-
-    if (!isset($requestData["uniqueid"])) {
-        
-        $info = array(
-            'result_info' => 
-                array(
-                    'code' => "401",
-                    'type' => "error",
-                    'message' => "Declined. Required Fields Cannot Be Empty",
-                ),
-            );
-
-    } else {
-
-        //Connect to Controller
-        $api_connect = new MemberDashboard();
-        $info = $api_connect->user_dashboard($requestData);
-    }
-
-    echo json_encode($info, JSON_FORCE_OBJECT);
-};
-
-
 
 
 
@@ -275,12 +272,14 @@ $endpoints["get-user-passcode"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->get_user_passcode($requestData);
     }
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
 
 
 
@@ -301,7 +300,7 @@ $endpoints["contact-us"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberRegister();
+        $api_connect = new RegisterController();
         $info = $api_connect->contact_us($requestData);
     }
 
@@ -329,7 +328,7 @@ $endpoints["confirm-subscriber"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberRegister();
+        $api_connect = new RegisterController();
         $info = $api_connect->user_subscriber($requestData);
     }
 
@@ -339,17 +338,112 @@ $endpoints["confirm-subscriber"] = function (array $requestData): void {
 
 
 
-
-
-//Subscriber
+//Get Company Information
 $endpoints["coy-info"] = function (array $requestData): void {
-
-        //Connect to Controller
-        $api_connect = new HomeController();
-        $info = $api_connect->coy_info();
+    //Connect to Controller
+    $api_connect = new HomeController();
+    $info = $api_connect->coy_info();
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+
+
+//LoggedIn User Credentials
+$endpoints["user-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_information($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get User Activity
+$endpoints["user-activity"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_activity($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get User Interests
+$endpoints["user-interests"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_interests($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Get User Preference
+$endpoints["user-preference"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_preference($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get User Album
+$endpoints["user-album"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_album($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get User Languages
+$endpoints["user-language"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_language($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get User Work & Education
+$endpoints["user-workeducation"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->user_workeducation($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
 
 
 
@@ -375,7 +469,7 @@ $endpoints["end-session"] = function (array $requestData): void {
     } else {
 
         //Connect to Controller
-        $api_connect = new MemberLogin();
+        $api_connect = new LoginController();
         $info = $api_connect->end_session($requestData);
     }
 

@@ -19,6 +19,13 @@ class Admin extends Model
     protected $sub_table = "app_subscribe";  //Subscribe Table
     protected $v_table = "app_visitors";  //Visitors Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    //User Preferences
+    protected $album_table = "app_user_album";  // Album Table
+    protected $wnts_table = "app_user_wants";  // Preferences Table
+    protected $lng_table = "app_user_languages";  //Languages Table
+    protected $wkedu_table = "app_user_workeducation";  //Work & Education History Table
+    protected $int_table = "app_user_interests";  //Interests Table
+    protected $uact_table = "app_user_activity";  //Activity For Users Table
 
 
 

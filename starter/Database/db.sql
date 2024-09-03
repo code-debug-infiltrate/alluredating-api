@@ -1,7 +1,7 @@
 -- Project updated today `13/10/21`
-CREATE DATABASE IF NOT EXISTS `orienteddating`;
+CREATE DATABASE IF NOT EXISTS `alluredating`;
 
-USE orienteddating;
+USE alluredating;
 
 -- Table structure for registered users `users` 
 CREATE TABLE IF NOT EXISTS `app_users` ( 
@@ -52,6 +52,74 @@ PRIMARY KEY  (`id`)
 
 
 
+-- Table structure for app_user_interests `app_user_interests` 
+CREATE TABLE IF NOT EXISTS `app_user_interests` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`details` longtext,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for app_user_album `app_user_album` 
+CREATE TABLE IF NOT EXISTS `app_user_album` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`details` VARCHAR(100) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for app_user_workeducation `app_user_workeducation` 
+CREATE TABLE IF NOT EXISTS `app_user_workeducation` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`name` VARCHAR(100) DEFAULT NULL,
+`from` VARCHAR(20) DEFAULT NULL,
+`to` VARCHAR(20) DEFAULT NULL,
+`details` longtext,
+`category` ENUM('School', 'Work') DEFAULT 'School',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for app_user_interests `app_user_interests` 
+CREATE TABLE IF NOT EXISTS `app_user_languages` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`language` VARCHAR(100) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+-- Table structure for app_user_wants `app_user_wants` 
+CREATE TABLE IF NOT EXISTS `app_user_wants` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
+`pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
+`dress` ENUM('Strict', 'Indefferent', 'Any') DEFAULT 'Any',
+`dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
+`race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
+`dating` ENUM('Marriage', 'Casual', 'Flirting', 'One Night', 'Gist Partner', 'All') DEFAULT 'All',
+`details` longtext,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+
 -- Table structure for msg report `msgreport` 
 CREATE TABLE IF NOT EXISTS `app_msgreport` ( 
 `id` INT(11) AUTO_INCREMENT,
@@ -93,6 +161,20 @@ CREATE TABLE IF NOT EXISTS `app_activity` (
 `uniqueid` VARCHAR(100) NOT NULL,
 `username` VARCHAR(100) DEFAULT NULL,
 `category` VARCHAR(20) DEFAULT NULL,
+`details` longtext,
+`status` ENUM('Unread', 'Hide', 'Read', 'Trash') DEFAULT 'Unread',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+-- Table structure for app_user_activity `app_user_activity` 
+CREATE TABLE IF NOT EXISTS `app_user_activity` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`user_uniqueid` VARCHAR(100) DEFAULT NULL,
 `details` longtext,
 `status` ENUM('Unread', 'Hide', 'Read', 'Trash') DEFAULT 'Unread',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
