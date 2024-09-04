@@ -1,6 +1,7 @@
 <?php
 
 //Required Files
+require_once __DIR__.'/../Models/Admin.php';
 require_once __DIR__.'/../../Config/Model.php';
 
 
@@ -47,6 +48,44 @@ class Members extends Model
 
 
 
+    //Update User Password
+    public function update_password($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $c = array('uniqueid' => $data['uniqueid'], );
+        $d = array('uniqueid' => $data['uniqueid'], "password" => password_hash($data['newpass'], PASSWORD_DEFAULT), );
+
+        try {
+                $query = "SELECT * FROM ". $this->u_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+                $check = $this->fetch_row($c, $query);
+
+                if (password_verify($data['oldpass'], $check['password'])) {
+                    // code...
+                    $query = "UPDATE ". $this->u_table ." SET `password` = :password WHERE `uniqueid` = :uniqueid LIMIT 1";
+                    $this->update($d, $query);
+                    //Record Activity
+                    $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Password Record", ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+                }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            );
+
+            return $data;   
+        }           
+    }
 
 
 
@@ -58,7 +97,7 @@ class Members extends Model
 
         try {
             //Fetch User Credentials For Use!
-            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC";
+            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC LIMIT 50";
             $activityInfo = $this->fetch_spec($newParams, $query1); 
 
             return $activityInfo;
@@ -117,6 +156,52 @@ class Members extends Model
 
 
 
+
+
+
+    //Method to Create New Interest
+    public function create_interest($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $newParams = array('uniqueid' => $params['uniqueid'], 'interest' => $params['interest'], );
+        
+        try {
+        	$query = "SELECT * FROM " . $this->int_table ." WHERE uniqueid = :uniqueid AND interest = :interest LIMIT 1";
+            $interest = $this->fetch_row($newParams, $query); 
+            // Checking all User credentials...
+            if ($interest == null) {
+
+                $query = "SELECT count(*) FROM " . $this->int_table ." WHERE uniqueid = :uniqueid ";
+                $count = $this->counter_spec($newParams, $query); ;
+
+                if ($count < '5') {
+
+                    $query = "INSERT INTO ". $this->int_table ." (uniqueid, interest) VALUES (:uniqueid, :interest)";
+                    $this->insert($newParams, $query); 
+                    
+                    //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Interests", 'details' => $params['username']." Created ".$params['interest']." Interest.", ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+                }
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
 
 
 

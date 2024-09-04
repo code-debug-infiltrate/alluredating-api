@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `app_user_wants` (
 `uniqueid` VARCHAR(100) NOT NULL,
 `color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
 `pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
-`dress` ENUM('Strict', 'Indefferent', 'Any') DEFAULT 'Any',
+`dress` ENUM('Strict', 'Indifferent', 'Any') DEFAULT 'Any',
 `dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
 `race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
 `dating` ENUM('Marriage', 'Casual', 'Flirting', 'One Night', 'Gist Partner', 'All') DEFAULT 'All',

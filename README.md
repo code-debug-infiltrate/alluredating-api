@@ -40,6 +40,14 @@ Set Basic Info in the htaccess file
 
 
 ## User Dashboard
+[user-profile] User Profile (fname, lname, email, gender, dob, about)
+[user-album] User Photo & Video Album (uniqueid)
+[user-activity] User Profile (uniqueid)
+[user-interests] User Interests (uniqueid)
+[user-preference] User Prefences (uniqueid)
+[user-language] User Language (uniqueid)
+[user-workeducation] User Work & Education (uniqueid)
+
 [all-ads] User Posts ()
 [ads-comments] Post Comments (postid)
 [add-comment] Add a Comment (postid, details)
@@ -49,11 +57,6 @@ Set Basic Info in the htaccess file
 
 ## General
 [user-info] User Credentails (uniqueid)
-[user-profile] User Profile (fname, lname, email, gender, dob, about)
-[user-album] User Photo & Video Album (uniqueid)
-[user-activity] User Profile (uniqueid)
-[user-interests] User Interests (uniqueid)
-[user-preference] User Prefences (uniqueid)
-[user-language] User Language (uniqueid)
-[user-workeducation] User Work & Education (uniqueid)
+[update-password] User Updates Password (uniqueid, oldpass, newpass)
+[new-interest] Create New Interest (uniqueid, interest)
 [end-session] Log Users Out (uniqueid)

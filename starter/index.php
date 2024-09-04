@@ -446,6 +446,59 @@ $endpoints["user-workeducation"] = function (array $requestData): void {
 
 
 
+//Update User Password
+$endpoints["update-password"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["oldpass"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_password($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Create New Interest
+$endpoints["new-interest"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["interest"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->create_interest($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
 
 
 
