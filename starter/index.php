@@ -446,6 +446,34 @@ $endpoints["user-workeducation"] = function (array $requestData): void {
 
 
 
+//Update User Username
+$endpoints["update-username"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["newUsername"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_username($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
 //Update User Password
 $endpoints["update-password"] = function (array $requestData): void {
 
@@ -501,6 +529,94 @@ $endpoints["new-interest"] = function (array $requestData): void {
 
 
 
+//Create New Language
+$endpoints["new-language"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["lang"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->create_language($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Create New Location
+$endpoints["new-location"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["city"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_location($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Update User Bio
+$endpoints["update-bio"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["lname"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_bio($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -529,6 +645,35 @@ $endpoints["end-session"] = function (array $requestData): void {
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
 
+
+
+
+
+
+
+//Logout
+$endpoints["deactivate-account"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["details"])) || (!isset($requestData["password"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->deactivate_account($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
 
 
 

@@ -210,6 +210,52 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+
+        //Method For Create language
+        public function create_language($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'lang' => htmlspecialchars($params['lang']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->create_language($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Language Added!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Max Number Reached Or Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+
+
         //Method For User Activities
         public function update_password($params)
         {
@@ -253,14 +299,158 @@ require_once __DIR__.'/../Models/Members.php';
         }
 
 
+
+
+        //Method For User Activities
+        public function update_username($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'newUsername' => htmlspecialchars($params['newUsername']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_username($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Username Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Username Taken, Retry With New Information.",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+        //Method For Update Location
+        public function update_location($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'address' => htmlspecialchars($params['address']), 
+                'city' => htmlspecialchars($params['city']), 
+                'country' => htmlspecialchars($params['country']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_location($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Location Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+
+        //Method For Update Bio Details
+        public function update_bio($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'fname' => htmlspecialchars($params['fname']), 
+                'lname' => htmlspecialchars($params['lname']), 
+                'number' => htmlspecialchars($params['number']),
+                'occupation' => htmlspecialchars($params['occupation']), 
+                'gender' => htmlspecialchars($params['gender']),
+                'dob' => htmlspecialchars($params['dob']),
+                'details' => htmlspecialchars($params['details']),
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_bio($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Bio Details Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+
+
+        
+
+        
+
+
         
 
         
 
 
-        
-
-        
 
 
 
@@ -270,9 +460,47 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+//Method For Create language
+public function deactivate_account($params)
+{
+    //User Model
+    $model_connect = new Members();
+    //User Account Parameters
+    $fillable = array(
+        'uniqueid' => htmlspecialchars($params['uniqueid']), 
+        'username' => htmlspecialchars($params['username']), 
+        'password' => htmlspecialchars($params['password']),
+        'details' => htmlspecialchars($params['details']), 
+    );
 
+    //Model Function Call
+    $result = $model_connect->deactivate_account($fillable);
 
+    if ($result == true) {
 
+        $data = array(
+            'result_info' => 
+                array(
+                    'code' => "200",
+                    'type' => "success",
+                    'message' => "Successful, Account Has Been Deactivated & Trashed After 180 Days!",
+                ),
+            );
+
+    } else {
+
+        $data = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Error, Something Came Up.",
+                ),
+            );
+    }
+
+    return $data; 
+}
 
 
 

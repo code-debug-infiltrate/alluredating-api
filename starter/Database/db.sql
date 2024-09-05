@@ -101,8 +101,8 @@ PRIMARY KEY  (`id`)
 
 
 
--- Table structure for app_user_wants `app_user_wants` 
-CREATE TABLE IF NOT EXISTS `app_user_wants` ( 
+-- Table structure for app_user_preferences `app_user_preferences` 
+CREATE TABLE IF NOT EXISTS `app_user_preferences` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(100) NOT NULL,
 `color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
@@ -268,6 +268,20 @@ PRIMARY KEY  (`id`)
 
 
 
+-- Table structure for Delete Account Reason `app_delete_account` 
+CREATE TABLE IF NOT EXISTS `app_delete_account` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`uniqueid` VARCHAR(50)  NOT NULL,
+`details` text DEFAULT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+
+
+
+
+
 
 
 
@@ -291,7 +305,7 @@ INSERT INTO `app_profile` (`id`, `uniqueid`, `fname`, `lname`) VALUES (1, 'REDfT
 --
 -- Dumping data for table `Company Profile`
 --
-INSERT INTO `app_coy_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `address`, `img`, `status`) VALUES (1, 'GistVille','Connecting You To Your Soulmate', 'hello@GistVille.com', '', '+20111111111', '', 'GistVille', 'GistVille', 'GistVille', 'GistVille', 'No 17, Kudeti Avenue, Flambush', 'favicon.png', 'Publish'); 
+INSERT INTO `app_coy_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `address`, `img`, `status`) VALUES (1, 'Allure-D','Connecting You To Your Soulmate', 'hello@allured.com', '', '+20111111111', '', 'allured', 'allured', 'allured', 'allured', 'No 17, Kudeti Avenue, Flambush, Kignson drive. Uk', 'favicon.png', 'Publish'); 
 
 
 

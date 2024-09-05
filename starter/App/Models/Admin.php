@@ -21,7 +21,7 @@ class Admin extends Model
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
-    protected $wnts_table = "app_user_wants";  // Preferences Table
+    protected $pref_table = "app_user_preferences";  //User Preferences Table
     protected $lng_table = "app_user_languages";  //Languages Table
     protected $wkedu_table = "app_user_workeducation";  //Work & Education History Table
     protected $int_table = "app_user_interests";  //Interests Table

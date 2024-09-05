@@ -16,9 +16,10 @@ class Members extends Model
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    protected $delAcc_table = "app_delete_account";  //Delete Account  Table
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
-    protected $wnts_table = "app_user_wants";  //User Preferences Table
+    protected $pref_table = "app_user_preferences";  //User Preferences Table
     protected $lng_table = "app_user_languages";  //Languages Table
     protected $wkedu_table = "app_user_workeducation";  //Work & Education History Table
     protected $int_table = "app_user_interests";  //Interests Table
@@ -45,6 +46,50 @@ class Members extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
+
+
+
+
+    //Update Username
+    public function update_username($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $b = array('username' => $data['newUsername'], );
+        $c = array('uniqueid' => $data['uniqueid'], 'username' => $data['newUsername'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->u_table ." WHERE username = :username LIMIT 1";
+            $check = $this->fetch_row($b, $query);
+
+            if (!$check) {
+
+                $query = "UPDATE ". $this->u_table ." SET `username` = :username WHERE `uniqueid` = :uniqueid LIMIT 1";
+                $this->update($c, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['newUsername'], 'category' => "Settings", 'details' => $data['username']." Updated Username To ".$data['newUsername'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
 
 
 
@@ -87,6 +132,80 @@ class Members extends Model
         }           
     }
 
+
+
+
+     //Method to Update Location
+     public function update_location($params)
+     {
+         //Admin Model
+         $admin_model = new Admin();
+         $a = array('uniqueid' => $params['uniqueid'], );
+         $newParams = array('uniqueid' => $params['uniqueid'], 'address' => $params['address'], 'city' => $params['city'], 'country' => $params['country'], );
+         
+         try {
+             $query = "SELECT * FROM " . $this->p_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+             $loc = $this->fetch_row($a, $query); 
+             // Checking all User credentials...
+             if ($loc) {
+ 
+                $query = "UPDATE ". $this->p_table ." SET address = :address, city = :city, country = :country WHERE uniqueid = :uniqueid LIMIT 1";
+                $this->update($newParams, $query); 
+                
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Location", 'details' => $params['username']." Updated Their Address", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+ 
+         } catch (Exception $e) {
+ 
+             return "There is some errors: " . $e->getMessage();
+         }
+     }
+
+
+
+
+    
+    //Method to Update Bio
+    public function update_bio($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $a = array('uniqueid' => $params['uniqueid'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], 'number' => $params['number'], 'occupation' => $params['occupation'], 'gender' => $params['gender'], 'dob' => $params['dob'], 'details' => $params['details'], );
+        
+        try {
+            $query = "SELECT * FROM " . $this->p_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $bio = $this->fetch_row($a, $query); 
+            // Checking all User credentials...
+            if ($bio) {
+
+                $query0 = "UPDATE ". $this->p_table ." SET fname = :fname, lname = :lname, number = :number, occupation = :occupation, gender = :gender, dob = :dob, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
+                $this->update($newParams, $query0); 
+                
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Settings", 'details' => $params['username']." Updated Their Bio Details", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                return false;
+        }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
 
 
 
@@ -143,7 +262,7 @@ class Members extends Model
 
         try {
             //Fetch User Credentials For Use!
-            $query1 = "SELECT * FROM ". $this->wnts_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $query1 = "SELECT * FROM ". $this->pref_table ." WHERE uniqueid = :uniqueid LIMIT 1";
             $preferenceInfo = $this->fetch_row($newParams, $query1); 
 
             return $preferenceInfo;
@@ -250,6 +369,53 @@ class Members extends Model
 
 
 
+     //Method to Create New Interest
+     public function create_language($params)
+     {
+         //Admin Model
+         $admin_model = new Admin();
+         $a = array('uniqueid' => $params['uniqueid'], );
+         $newParams = array('uniqueid' => $params['uniqueid'], 'language' => $params['lang'], );
+         
+         try {
+             $query = "SELECT * FROM " . $this->lng_table ." WHERE uniqueid = :uniqueid AND language = :language LIMIT 1";
+             $language = $this->fetch_row($newParams, $query); 
+             // Checking all User credentials...
+             if ($language == null) {
+ 
+                 $query = "SELECT count(*) FROM " . $this->lng_table ." WHERE uniqueid = :uniqueid ";
+                 $count = $this->counter_spec($a, $query); ;
+ 
+                 if ($count < '5') {
+ 
+                     $query = "INSERT INTO ". $this->lng_table ." (uniqueid, language) VALUES (:uniqueid, :language)";
+                     $this->insert($newParams, $query); 
+                     
+                     //Record Activity
+                     $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Language", 'details' => $params['username']." Added ".$params['lang']." Language.", ); 
+                     $admin_model->record_activity($info);
+ 
+                     return true;
+ 
+                 } else {
+ 
+                     return false;
+                 }
+ 
+             } else {
+ 
+                 return false;
+             }
+ 
+         } catch (Exception $e) {
+ 
+             return "There is some errors: " . $e->getMessage();
+         }
+     }
+
+
+
+
 
     //Fetch User Languages
     public function user_language($param)
@@ -281,6 +447,58 @@ class Members extends Model
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    //Login method For All Users
+    public function deactivate_account($params)
+    {
+        $admin_model = new Admin();
+        $c = array('uniqueid' => $params['uniqueid'], 'details' => $params['details'], );
+        $d = array('uniqueid' => $params['uniqueid'], );
+        $e = array('uniqueid' => $params['uniqueid'], 'login_status' => "Logged_out", 'log_session' => "End Session", 'status' => "Deactivated", );
+
+        try {
+            $query = "SELECT * FROM ". $this->u_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $user = $this->fetch_row($d, $query);
+
+            if (password_verify($params['password'], $user['password'])) {
+
+                $query0 = "INSERT INTO ". $this->delAcc_table ." (uniqueid, details) VALUES (:uniqueid, :details)";
+                $this->insert($c, $query0); 
+                
+                $query1 = "UPDATE ". $this->u_table ." SET `login_status` = :login_status, `status` = :status, `log_session` = :log_session WHERE `uniqueid` = :uniqueid LIMIT 1";
+                $this->logout($e, $query1);
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Authentication", 'details' => $params['username']." Deactivated Account", ); 
+                $admin_model->record_activity($info);
+
+                unset($params['uniqueid']);
+                
+                return true;
+            } else {
+
+                return false;
+
+            }
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e,
+            );
+
+            return $data;          
+        }
+    }
 
 
 

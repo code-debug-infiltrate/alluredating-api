@@ -57,6 +57,11 @@ Set Basic Info in the htaccess file
 
 ## General
 [user-info] User Credentails (uniqueid)
-[update-password] User Updates Password (uniqueid, oldpass, newpass)
-[new-interest] Create New Interest (uniqueid, interest)
-[end-session] Log Users Out (uniqueid)
+[update-username] User Updates Username (uniqueid, username, newUsername)
+[update-password] User Updates Password (uniqueid, username, oldpass, newpass)
+[update-bio] User Updates Bio Details (uniqueid, username, fname, lname, number, occupation, gender, dob, details)
+[new-interest] Create New Interest (uniqueid, username, interest)
+[new-location] Create New Location (uniqueid, username, address, city, country)
+[new-language] Create New Interest (uniqueid, username, lang)
+[end-session] Log Users Out (uniqueid, username, )
+[deactivate-account] Deactivate An Account (uniqueid, username, password, details)
