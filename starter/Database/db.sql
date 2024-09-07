@@ -56,7 +56,7 @@ PRIMARY KEY  (`id`)
 CREATE TABLE IF NOT EXISTS `app_user_interests` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(100) NOT NULL,
-`details` longtext,
+`details`  VARCHAR(100) NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS `app_user_workeducation` (
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(100) NOT NULL,
 `name` VARCHAR(100) DEFAULT NULL,
-`from` VARCHAR(20) DEFAULT NULL,
-`to` VARCHAR(20) DEFAULT NULL,
+`start` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`end` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 `details` longtext,
 `category` ENUM('School', 'Work') DEFAULT 'School',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
@@ -107,6 +107,9 @@ CREATE TABLE IF NOT EXISTS `app_user_preferences` (
 `uniqueid` VARCHAR(100) NOT NULL,
 `color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
 `pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
+`height` VARCHAR(100) NOT NULL,
+`weight` VARCHAR(100) NOT NULL,
+`employment` VARCHAR(100) NOT NULL,
 `dress` ENUM('Strict', 'Indifferent', 'Any') DEFAULT 'Any',
 `dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
 `race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
@@ -115,6 +118,27 @@ CREATE TABLE IF NOT EXISTS `app_user_preferences` (
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for app_user_attributes `app_user_attributes` 
+CREATE TABLE IF NOT EXISTS `app_user_attributes` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(100) NOT NULL,
+`color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
+`pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
+`height` VARCHAR(100) NOT NULL,
+`weight` VARCHAR(100) NOT NULL,
+`employment` VARCHAR(100) NOT NULL,
+`dress` ENUM('Strict', 'Indifferent', 'Any') DEFAULT 'Any',
+`dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
+`race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
+`dating` ENUM('Marriage', 'Casual', 'Flirting', 'One Night', 'Gist Partner', 'All') DEFAULT 'All',
+`details` longtext,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
 
 
 

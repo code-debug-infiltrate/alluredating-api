@@ -20,8 +20,9 @@ class Members extends Model
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
     protected $pref_table = "app_user_preferences";  //User Preferences Table
+    protected $attr_table = "app_user_attributes";  //User Attributes Table
     protected $lng_table = "app_user_languages";  //Languages Table
-    protected $wkedu_table = "app_user_workeducation";  //Work & Education History Table
+    protected $workedu_table = "app_user_workeducation";  //Work & Education History Table
     protected $int_table = "app_user_interests";  //Interests Table
     protected $uact_table = "app_user_activity";  //Activity For Users Table
 
@@ -172,6 +173,43 @@ class Members extends Model
 
 
 
+     //Method to Update Work N Education
+     public function update_workneducation($params)
+     {
+         //Admin Model
+         $admin_model = new Admin();
+         $a = array('uniqueid' => $params['uniqueid'], 'category' => $params['category'], 'name' => $params['name'],);
+         
+         try {
+             $query = "SELECT * FROM " . $this->workedu_table ." WHERE uniqueid = :uniqueid AND name = :name AND category = :category LIMIT 1";
+             $loc = $this->fetch_row($a, $query); 
+             // Checking all User credentials...
+             if (!$loc) {
+
+                $newParams = array('uniqueid' => $params['uniqueid'], 'name' => $params['name'], 'category' => $params['category'], 'end' => $params['to'], 'start' => $params['from'], 'details' => $params['details'], );
+                    
+                $query = "INSERT INTO ". $this->workedu_table ." (uniqueid, name, start, end, category, details) VALUES (:uniqueid, :name, :start, :end, :category, :details)";
+                $this->insert($newParams, $query); 
+                
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Work/Education", 'details' => $params['username']." Added ".$params['name'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+ 
+         } catch (Exception $e) {
+ 
+             return "There is some errors: " . $e->getMessage();
+         }
+     }
+
+
+
     
     //Method to Update Bio
     public function update_bio($params)
@@ -283,21 +321,21 @@ class Members extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-
-        $newParams = array('uniqueid' => $params['uniqueid'], 'interest' => $params['interest'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'details' => $params['interest'], );
         
         try {
-        	$query = "SELECT * FROM " . $this->int_table ." WHERE uniqueid = :uniqueid AND interest = :interest LIMIT 1";
-            $interest = $this->fetch_row($newParams, $query); 
+        	$query = "SELECT * FROM " . $this->int_table ." WHERE uniqueid = :uniqueid AND details = :details LIMIT 1";
+            $inte = $this->fetch_row($newParams, $query); 
             // Checking all User credentials...
-            if ($interest == null) {
+            if ($inte == null) {
+                $newParam = array('uniqueid' => $params['uniqueid'], );
 
                 $query = "SELECT count(*) FROM " . $this->int_table ." WHERE uniqueid = :uniqueid ";
-                $count = $this->counter_spec($newParams, $query); ;
+                $count = $this->counter_spec($newParam, $query); ;
 
                 if ($count < '5') {
 
-                    $query = "INSERT INTO ". $this->int_table ." (uniqueid, interest) VALUES (:uniqueid, :interest)";
+                    $query = "INSERT INTO ". $this->int_table ." (uniqueid, details) VALUES (:uniqueid, :details)";
                     $this->insert($newParams, $query); 
                     
                     //Record Activity
@@ -354,7 +392,7 @@ class Members extends Model
 
         try {
             //Fetch User Credentials For Use!
-            $query1 = "SELECT * FROM ". $this->wkedu_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC";
+            $query1 = "SELECT * FROM ". $this->workedu_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC";
             $workeducationInfo = $this->fetch_spec($newParams, $query1); 
 
             return $workeducationInfo;

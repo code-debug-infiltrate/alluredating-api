@@ -63,5 +63,6 @@ Set Basic Info in the htaccess file
 [new-interest] Create New Interest (uniqueid, username, interest)
 [new-location] Create New Location (uniqueid, username, address, city, country)
 [new-language] Create New Interest (uniqueid, username, lang)
+[new-workneducation] Create New Work Or Education Info (uniqueid, username, name, from, to, category, details)
 [end-session] Log Users Out (uniqueid, username, )
 [deactivate-account] Deactivate An Account (uniqueid, username, password, details)

@@ -389,6 +389,55 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+        
+
+        //Method For Update Work N Education
+        public function update_workneducation($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'name' => htmlspecialchars($params['name']), 
+                'from' => htmlspecialchars($params['from']), 
+                'to' => htmlspecialchars($params['to']), 
+                'category' => htmlspecialchars($params['category']), 
+                'details' => htmlspecialchars($params['details']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_workneducation($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Work & Education Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
 
         //Method For Update Bio Details
         public function update_bio($params)
