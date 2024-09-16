@@ -19,8 +19,8 @@ class RegisterController
         $hash = md5(rand(0,1000));
         $length = 5;
         $chars = getenv('COMBINATION');
-        $code = substr(str_shuffle(trim($chars)), 0, $length);
-        $uniqueid = trim('uid').trim($code);
+        $code = preg_replace('/\s+/', '', trim($chars));
+        $uniqueid = preg_replace('/\s+/', '', trim('uid').trim($code));
 
         //User Account Parameters
         $fillable = array(

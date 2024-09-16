@@ -9,6 +9,42 @@ require_once __DIR__.'/../Models/Members.php';
     {
 
 
+        //Method To Fetch All User Profiles
+        public function user_profiles()
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->user_profiles();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'user_profiles' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch All User Profiles
+        public function users_online_status()
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->users_online_status();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'users_status' => $actInfo,
+                );
+
+            return $data; 
+        }
+
 
         //Method For User Dashboard
         public function user_information($params)
@@ -74,6 +110,27 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+        //Method For User Myself Attributes
+        public function user_myself($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_myself($fillable);
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
 
         //Method For User Album
         public function user_album($params)
@@ -93,9 +150,6 @@ require_once __DIR__.'/../Models/Members.php';
 
             return $data; 
         }
-
-
-
 
 
 
@@ -120,9 +174,6 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
-
-
-
         //Method For User Language
         public function user_language($params)
         {
@@ -141,9 +192,6 @@ require_once __DIR__.'/../Models/Members.php';
 
             return $data; 
         }
-
-
-
 
 
         //Method For User Activities
@@ -389,8 +437,7 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
-        
-
+    
         //Method For Update Work N Education
         public function update_workneducation($params)
         {
@@ -488,14 +535,547 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+        //Method For Update Profile Photo
+        public function update_profile_photo($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'profileimage' => htmlspecialchars($params['profileimage']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_profile_photo($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Profile Photo Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
 
 
+
+        //Method For Update Cover Photo
+        public function update_cover_photo($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'coverimage' => htmlspecialchars($params['coverimage']), 
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_cover_photo($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Profile Photo Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+        //Method For Update Myself Attributes
+        public function update_myself($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'orientation' => htmlspecialchars($params['orientation']), 
+                'height' => htmlspecialchars($params['height']), 
+                'weight' => htmlspecialchars($params['weight']), 
+                'bodytype' => htmlspecialchars($params['bodytype']), 
+                'seeking' => htmlspecialchars($params['seeking']),
+                'ethnicity' => htmlspecialchars($params['ethnicity']),
+                'religion' => htmlspecialchars($params['religion']),
+                'pets' => htmlspecialchars($params['pets']),
+                'dates' => htmlspecialchars($params['dates']),
+                'dress' => htmlspecialchars($params['dress']), 
+                'eating' => htmlspecialchars($params['eating']),
+                'smoking' => htmlspecialchars($params['smoking']),
+                'drinking' => htmlspecialchars($params['drinking']),
+                'color' => htmlspecialchars($params['color']),
+                'employment' => htmlspecialchars($params['employment']),
+                'details' => htmlspecialchars($params['details']),
+               
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_myself($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Personal Attributes Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+        //Method For Update Preference Attributes
+        public function update_preference($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']), 
+                'username' => htmlspecialchars($params['username']), 
+                'gender' => htmlspecialchars($params['gender']),
+                'orientation' => htmlspecialchars($params['orientation']), 
+                'height' => htmlspecialchars($params['height']), 
+                'weight' => htmlspecialchars($params['weight']), 
+                'bodytype' => htmlspecialchars($params['bodytype']), 
+                'seeking' => htmlspecialchars($params['seeking']),
+                'ethnicity' => htmlspecialchars($params['ethnicity']),
+                'religion' => htmlspecialchars($params['religion']),
+                'pets' => htmlspecialchars($params['pets']),
+                'dates' => htmlspecialchars($params['dates']),
+                'dress' => htmlspecialchars($params['dress']), 
+                'eating' => htmlspecialchars($params['eating']),
+                'smoking' => htmlspecialchars($params['smoking']),
+                'drinking' => htmlspecialchars($params['drinking']),
+                'color' => htmlspecialchars($params['color']),
+                'employment' => htmlspecialchars($params['employment']),
+                'details' => htmlspecialchars($params['details']),
+               
+            );
+
+            //Model Function Call
+            $result = $model_connect->update_preference($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Ideal Date Attributes Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+        //Method For User To Find Matches
+        public function user_find_people($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_find_people($fillable);
+
+            if ($actInfo != false) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'people_info' => $actInfo,
+                );
+                return $data;
+                
+             } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "No Record Found", ),
+                    'people_info' => false,
+                );
+ 
+                 return $data; 
+            }
+        }
+
+
+         //Method For User To Random Matches
+         public function user_random_people($params)
+         {
+             //User Model
+             $model_connect = new Members();
+             //User Account Parameters
+             $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+ 
+             //Model Function Call
+             $actInfo = $model_connect->user_random_people($fillable);
+ 
+             if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'buddy_info' => $actInfo,
+                );
+                return $data;
+
+             } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "No Record Found", ),
+                    'buddy_info' => false,
+                );
+ 
+                 return $data; 
+            }
+         }
+
+
+
+        //Method For Online User Count
+        public function online_now_count()
+        {
+            //User Model
+            $model_connect = new Members();
+            //Model Function Call
+            $actInfo = $model_connect->online_now_count();
+
+            return $actInfo;
+        }
+
+
+        //Method For Online User Count
+        public function count_user_activity($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $actInfo = $model_connect->count_user_activity($fillable);
+
+            return $actInfo;
+        }
+
+
+        //Method For User Views Count
+        public function count_user_views($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $actInfo = $model_connect->count_user_views($fillable);
+
+            return $actInfo;
+        }
+
+
+        //Method For User Likes Count
+        public function count_user_likes($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $actInfo = $model_connect->count_user_likes($fillable);
+
+            return $actInfo;
+        }
+
+
+        //Method For Buddy Activity Records
+        public function buddy_activities($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $actInfo = $model_connect->buddy_activities($fillable);
+
+            return $actInfo;
+        }
+        
+        
+
+
+        
+        //Method For User Actions On Buddy Profile
+        public function user_actions($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'username' => htmlspecialchars($params['username']),
+                'viewerid' => htmlspecialchars($params['viewerid']),
+                'action' => htmlspecialchars($params['action']),
+              );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_actions($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+            } 
+        }
+
+
+        //Method For User Views On Buddy Profile
+        public function user_views($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'viewerid' => htmlspecialchars($params['viewerid']), 'username' => htmlspecialchars($params['username']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_views($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+        //Method For User To Add Buddy
+        public function user_add_buddy($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), 'buddyid' => htmlspecialchars($params['buddyid']), 'buddyname' => htmlspecialchars($params['buddyname']), 'request' => htmlspecialchars($params['request']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_add_buddy($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+
+        //Method For User To Accept Buddy
+        public function user_accept_buddy($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), 'buddyid' => htmlspecialchars($params['buddyid']), 'buddyname' => htmlspecialchars($params['buddyname']), 'request' => htmlspecialchars($params['request']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_accept_buddy($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'myself_info' => $actInfo,
+                );
+
+                return $data;
+            } 
+        }
+
+        
+
+        //Method For User To Count Buddy
+        public function user_buddies_count($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_buddies_count($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'buddiesCount_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'buddiesCount_info' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+        
+
+
+        //Method For User To List All Buddies
+        public function user_buddies_list($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->user_buddies_list($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'buddiesList_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'buddiesList_info' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
         
 
         
 
 
-        
+
+
+
 
         
 

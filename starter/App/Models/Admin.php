@@ -21,9 +21,13 @@ class Admin extends Model
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
+    protected $self_table = "app_user_self";  //User Self Table
+    protected $actions_table = "app_user_actions";  //User Actions Table
+    protected $buddy_table = "app_user_buddy";  //User Buddy Table
+    protected $views_table = "app_user_views";  //User Views Table
     protected $pref_table = "app_user_preferences";  //User Preferences Table
     protected $lng_table = "app_user_languages";  //Languages Table
-    protected $wkedu_table = "app_user_workeducation";  //Work & Education History Table
+    protected $workedu_table = "app_user_workeducation";  //Work & Education History Table
     protected $int_table = "app_user_interests";  //Interests Table
     protected $uact_table = "app_user_activity";  //Activity For Users Table
 
@@ -39,9 +43,10 @@ class Admin extends Model
     public function record_activity($params)
     {
         try {
-            
             $query = "INSERT INTO ". $this->act_table ." (uniqueid, username, category, details) VALUES (:uniqueid, :username, :category, :details)";
-            $result = $this->insert($params, $query); 
+            $this->insert($params, $query); 
+
+            return true;
 
         } catch (Exception $e) {
 

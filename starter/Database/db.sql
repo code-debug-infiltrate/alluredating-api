@@ -6,7 +6,7 @@ USE alluredating;
 -- Table structure for registered users `users` 
 CREATE TABLE IF NOT EXISTS `app_users` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `email` VARCHAR(150) NOT NULL,
 `username` VARCHAR(200) NOT NULL,
 `password` VARCHAR(150) DEFAULT NULL,
@@ -29,7 +29,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for confirmed users `profile` 
 CREATE TABLE IF NOT EXISTS `app_profile` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `fname` VARCHAR(50) NOT NULL,
 `lname` VARCHAR(50) NOT NULL,
 `dob` varchar(20) DEFAULT NULL,
@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `app_profile` (
 `country` VARCHAR(150) DEFAULT NULL,
 `zipcode` VARCHAR(50) DEFAULT NULL,
 `profileimage` VARCHAR(200) DEFAULT 'favicon.png',
+`coverimage` VARCHAR(200) DEFAULT 'outdoor.jpg',
 `details` longtext DEFAULT NULL,
 `verify_status` ENUM('Unverified', 'Verified') DEFAULT 'Unverified',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
@@ -55,7 +56,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_interests `app_user_interests` 
 CREATE TABLE IF NOT EXISTS `app_user_interests` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `details`  VARCHAR(100) NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
@@ -66,7 +67,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_album `app_user_album` 
 CREATE TABLE IF NOT EXISTS `app_user_album` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `details` VARCHAR(100) NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
@@ -77,7 +78,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_workeducation `app_user_workeducation` 
 CREATE TABLE IF NOT EXISTS `app_user_workeducation` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `name` VARCHAR(100) DEFAULT NULL,
 `start` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 `end` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -92,8 +93,55 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_interests `app_user_interests` 
 CREATE TABLE IF NOT EXISTS `app_user_languages` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `language` VARCHAR(100) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+-- Table structure for app_user_actions `app_user_actions` 
+CREATE TABLE IF NOT EXISTS `app_user_actions` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`viewerid` VARCHAR(100) NOT NULL,
+`action` ENUM('Like', 'Dislike', 'None') DEFAULT 'None',
+`views` INT(10) DEFAULT '0',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+-- Table structure for app_user_views `app_user_views` 
+CREATE TABLE IF NOT EXISTS `app_user_views` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`views` INT(10) DEFAULT '0',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+-- Table structure for app_user_buddy `app_user_buddy` 
+CREATE TABLE IF NOT EXISTS `app_user_buddy` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`buddyid` VARCHAR(50) NOT NULL,
+`request` ENUM('Pending', 'Accepted', 'Declined') DEFAULT 'Pending',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+-- Table structure for app_user_buddy `app_user_buddy_chats` 
+CREATE TABLE IF NOT EXISTS `app_user_buddy_chats` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`buddyid` VARCHAR(50) NOT NULL,
+`status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
+`details` text NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
@@ -104,16 +152,23 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_preferences `app_user_preferences` 
 CREATE TABLE IF NOT EXISTS `app_user_preferences` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
-`color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
-`pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
-`height` VARCHAR(100) NOT NULL,
-`weight` VARCHAR(100) NOT NULL,
-`employment` VARCHAR(100) NOT NULL,
-`dress` ENUM('Strict', 'Indifferent', 'Any') DEFAULT 'Any',
-`dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
-`race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
-`dating` ENUM('Marriage', 'Casual', 'Flirting', 'One Night', 'Gist Partner', 'All') DEFAULT 'All',
+`uniqueid` VARCHAR(50) NOT NULL,
+`gender` VARCHAR(20) DEFAULT NULL,
+`orientation` VARCHAR(20) DEFAULT NULL,
+`ethnicity` VARCHAR(20) DEFAULT NULL,
+`color` VARCHAR(20) DEFAULT NULL,
+`pets` VARCHAR(20) DEFAULT NULL,
+`smoking` VARCHAR(20) DEFAULT NULL,
+`eating` VARCHAR(20) DEFAULT NULL,
+`drinking` VARCHAR(20) DEFAULT NULL,
+`bodytype` VARCHAR(20) DEFAULT NULL,
+`height` VARCHAR(20) DEFAULT NULL,
+`weight` VARCHAR(20) DEFAULT NULL,
+`employment` VARCHAR(70) DEFAULT NULL,
+`religion` VARCHAR(70) DEFAULT NULL,
+`dress` VARCHAR(20) DEFAULT NULL,
+`dates` VARCHAR(20) DEFAULT NULL,
+`seeking` VARCHAR(20) DEFAULT NULL,
 `details` longtext,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
@@ -121,24 +176,90 @@ PRIMARY KEY  (`id`)
 
 
 
--- Table structure for app_user_attributes `app_user_attributes` 
-CREATE TABLE IF NOT EXISTS `app_user_attributes` ( 
+-- Table structure for app_user_self `app_user_self` 
+CREATE TABLE IF NOT EXISTS `app_user_self` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
-`color` ENUM('White', 'Black', 'Any') DEFAULT 'Any',
-`pets` ENUM('Yes', 'No', 'Any') DEFAULT 'Any',
-`height` VARCHAR(100) NOT NULL,
-`weight` VARCHAR(100) NOT NULL,
-`employment` VARCHAR(100) NOT NULL,
-`dress` ENUM('Strict', 'Indifferent', 'Any') DEFAULT 'Any',
-`dates` ENUM('Regular', 'Once a While', 'Any') DEFAULT 'Any',
-`race` ENUM('American', 'African', 'Asian', 'European',  'Australian', 'Any') DEFAULT 'Any',
-`dating` ENUM('Marriage', 'Casual', 'Flirting', 'One Night', 'Gist Partner', 'All') DEFAULT 'All',
+`uniqueid` VARCHAR(50) NOT NULL,
+`orientation` VARCHAR(20) DEFAULT NULL,
+`ethnicity` VARCHAR(20) DEFAULT NULL,
+`color` VARCHAR(20) DEFAULT NULL,
+`pets` VARCHAR(20) DEFAULT NULL,
+`smoking` VARCHAR(20) DEFAULT NULL,
+`eating` VARCHAR(20) DEFAULT NULL,
+`drinking` VARCHAR(20) DEFAULT NULL,
+`bodytype` VARCHAR(20) DEFAULT NULL,
+`height` VARCHAR(20) DEFAULT NULL,
+`weight` VARCHAR(20) DEFAULT NULL,
+`employment` VARCHAR(70) DEFAULT NULL,
+`religion` VARCHAR(70) DEFAULT NULL,
+`dress` VARCHAR(20) DEFAULT NULL,
+`dates` VARCHAR(20) DEFAULT NULL,
+`seeking` VARCHAR(20) DEFAULT NULL,
 `details` longtext,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
 
+
+
+
+-- Table structure for User Posts `app_Posts` 
+CREATE TABLE `app_posts` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`postid` VARCHAR(20) NOT NULL,
+`url` VARCHAR(150) NOT NULL,
+`details` longtext NOT NULL,
+`type` ENUM('Video', 'Image') DEFAULT 'Image',
+`status` ENUM('New', 'Publish', 'Draft', 'Trash') DEFAULT 'New',
+`updated` DATETIME DEFAULT NULL, 
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for User Post Images `app_Post_images` 
+CREATE TABLE `app_post_images` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`postid` VARCHAR(20) NOT NULL,
+`img` VARCHAR(100) NOT NULL,
+`img1` VARCHAR(100) DEFAULT NULL,
+`img2` VARCHAR(100) DEFAULT NULL,
+`img3` VARCHAR(100) DEFAULT NULL,
+`img4` VARCHAR(100) DEFAULT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+-- Table structure for User Post Images `app_Post_actions` 
+CREATE TABLE `app_post_actions` ( 
+`id` INT(11) AUTO_INCREMENT,
+`postid` VARCHAR(20) NOT NULL,
+`likes` INT(11) NOT NULL,
+`dislikes` INT(11) DEFAULT NULL,
+`views` INT(11) DEFAULT NULL,
+`reports` INT(11) DEFAULT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+-- Table structure for User Post Images `app_Post_images` 
+CREATE TABLE `app_user_post_actions` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`postid` VARCHAR(20) NOT NULL,
+`action` VARCHAR(20) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
 
 
 
@@ -182,7 +303,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for activity `activity` 
 CREATE TABLE IF NOT EXISTS `app_activity` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `username` VARCHAR(100) DEFAULT NULL,
 `category` VARCHAR(20) DEFAULT NULL,
 `details` longtext,
@@ -197,7 +318,7 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_activity `app_user_activity` 
 CREATE TABLE IF NOT EXISTS `app_user_activity` ( 
 `id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(100) NOT NULL,
+`uniqueid` VARCHAR(50) NOT NULL,
 `user_uniqueid` VARCHAR(100) DEFAULT NULL,
 `details` longtext,
 `status` ENUM('Unread', 'Hide', 'Read', 'Trash') DEFAULT 'Unread',
