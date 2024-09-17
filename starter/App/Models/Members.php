@@ -28,6 +28,10 @@ class Members extends Model
     protected $workedu_table = "app_user_workeducation";  //Work & Education History Table
     protected $int_table = "app_user_interests";  //Interests Table
     protected $uact_table = "app_user_activity";  //Activity For Users Table
+    protected $post_table = "app_users_posts";  //Posts For Users Table
+    protected $postimg_table = "app_post_files";  //Posts Images For Users Table
+    protected $postact_table = "app_post_actions";  //Post Actions
+    protected $urpostact_table = "app_user_post_actions";  //User Post Actions
 
 
 
@@ -402,8 +406,6 @@ class Members extends Model
 
 
 
-
-
     //Fetch User Album
     public function user_album($param)
     {
@@ -421,8 +423,6 @@ class Members extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
-
-
 
 
 
@@ -490,8 +490,6 @@ class Members extends Model
         }
     }
    
-   
-   
 
 
 
@@ -512,8 +510,6 @@ class Members extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
-
-
     
 
     
@@ -628,8 +624,6 @@ class Members extends Model
 
 
 
-
-
     //Fetch User Work & Education
     public function user_workeducation($param)
     {
@@ -647,7 +641,6 @@ class Members extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
-
 
 
 
@@ -695,7 +688,6 @@ class Members extends Model
             return "There is some errors: " . $e->getMessage();
         }
     }
-
 
 
 
@@ -968,7 +960,7 @@ class Members extends Model
                    $admin_model->record_activity($info);
 
                    //Record Activity
-                    $info = array('uniqueid' => $params['buddyid'], 'user_uniqueid' => $params['uniqueid'], 'details' => $params['buddyname']." Accepted Your Buddy Request.", ); 
+                    $info = array('uniqueid' => $params['buddyid'], 'user_uniqueid' => $params['uniqueid'], 'details' => $params['username']." Accepted Your Buddy Request.", ); 
                     $this->record_user_activity($info);
 
                     return true;
@@ -1010,6 +1002,49 @@ class Members extends Model
    }
 
 
+
+   //Method to Create New Post
+   public function user_create_post($params, $images)
+   {
+       //Admin Model
+       $admin_model = new Admin();
+       
+       $newP = array('uniqueid' => $params['uniqueid'], 'postdetails' => $params['postdetails'], );
+       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'postdetails' => $params['postdetails'], 'file' => $params['file'], 'url' => $params['url'], );
+
+       try {
+           $query = "SELECT * FROM " . $this->post_table ." WHERE uniqueid = :uniqueid AND postdetails = :postdetails LIMIT 1";
+           $RowCount = $this->fetch_row($newP, $query); 
+
+           // Checking all User credentials...
+           if (!$RowCount) {
+
+               $query = "INSERT INTO ". $this->post_table ." (postid, uniqueid, postdetails, file, url) VALUES (:postid, :uniqueid, :postdetails, file, :url)";
+               $this->insert($newParams, $query); 
+
+               if ($images != null) {
+
+                    $a = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'file1' => $images[0], 'file2' => $images[1], 'file3' => $images[2], 'file4' => $images[3], );
+                    $query = "INSERT INTO ". $this->postimg_table ." (postid, uniqueid, file1, file2, file3, file4) VALUES (:postid, :uniqueid, :file1, :file2, :file3, :file4)";
+                    $this->insert($a, $query);   
+               }
+               
+               //Record Activity
+               $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Made a Post", ); 
+               $admin_model->record_activity($info);
+
+               return true;
+
+           } else {
+
+               return false;
+           }
+
+       } catch (Exception $e) {
+
+           return "There is some errors: " . $e->getMessage();
+       }
+   }
 
 
 
@@ -1195,14 +1230,14 @@ class Members extends Model
 
             return $count;
 
-            } catch (Exception $e) {
+        } catch (Exception $e) {
 
-                $data = array(
-                    "type" => "error",
-                    "message" => $e->getMessage()
-                    ); 
-                    return $data;  
-            }
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+                ); 
+                return $data;  
+        }
     }
 
 
@@ -1249,6 +1284,31 @@ class Members extends Model
             return $data;  
         }
     }
+
+
+
+    
+    //Fetch All New Buddy Activity
+    public function new_user_activity($params)
+    {
+        $d = array('uniqueid' => $params['uniqueid'], 'status' => "Unread", );
+        try {
+            $query="SELECT * FROM ". $this->uact_table ." WHERE uniqueid = :uniqueid AND status = :status";
+
+            $info = $this->fetch_spec($d, $query);
+
+            return $info;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+                ); 
+                return $data;  
+        }
+    }
+
 
 
 

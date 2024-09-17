@@ -66,7 +66,7 @@ if (empty($endpointName)) {
 
 
 
-//Subscriber
+//Create Visitor Information
 $endpoints["visitor-info"] = function (array $requestData): void {
 
     if ((!isset($requestData["ip"])) || (!isset($requestData["user_agent"]))) {
@@ -349,8 +349,6 @@ $endpoints["coy-info"] = function (array $requestData): void {
 
 
 
-
-
 //LoggedIn User Credentials
 $endpoints["user-info"] = function (array $requestData): void {
 
@@ -407,6 +405,8 @@ $endpoints["user-profiles"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
 
 
 //Get All Users Online Status
@@ -819,6 +819,58 @@ $endpoints["online-now-count"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+//New Users Activity 
+$endpoints["new-user-activity"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->new_user_activity($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//New Users Activity 
+$endpoints["user-create-post"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_create_post($requestData, $requestData['images']);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
 
 
 //Count Users Activity 

@@ -868,6 +868,34 @@ require_once __DIR__.'/../Models/Members.php';
         
         
 
+        //Method For All New User Activities Info
+        public function new_user_activity($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            //Model Function Call
+            $actInfo = $model_connect->new_user_activity($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'notification_info' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'notification_info' => $actInfo,
+                );
+
+                return $data;
+            } 
+        }
 
         
         //Method For User Actions On Buddy Profile
@@ -881,7 +909,7 @@ require_once __DIR__.'/../Models/Members.php';
                 'username' => htmlspecialchars($params['username']),
                 'viewerid' => htmlspecialchars($params['viewerid']),
                 'action' => htmlspecialchars($params['action']),
-              );
+            );
 
             //Model Function Call
             $actInfo = $model_connect->user_actions($fillable);
@@ -1070,7 +1098,62 @@ require_once __DIR__.'/../Models/Members.php';
         }
         
 
-        
+
+        //Method to Create New Post 
+        public function user_create_post($params, $images)
+        {
+            //Member Model
+            $model_connect = new Members();
+            // Generate the postid
+            $length = 5;
+            $chars = getenv('COMBINATION');
+            $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+            $postid = preg_replace('/\s+/', '', trim('ads').trim($code));
+            //User Account Parameters
+            $fillable = array(
+                'postid' => $postid,
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'username' => htmlspecialchars($params['username']),
+                'postdetails' => htmlspecialchars($params['postdetails']),
+                'file' => htmlspecialchars($params['file']),
+                'url' => htmlspecialchars(str_replace(' ', '', trim($params['url']).trim($postid)."/")),
+            );
+
+            //Model Function Call
+            $member = $model_connect->user_create_post($fillable, $images);
+
+            if ($member == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Login Credentials.",
+                        ),
+                    'user_info' => $fillable,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support.",
+                        ),
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+
 
 
 

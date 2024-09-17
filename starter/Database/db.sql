@@ -204,11 +204,12 @@ PRIMARY KEY  (`id`)
 
 
 -- Table structure for User Posts `app_Posts` 
-CREATE TABLE `app_posts` ( 
+CREATE TABLE IF NOT EXISTS `app_users_posts` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(50) NOT NULL,
 `postid` VARCHAR(20) NOT NULL,
 `url` VARCHAR(150) NOT NULL,
+`file` VARCHAR(100) DEFAULT NULL,
 `details` longtext NOT NULL,
 `type` ENUM('Video', 'Image') DEFAULT 'Image',
 `status` ENUM('New', 'Publish', 'Draft', 'Trash') DEFAULT 'New',
@@ -219,16 +220,15 @@ PRIMARY KEY  (`id`)
 
 
 
--- Table structure for User Post Images `app_Post_images` 
-CREATE TABLE `app_post_images` ( 
+-- Table structure for User Post Files `app_Post_files` 
+CREATE TABLE IF NOT EXISTS `app_post_files` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(50) NOT NULL,
 `postid` VARCHAR(20) NOT NULL,
-`img` VARCHAR(100) NOT NULL,
-`img1` VARCHAR(100) DEFAULT NULL,
-`img2` VARCHAR(100) DEFAULT NULL,
-`img3` VARCHAR(100) DEFAULT NULL,
-`img4` VARCHAR(100) DEFAULT NULL,
+`file1` VARCHAR(100) DEFAULT NULL,
+`file2` VARCHAR(100) DEFAULT NULL,
+`file3` VARCHAR(100) DEFAULT NULL,
+`file4` VARCHAR(100) DEFAULT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
@@ -237,7 +237,7 @@ PRIMARY KEY  (`id`)
 
 
 -- Table structure for User Post Images `app_Post_actions` 
-CREATE TABLE `app_post_actions` ( 
+CREATE TABLE IF NOT EXISTS `app_post_actions` ( 
 `id` INT(11) AUTO_INCREMENT,
 `postid` VARCHAR(20) NOT NULL,
 `likes` INT(11) NOT NULL,
@@ -252,7 +252,7 @@ PRIMARY KEY  (`id`)
 
 
 -- Table structure for User Post Images `app_Post_images` 
-CREATE TABLE `app_user_post_actions` ( 
+CREATE TABLE IF NOT EXISTS `app_user_post_actions` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(50) NOT NULL,
 `postid` VARCHAR(20) NOT NULL,

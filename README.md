@@ -46,6 +46,7 @@ Set Basic Info in the htaccess file
 [user-myself] User Attributes (uniqueid)
 [user-album] User Photo & Video Album (uniqueid)
 [user-activity] User Profile (uniqueid)
+[new-user-activity] New User Activity (uniqueid)
 [user-interests] User Interests (uniqueid)
 [user-preference] User Prefences (uniqueid)
 [user-language] User Language (uniqueid)
