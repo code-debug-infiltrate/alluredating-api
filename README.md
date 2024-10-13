@@ -54,7 +54,9 @@ Set Basic Info in the htaccess file
 [update-profile-photo] Update Profile Image (uniqueid, username, profileimage)
 [update-cover-photo] Update Cover Image (uniqueid, username, coverimage)
 [update-myself] Update User Self Attributes (uniqueid, orientation, ethnicity, dress, pets, drinking, smoking, eating, race, color, details)
+
 [update-preference] Update User Self Attributes (uniqueid, orientation, ethnicity, dress, pets, drinking, smoking, eating, race, color, details)
+
 [user-find-people] Find Matches (uniqueid)
 [user-random-people] Find Random Matches (uniqueid)
 [user-views] Create User Profile Views (uniqueid)
@@ -62,11 +64,23 @@ Set Basic Info in the htaccess file
 [user-add-buddy] Add Buddy Request (uniqueid, buddyid, request)
 [user-accept-buddy] Accept Buddy Request (uniqueid, buddyid)
 [user-buddies-count] User Buddies Count (uniqueid)
+[user-chat-messages] User Buddies Messages (uniqueid, buddyid)
 [user-buddies-list] User Buddies List (uniqueid)
+[get-latest-posts] New User Posts ()
+[get-post] New User Posts (postid)
+[get-latest-posts-files] New User Posts Files()
+[post-comments] All Post Comments (postid)
+[new-comment] Add a Comment (postid, details)
+[post-views] Post Views (postid)
+[post-likes] Post Likes (postid)
+[post-dislikes] Post Dislikes (postid)
+[user-post-interaction] Post Interaction (postid, uniqueid, username, )
+[user-post-reports] Post Interaction (postid, uniqueid, username, reason)
+[user-post-comment] Post Comment (postid, uniqueid, username, details)
+[user-post-status] Post Delete (postid, uniqueid, username, status)
+[get-post-interactions] Post Interactions (postid)
+[new-message-count] New Message Count (uniqueid)
 
-[all-ads] User Posts ()
-[ads-comments] Post Comments (postid)
-[add-comment] Add a Comment (postid, details)
 
 ## Admin Dashboard
 [admin-info] User Credentails (uniqueid)

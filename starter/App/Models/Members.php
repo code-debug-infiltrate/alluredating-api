@@ -20,8 +20,9 @@ class Members extends Model
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
     protected $self_table = "app_user_self";  //User Self Table
-    protected $actions_table = "app_user_actions";  //User Actions Table
+    protected $actions_table = "app_user_profile_actions";  //User Actions Table
     protected $buddy_table = "app_user_buddy";  //User Buddy Table
+    protected $buddychats_table = "app_user_buddy_chats";  //User Buddy Chats
     protected $views_table = "app_user_views";  //User Views Table
     protected $pref_table = "app_user_preferences";  //User Preferences Table
     protected $lng_table = "app_user_languages";  //Languages Table
@@ -30,8 +31,10 @@ class Members extends Model
     protected $uact_table = "app_user_activity";  //Activity For Users Table
     protected $post_table = "app_users_posts";  //Posts For Users Table
     protected $postimg_table = "app_post_files";  //Posts Images For Users Table
+    protected $postcomments_table = "app_user_buddy_messages";  //Post Comments/Messages
     protected $postact_table = "app_post_actions";  //Post Actions
     protected $urpostact_table = "app_user_post_actions";  //User Post Actions
+    protected $postreport_table = "app_post_reports"; //User Post Reports
 
 
 
@@ -454,7 +457,7 @@ class Members extends Model
         //Admin Model
         $admin_model = new Admin();
         $a = array('uniqueid' => $params['uniqueid'], );
-        $newParams = array('uniqueid' => $params['uniqueid'], 'gender' => $params['gender'], 'orientation' => $params['orientation'], 'height' => $params['height'], 'weight' => $params['weight'], 'bodytype' => $params['bodytype'], 'seeking' => $params['seeking'], 'ethnicity' => $params['ethnicity'], 'religion' => $params['religion'], 'pets' => $params['pets'], 'dates' => $params['dates'], 'dress' => $params['dress'], 'eating' => $params['eating'], 'smoking' => $params['smoking'], 'drinking' => $params['drinking'], 'color' => $params['color'], 'employment' => $params['employment'], 'details' => $params['details'],
+        $newParams = array('uniqueid' => $params['uniqueid'], 'gender' => $params['gender'], 'orientation' => $params['orientation'], 'height' => $params['height'], 'weight' => $params['weight'], 'bodytype' => $params['bodytype'], 'seeking' => $params['seeking'], 'ethnicity' => $params['ethnicity'], 'religion' => $params['religion'], 'pets' => $params['pets'], 'dates' => $params['dates'], 'havekids' => $params['havekids'], 'wantkids' => $params['wantkids'], 'maritalstatus' => $params['maritalstatus'], 'dress' => $params['dress'], 'eating' => $params['eating'], 'smoking' => $params['smoking'], 'drinking' => $params['drinking'], 'color' => $params['color'], 'employment' => $params['employment'], 'details' => $params['details'],
         );
         
         try {
@@ -463,7 +466,7 @@ class Members extends Model
             // Checking all User credentials...
             if ($bio) {
 
-                $query0 = "UPDATE ". $this->pref_table ." SET gender = :gender, orientation = :orientation, height = :height, weight = :weight, bodytype = :bodytype, seeking = :seeking, ethnicity = :ethnicity, religion = :religion, pets = :pets, dates = :dates, dress = :dress, eating = :eating, smoking = :smoking, drinking = :drinking, color = :color, employment = :employment, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
+                $query0 = "UPDATE ". $this->pref_table ." SET gender = :gender, orientation = :orientation, height = :height, weight = :weight, bodytype = :bodytype, seeking = :seeking, ethnicity = :ethnicity, religion = :religion, pets = :pets, dates = :dates, havekids = :havekids, wantkids = :wantkids, maritalstatus = :maritalstatus, dress = :dress, eating = :eating, smoking = :smoking, drinking = :drinking, color = :color, employment = :employment, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
                 $this->update($newParams, $query0); 
                 
                 //Record Activity
@@ -474,7 +477,7 @@ class Members extends Model
 
             } else {
 
-                $query = "INSERT INTO ". $this->pref_table ." (uniqueid, gender, orientation, height, weight, bodytype, seeking, ethnicity, religion, pets, dates, dress, eating, smoking, drinking, color, employment, details) VALUES (:uniqueid, :gender, :orientation, :height, :weight, :bodytype, :seeking, :ethnicity, :religion, :pets, :dates, :dress, :eating, :smoking, :drinking, :color, :employment, :details)";
+                $query = "INSERT INTO ". $this->pref_table ." (uniqueid, gender, orientation, height, weight, bodytype, seeking, ethnicity, religion, pets, dates, wantkids, havekids, maritalstatus, dress, eating, smoking, drinking, color, employment, details) VALUES (:uniqueid, :gender, :orientation, :height, :weight, :bodytype, :seeking, :ethnicity, :religion, :pets, :dates, :wantkids, :havekids, :maritalstatus, :dress, :eating, :smoking, :drinking, :color, :employment, :details)";
                 $this->insert($newParams, $query); 
                 
                 //Record Activity
@@ -519,7 +522,7 @@ class Members extends Model
         //Admin Model
         $admin_model = new Admin();
         $a = array('uniqueid' => $params['uniqueid'], );
-        $newParams = array('uniqueid' => $params['uniqueid'], 'orientation' => $params['orientation'], 'height' => $params['height'], 'weight' => $params['weight'], 'bodytype' => $params['bodytype'], 'seeking' => $params['seeking'], 'ethnicity' => $params['ethnicity'], 'religion' => $params['religion'], 'pets' => $params['pets'], 'dates' => $params['dates'], 'dress' => $params['dress'], 'eating' => $params['eating'], 'smoking' => $params['smoking'], 'drinking' => $params['drinking'], 'color' => $params['color'], 'employment' => $params['employment'], 'details' => $params['details'],
+        $newParams = array('uniqueid' => $params['uniqueid'], 'orientation' => $params['orientation'], 'height' => $params['height'], 'weight' => $params['weight'], 'bodytype' => $params['bodytype'], 'seeking' => $params['seeking'], 'ethnicity' => $params['ethnicity'], 'religion' => $params['religion'], 'pets' => $params['pets'], 'dates' => $params['dates'], 'havekids' => $params['havekids'], 'wantkids' => $params['wantkids'], 'maritalstatus' => $params['maritalstatus'], 'dress' => $params['dress'], 'eating' => $params['eating'], 'smoking' => $params['smoking'], 'drinking' => $params['drinking'], 'color' => $params['color'], 'employment' => $params['employment'], 'details' => $params['details'],
         );
         
         try {
@@ -528,7 +531,7 @@ class Members extends Model
             // Checking all User credentials...
             if ($bio) {
 
-                $query0 = "UPDATE ". $this->self_table ." SET orientation = :orientation, height = :height, weight = :weight, bodytype = :bodytype, seeking = :seeking, ethnicity = :ethnicity, religion = :religion, pets = :pets, dates = :dates, dress = :dress, eating = :eating, smoking = :smoking, drinking = :drinking, color = :color, employment = :employment, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
+                $query0 = "UPDATE ". $this->self_table ." SET orientation = :orientation, height = :height, weight = :weight, bodytype = :bodytype, seeking = :seeking, ethnicity = :ethnicity, religion = :religion, pets = :pets, dates = :dates, havekids = :havekids, wantkids = :wantkids, maritalstatus = :maritalstatus, dress = :dress, eating = :eating, smoking = :smoking, drinking = :drinking, color = :color, employment = :employment, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
                 $this->update($newParams, $query0); 
                 
                 //Record Activity
@@ -539,7 +542,7 @@ class Members extends Model
 
             } else {
 
-                $query = "INSERT INTO ". $this->self_table ." (uniqueid, orientation, height, weight, bodytype, seeking, ethnicity, religion, pets, dates, dress, eating, smoking, drinking, color, employment, details) VALUES (:uniqueid, :orientation, :height, :weight, :bodytype, :seeking, :ethnicity, :religion, :pets, :dates, :dress, :eating, :smoking, :drinking, :color, :employment, :details)";
+                $query = "INSERT INTO ". $this->self_table ." (uniqueid, orientation, height, weight, bodytype, seeking, ethnicity, religion, pets, dates, wantkids, havekids, maritalstatus, dress, eating, smoking, drinking, color, employment, details) VALUES (:uniqueid, :orientation, :height, :weight, :bodytype, :seeking, :ethnicity, :religion, :pets, :dates, :wantkids, :havekids, :maritalstatus, :dress, :eating, :smoking, :drinking, :color, :employment, :details)";
                 $this->insert($newParams, $query); 
                 
                 //Record Activity
@@ -725,9 +728,9 @@ class Members extends Model
             
             if ($myselfInfo) {
 
-                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], );
+                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND uniqueid != :uniqueid OR orientation = 'Any' OR ethnicity = 'Any' OR religion = 'Any' OR color = 'Any' OR employment = 'Any' OR seeking = 'Any' OR smoking = 'Any' OR drinking = 'Any' ORDER BY created DESC";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' OR ethnicity = 'Any' OR religion = 'Any' OR color = 'Any' OR employment = 'Any' OR seeking = 'Any' OR smoking = 'Any' OR drinking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' ORDER BY created DESC";
                 $matchInfo = $this->fetch_spec($prefMatch, $query0); 
 
                 return $matchInfo;
@@ -759,9 +762,9 @@ class Members extends Model
             
             if ($myselfInfo) {
 
-                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'seeking' => $myselfInfo['seeking'], );
+                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'seeking' => $myselfInfo['seeking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = 'Any' AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = :orientation AND seeking = 'Any' AND uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 50";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND seeking = :seeking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = :orientation AND seeking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 50";
                 $matchInfo = $this->fetch_spec($prefMatch, $query0); 
 
                 return $matchInfo;
@@ -979,26 +982,28 @@ class Members extends Model
         }
     }
 
+
     
    //Buddies Friend List
    public function user_buddies_list($params)
    {
        $d = array('uniqueid' => $params['uniqueid'], 'buddyid' => $params['uniqueid'], );
-       try {
-           $query="SELECT * FROM ". $this->buddy_table ." WHERE uniqueid = :uniqueid OR buddyid = :buddyid ";
 
-           $list = $this->fetch_spec($d, $query);
+        try {
+            $query="SELECT * FROM ". $this->buddy_table ." WHERE uniqueid = :uniqueid OR buddyid = :buddyid ";
 
-           return $list;
+            $list = $this->fetch_spec($d, $query);
 
-           } catch (Exception $e) {
+            return $list;
 
-               $data = array(
-                   "type" => "error",
-                   "message" => $e->getMessage()
-                   ); 
-                   return $data;  
-           }
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
    }
 
 
@@ -1009,25 +1014,27 @@ class Members extends Model
        //Admin Model
        $admin_model = new Admin();
        
-       $newP = array('uniqueid' => $params['uniqueid'], 'postdetails' => $params['postdetails'], );
-       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'postdetails' => $params['postdetails'], 'file' => $params['file'], 'url' => $params['url'], );
+       $newP = array('uniqueid' => $params['uniqueid'], 'details' => $params['details'], );
+
+       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'details' => $params['details'], 'file' => $params['file'], 'url' => $params['url'], );
 
        try {
-           $query = "SELECT * FROM " . $this->post_table ." WHERE uniqueid = :uniqueid AND postdetails = :postdetails LIMIT 1";
+           $query = "SELECT * FROM " .$this->post_table." WHERE uniqueid = :uniqueid AND details = :details LIMIT 1";
            $RowCount = $this->fetch_row($newP, $query); 
 
-           // Checking all User credentials...
-           if (!$RowCount) {
+            // Checking all User credentials...
+            if (!$RowCount) {
 
-               $query = "INSERT INTO ". $this->post_table ." (postid, uniqueid, postdetails, file, url) VALUES (:postid, :uniqueid, :postdetails, file, :url)";
+               $query = "INSERT INTO ".$this->post_table." (postid, uniqueid, details, file, url) VALUES (:postid, :uniqueid, :details, :file, :url)";
                $this->insert($newParams, $query); 
 
-               if ($images != null) {
+                if ($images[1] != null) {
 
-                    $a = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'file1' => $images[0], 'file2' => $images[1], 'file3' => $images[2], 'file4' => $images[3], );
+                    $a = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'file1' => $images[1], 'file2' => $images[2], 'file3' => $images[3], 'file4' => $images[4], );
+
                     $query = "INSERT INTO ". $this->postimg_table ." (postid, uniqueid, file1, file2, file3, file4) VALUES (:postid, :uniqueid, :file1, :file2, :file3, :file4)";
                     $this->insert($a, $query);   
-               }
+                }
                
                //Record Activity
                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Made a Post", ); 
@@ -1048,14 +1055,444 @@ class Members extends Model
 
 
 
+       
+   //All Posts List
+   public function get_latest_posts()
+   {
+        try {
+           $query="SELECT * FROM ". $this->post_table ." WHERE reports < '10' AND status = 'New' OR status = 'Published'  ORDER BY created DESC ";
+
+           $list = $this->fetch_all($query);
+
+           return $list;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+   }
 
 
-    //Unread Messages Count
-    public function messageInfoCount($params)
+
+    //All Posts List
+    public function get_latest_posts_files()
+    {
+        try {
+            $query="SELECT * FROM ". $this->postimg_table ." ORDER BY created DESC ";
+
+            $list = $this->fetch_all($query);
+
+            return $list;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+    //All Posts List
+    public function get_post_details($params)
+    {
+        $a = array('postid' => $params['postid'], );
+        try {
+            $query="SELECT * FROM ". $this->post_table ." WHERE postid = :postid LIMIT 1";
+
+            $list = $this->fetch_row($a, $query);
+
+            return $list;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+   //Method to Create User Post Interaction
+   public function user_post_interaction($params)
+   {
+       //Admin Model
+       $admin_model = new Admin();
+       
+       $newP = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], );
+       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'views' => "1", );
+
+       try {
+           $query = "SELECT * FROM " .$this->urpostact_table." WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+           $urPostAct = $this->fetch_row($newP, $query); 
+
+            // Checking all User credentials...
+            if (!$urPostAct) {
+
+               $query0 = "INSERT INTO ".$this->urpostact_table." (postid, uniqueid, views) VALUES (:postid, :uniqueid, :views)";
+               $new = $this->insert($newParams, $query0); 
+
+                if ($new == true) {
+
+                    $newQ = array('postid' => $params['postid'], );
+                    $query1 = "SELECT * FROM " .$this->postact_table." WHERE postid = :postid LIMIT 1";
+                    $postAct = $this->fetch_row($newQ, $query1);
+
+                    if (!$postAct) {
+
+                        $a = array('postid' => $params['postid'], 'views' => "1");
+                        $query2 = "INSERT INTO ". $this->postact_table ." (postid, views) VALUES (:postid, :views)";
+                        $this->insert($a, $query2);
+
+                    } else {
+
+                        $newParams = array('postid' => $params['postid'], 'views' => $postAct['views'] + 1, );
+                        $query = "UPDATE ". $this->postact_table ." SET `views` = :views WHERE postid = :postid";
+                        $this->update($newParams, $query);
+                    }
+                }
+               
+               //Record Activity
+               $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Post", 'details' => $params['username']." Viewed a Post With ID:".$params['postid'], ); 
+               $admin_model->record_activity($info);
+
+               return true;
+
+           } else {
+
+                $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'views' => $urPostAct['views'] + 1, );
+                $query = "UPDATE ". $this->urpostact_table ." SET `views` = :views WHERE uniqueid = :uniqueid AND postid = :postid";
+                $this->update($newParams, $query);
+
+                return true;
+           }
+
+       } catch (Exception $e) {
+
+           return "There is some errors: " . $e->getMessage();
+       }
+   }
+
+
+
+      
+    //Method to Create User Post Action
+    public function user_post_actions($params)
+    {
+       //Admin Model
+       $admin_model = new Admin();
+       
+       $newP = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], );
+       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'action' => $params['action'],);
+
+       try {
+           $query = "SELECT * FROM " .$this->urpostact_table." WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+           $urPostAct = $this->fetch_row($newP, $query); 
+
+            // Checking all User credentials...
+            if (!$urPostAct) {
+
+               $query0 = "INSERT INTO ".$this->urpostact_table." (postid, uniqueid, action) VALUES (:postid, :uniqueid, action)";
+               $new = $this->insert($newParams, $query0); 
+
+                if ($new == true) {
+
+                    $newQ = array('postid' => $params['postid'], );
+                    $query1 = "SELECT * FROM " .$this->postact_table." WHERE postid = :postid LIMIT 1";
+                    $postAct = $this->fetch_row($newQ, $query1);
+
+                    if (!$postAct) {
+                        if ($params['action'] == "Like") { 
+
+                            $a = array('postid' => $params['postid'], 'likes' => "1");
+                            $query2 = "INSERT INTO ". $this->postact_table ." (postid, likes) VALUES (:postid, :likes)";
+                            $this->insert($a, $query2);
+
+                        } else {
+
+                            $a = array('postid' => $params['postid'], 'dislikes' => "1");
+                            $query2 = "INSERT INTO ". $this->postact_table ." (postid, dislikes) VALUES (:postid, :dislikes)";
+                            $this->insert($a, $query2);
+
+                        }
+
+                    } else {
+
+                        if ($params['action'] != $urPostAct['action']) {
+
+                            if ($params['action'] == "like") {
+                                
+                                if ($postAct['dislikes'] > "0") {$new = $postAct['dislikes'] - 1; }else{ $new = "0"; }
+                                $newParams = array('postid' => $params['postid'], 'likes' => $postAct['likes'] + 1, 'dislikes' => $new, );
+                                $query = "UPDATE ". $this->postact_table ." SET `likes` = :likes, `dislikes` = :dislikes WHERE postid = :postid";
+                                $this->update($newParams, $query);
+    
+                            } else {
+                                
+                                if ($postAct['likes'] > "0") {$new = $postAct['likes'] - 1; }else{ $new = "0"; }
+                                $newParams = array('postid' => $params['postid'], 'dislikes' => $postAct['dislikes'] + 1, 'likes' => $new, );
+                                $query = "UPDATE ". $this->postact_table ." SET `likes` = :likes, `dislikes` = :dislikes WHERE postid = :postid";
+                                $this->update($newParams, $query);
+    
+                            }
+                        }
+                    }
+                }
+               
+               //Record Activity
+               $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Post", 'details' => $params['username']." ".$params['action']." a Post With ID:".$params['postid'], ); 
+               $admin_model->record_activity($info);
+
+               return true;
+
+            } else {
+
+                if ($params['action'] != $urPostAct['action']) {
+
+                    $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'action' => $params['action'], );
+                    $query = "UPDATE ". $this->urpostact_table ." SET `action` = :action WHERE uniqueid = :uniqueid AND postid = :postid";
+                    $this->update($newParams, $query);
+
+                    $newQ = array('postid' => $params['postid'], );
+                    $query1 = "SELECT * FROM " .$this->postact_table." WHERE postid = :postid LIMIT 1";
+                    $postAct = $this->fetch_row($newQ, $query1);
+
+                    if ($params['action'] == "like") {
+
+                        if ($postAct['dislikes'] > "0") {$new = $postAct['dislikes'] - 1; }else{ $new = "0"; }
+
+                        $newParams = array('postid' => $params['postid'], 'dislikes' => $new, 'likes' => $postAct['likes'] + 1, );
+                        $query = "UPDATE ". $this->postact_table ." SET `likes` = :likes, `dislikes` = :dislikes WHERE postid = :postid";
+                        $this->update($newParams, $query);
+
+                    } else {
+
+                        if ($postAct['likes'] > "0") {$new = $postAct['likes'] - 1; }else{ $new = "0"; }
+                        $newParams = array('postid' => $params['postid'], 'likes' => $new, 'dislikes' => $postAct['dislikes'] + 1, );
+                        $query = "UPDATE ". $this->postact_table ." SET `likes` = :likes, `dislikes` = :dislikes WHERE postid = :postid";
+                        $this->update($newParams, $query);
+
+                    }
+
+                    //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Post", 'details' => $params['username']." ".$params['action']." a Post With ID:".$params['postid'], ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+                }
+            }
+
+        } catch (Exception $e) {
+
+           return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+      
+    
+    //Post Views Count
+    public function get_post_actions()
+    {
+       //$d = array('postid' => $params['postid'], );
+
+        try {
+            $query="SELECT * FROM ". $this->postact_table ." ORDER BY created DESC";
+
+            $postDetail = $this->fetch_all($query);
+
+            return $postDetail;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+    //Method to Create Or Update Post Reports
+    public function user_post_reports($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $chek = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'reason' => $params['reason'], );
+         
+        try {
+             $query = "SELECT * FROM " . $this->postreport_table ." WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+             $actview = $this->fetch_row($chek, $query); 
+             // Checking all User credentials...
+             if ($actview) {
+ 
+                 if ($actview['reason'] != $params['reason']) { 
+
+                     $query = "UPDATE ". $this->postreport_table ." SET reason = :reason WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+                     $this->update($newParams, $query);
+ 
+                     return true;
+                 }
+ 
+                 return false;
+ 
+             } else {
+
+                $pos = array('postid' => $params['postid'], );
+
+                $query = "INSERT INTO ". $this->postreport_table ." (uniqueid, postid, reason) VALUES (:uniqueid, :postid, :reason)";
+                $this->insert($newParams, $query); 
+
+                $query = "SELECT * FROM " . $this->post_table ." WHERE postid = :postid LIMIT 1";
+                $postDetails = $this->fetch_row($pos, $query); 
+
+                $pos2 = array('postid' => $params['postid'], 'reports' => $postDetails['reports'] + 1,);
+
+                $query = "UPDATE ". $this->post_table ." SET reports = :reports WHERE postid = :postid LIMIT 1";
+                $this->update($pos2, $query);
+ 
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Reported a Post With ID: ".$params['postid'], ); 
+                $admin_model->record_activity($info);
+ 
+                return true;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+    //Method to Create Or Update Post Comment
+    public function user_post_comment($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $chek = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'details' => $params['details'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'commentid' => $params['commentid'], 'details' => $params['details'], );
+         
+        try {
+            $query = "SELECT * FROM " . $this->postcomments_table ." WHERE uniqueid = :uniqueid AND postid = :postid AND details = :details LIMIT 1";
+            $actview = $this->fetch_row($chek, $query); 
+            // Checking all User credentials...
+            if ($actview) {
+
+                // if ($actview['details'] != $params['details']) { 
+
+                //     $query = "UPDATE ". $this->postcomments_table ." SET details = :details WHERE uniqueid = :uniqueid AND postid = :postid AND commentid = :commentid LIMIT 1";
+                //     $this->update($newParams, $query);
+
+                //     //Record Activity
+                //     $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Updated a Comment On a Post With ID: ".$params['postid'], ); 
+                //     $admin_model->record_activity($info);
+
+                //     return true;
+                // }
+
+                return false;
+
+            } else {
+
+                $pos = array('postid' => $params['postid'], );
+        
+                $query = "INSERT INTO ". $this->postcomments_table ." (uniqueid, postid, commentid, details) VALUES (:uniqueid, :postid, :commentid, :details)";
+                $this->insert($newParams, $query); 
+
+                $query = "SELECT * FROM " . $this->postact_table ." WHERE postid = :postid LIMIT 1";
+                $postDetails = $this->fetch_row($pos, $query); 
+
+                $pos2 = array('postid' => $params['postid'], 'comments' => $postDetails['comments'] + 1,);
+
+                $query = "UPDATE ". $this->postact_table ." SET comments = :comments WHERE postid = :postid LIMIT 1";
+                $this->update($pos2, $query);
+
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Commented On a Post With ID: ".$params['postid'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    //Method to Create Or Update Post Status
+    public function user_post_status($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $chek = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'status' => $params['status'], );
+         
+        try {
+             $query = "SELECT * FROM " . $this->post_table ." WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+             $actview = $this->fetch_row($chek, $query); 
+             // Checking all User credentials...
+             if ($actview) {
+ 
+                 if ($actview['status'] != $params['status']) { 
+
+                     $query = "UPDATE ". $this->post_table ." SET status = :status WHERE uniqueid = :uniqueid AND postid = :postid LIMIT 1";
+                     $this->update($newParams, $query);
+
+                     //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Trashed a Post With ID: ".$params['postid'], ); 
+                    $admin_model->record_activity($info);
+ 
+                     return true;
+                 }
+ 
+                 return false;
+ 
+             } else {
+ 
+                return false;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+    //Unread Messages Count (Post COmments)
+    public function message_info_count($params)
     {
         $d = array('receiver' => $params['uniqueid'], );
         try {
-            $query="SELECT count(*) FROM ". $this->tck_table ." WHERE receiver = :receiver AND status = 'Unread'";
+            $query="SELECT count(*) FROM ". $this->postcomments_table ." WHERE receiver = :receiver AND status = 'Unread'";
 
             $count = $this->counter_spec($d, $query);
 
@@ -1115,6 +1552,28 @@ class Members extends Model
                    ); 
                    return $data;  
            }
+   }
+
+
+   //User CHat Messages
+   public function user_chat_messages($params)
+   {
+       $d = array('uniqueid' => $params['uniqueid'], 'buddyid' => $params['buddyid'], 'status' => "Trash");
+        try {
+           $query = "(SELECT * FROM ". $this->buddychats_table ." WHERE uniqueid = :uniqueid AND buddyid = :buddyid AND status != :status ORDER BY created DESC) UNION (SELECT * FROM ". $this->buddychats_table ." WHERE buddyid = :uniqueid AND uniqueid = :buddyid AND status != :status ORDER BY created DESC)";
+
+           $chatMsgs = $this->fetch_spec($d, $query);
+
+           return $chatMsgs;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
    }
 
 

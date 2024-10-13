@@ -639,6 +639,9 @@ require_once __DIR__.'/../Models/Members.php';
                 'religion' => htmlspecialchars($params['religion']),
                 'pets' => htmlspecialchars($params['pets']),
                 'dates' => htmlspecialchars($params['dates']),
+                'havekids' => htmlspecialchars($params['havekids']),
+                'wantkids' => htmlspecialchars($params['wantkids']),
+                'maritalstatus' => htmlspecialchars($params['maritalstatus']),
                 'dress' => htmlspecialchars($params['dress']), 
                 'eating' => htmlspecialchars($params['eating']),
                 'smoking' => htmlspecialchars($params['smoking']),
@@ -699,6 +702,9 @@ require_once __DIR__.'/../Models/Members.php';
                 'religion' => htmlspecialchars($params['religion']),
                 'pets' => htmlspecialchars($params['pets']),
                 'dates' => htmlspecialchars($params['dates']),
+                'havekids' => htmlspecialchars($params['havekids']),
+                'wantkids' => htmlspecialchars($params['wantkids']),
+                'maritalstatus' => htmlspecialchars($params['maritalstatus']),
                 'dress' => htmlspecialchars($params['dress']), 
                 'eating' => htmlspecialchars($params['eating']),
                 'smoking' => htmlspecialchars($params['smoking']),
@@ -1109,14 +1115,15 @@ require_once __DIR__.'/../Models/Members.php';
             $chars = getenv('COMBINATION');
             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
             $postid = preg_replace('/\s+/', '', trim('ads').trim($code));
+            $url = htmlspecialchars(str_replace(' ', '', trim($params['url']).trim($postid)."/"));
             //User Account Parameters
             $fillable = array(
                 'postid' => $postid,
                 'uniqueid' => htmlspecialchars($params['uniqueid']),
                 'username' => htmlspecialchars($params['username']),
-                'postdetails' => htmlspecialchars($params['postdetails']),
+                'details' => htmlspecialchars($params['details']),
                 'file' => htmlspecialchars($params['file']),
-                'url' => htmlspecialchars(str_replace(' ', '', trim($params['url']).trim($postid)."/")),
+                'url' => $url,
             );
 
             //Model Function Call
@@ -1129,9 +1136,9 @@ require_once __DIR__.'/../Models/Members.php';
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Login Credentials.",
+                            'message' => "Successfully Posted.",
                         ),
-                    'user_info' => $fillable,
+                    'post_info' => $member,
                     );
 
             } else {
@@ -1141,9 +1148,443 @@ require_once __DIR__.'/../Models/Members.php';
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support.",
+                            'message' => "Sorry, This Post Already Exists In Our Records, Be More Creative.",
                         ),
                     );
+            }
+            
+            return $data; 
+        }
+
+
+        //Method To Fetch All Latest Posts
+        public function get_latest_posts()
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_latest_posts();
+
+            $data = array(
+                'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                'post_details' => $actInfo,
+            );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch All Latest Posts
+        public function get_post_details($params)
+        {
+            //User Model
+            $model_connect = new Members();
+
+            $fillable = array(
+                'postid' => htmlspecialchars($params['postid']),
+            );
+
+            //Model Function Call
+            $actInfo = $model_connect->get_post_details($fillable);
+
+            $data = array(
+                'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                'post_details' => $actInfo,
+            );
+
+            return $data; 
+        }
+
+
+
+
+        //Method To Fetch All Latest Posts Files
+        public function get_latest_posts_files()
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_latest_posts_files();
+
+            $data = array(
+                'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                'post_files' => $actInfo,
+            );
+
+            return $data; 
+        }
+
+
+
+
+        //Method to Fetch Post Interaction 
+        public function get_post_actions()
+        {
+             //Member Model
+             $model_connect = new Members();
+ 
+             //Model Function Call
+             $postAct = $model_connect->get_post_actions();
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "",
+                         ),
+                     'post_interactions' => $postAct,
+                     );
+ 
+             } else {
+ 
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "No Interaction Recorded!",
+                        ),
+                    'post_interactions' => "",
+                );
+             }
+             
+             return $data; 
+        }
+       
+        
+
+        //Method For User To Count Buddy
+        public function message_info_count($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->message_info_count($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'newmsg_count' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'buddiesCount_info' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+        //Method to Create New User Post Interaction 
+        public function user_post_interaction($params)
+        {
+             //Member Model
+             $model_connect = new Members();
+             
+             //User Account Parameters
+             $fillable = array(
+                 'uniqueid' => htmlspecialchars($params['uniqueid']),
+                 'username' => htmlspecialchars($params['username']),
+                 'postid' => htmlspecialchars($params['postid']),
+             );
+ 
+             //Model Function Call
+             $postAct = $model_connect->user_post_interaction($fillable);
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "",
+                         ),
+                     'user_post_interaction' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "No Interaction Recorded!",
+                         ),
+                     'user_post_interaction' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+
+
+
+        //Method to Create New User Post Interaction 
+        public function user_post_actions($params)
+        {
+              //Member Model
+              $model_connect = new Members();
+              
+              //User Account Parameters
+              $fillable = array(
+                  'uniqueid' => htmlspecialchars($params['uniqueid']),
+                  'username' => htmlspecialchars($params['username']),
+                  'postid' => htmlspecialchars($params['postid']),
+                  'action' => htmlspecialchars($params['action']),
+              );
+  
+              //Model Function Call
+              $postAct = $model_connect->user_post_actions($fillable);
+  
+              if ($postAct == true) {
+  
+                  $data = array(
+                      'result_info' => 
+                          array(
+                              'code' => "200",
+                              'type' => "success",
+                              'message' => "Successful",
+                          ),
+                      'user_post_interaction' => $postAct,
+                      );
+  
+              } else {
+  
+                  $data = array(
+                      'result_info' => 
+                          array(
+                              'code' => "401",
+                              'type' => "error",
+                              'message' => "Not Recorded!",
+                          ),
+                      'user_post_interaction' => "",
+                      );
+              }
+              
+              return $data; 
+        }
+
+
+
+
+        //Method to Create New User Post Reports 
+        public function user_post_reports($params)
+        {
+             //Member Model
+             $model_connect = new Members();
+             
+             //User Account Parameters
+             $fillable = array(
+                 'uniqueid' => htmlspecialchars($params['uniqueid']),
+                 'username' => htmlspecialchars($params['username']),
+                 'postid' => htmlspecialchars($params['postid']),
+                 'reason' => htmlspecialchars($params['reason']),
+             );
+ 
+             //Model Function Call
+             $postAct = $model_connect->user_post_reports($fillable);
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Reported!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Not Reported!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+        
+
+        //Method to Create New User Post Comment 
+        public function user_post_comment($params)
+        {
+             //Member Model
+             $model_connect = new Members();
+
+             $length = 5;
+             $chars = getenv('COMBINATION');
+             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+             $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
+             
+            //User Account Parameters
+            if (!$params['commentid']) {
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'commentid' => $commentid,
+                    'postid' => htmlspecialchars($params['postid']),
+                    'details' => htmlspecialchars($params['details']),
+                );
+            } else {
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'commentid' => htmlspecialchars($params['commentid']),
+                    'postid' => htmlspecialchars($params['postid']),
+                    'details' => htmlspecialchars($params['details']),
+                );
+            }
+ 
+             //Model Function Call
+             $postAct = $model_connect->user_post_comment($fillable);
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Comment Posted!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+
+        //Method to Create New User Post Reports 
+        public function user_post_status($params)
+        {
+             //Member Model
+             $model_connect = new Members();
+             
+             //User Account Parameters
+             $fillable = array(
+                 'uniqueid' => htmlspecialchars($params['uniqueid']),
+                 'username' => htmlspecialchars($params['username']),
+                 'postid' => htmlspecialchars($params['postid']),
+                 'status' => htmlspecialchars($params['status']),
+             );
+ 
+             //Model Function Call
+             $postAct = $model_connect->user_post_status($fillable);
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Deleted!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Not Deleted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+        
+
+
+
+        //Method to Create New Chat 
+        public function create_user_chat($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'buddyid' => htmlspecialchars($params['buddyid']),
+                'details' => htmlspecialchars($params['details']),
+            );
+
+            //Model Function Call
+            $chatInfo = $model_connect->create_user_chat($fillable);
+
+            if ($chatInfo == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "",
+                        ),
+                    'user_chat_info' => $chatInfo,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "No Chat Record Found. Start a Conversation",
+                        ),
+                    'user_chat_info' => "",
+                );
             }
             
             return $data; 
@@ -1155,6 +1596,48 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+        //Method to Get User Chats 
+        public function user_chat_messages($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'buddyid' => htmlspecialchars($params['buddyid']),
+            );
+
+            //Model Function Call
+            $chatInfo = $model_connect->user_chat_messages($fillable);
+
+            if ($chatInfo == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "",
+                        ),
+                    'user_chat_info' => $chatInfo,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "No Chat Record Found. Start a Conversation",
+                        ),
+                    'user_chat_info' => "",
+                    );
+            }
+            
+            return $data; 
+        }
 
 
 

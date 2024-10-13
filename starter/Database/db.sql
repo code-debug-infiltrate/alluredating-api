@@ -100,8 +100,8 @@ PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
 
 
--- Table structure for app_user_actions `app_user_actions` 
-CREATE TABLE IF NOT EXISTS `app_user_actions` ( 
+-- Table structure for app_user_profile_actions `app_user_profile_actions` 
+CREATE TABLE IF NOT EXISTS `app_user_profile_actions` ( 
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(50) NOT NULL,
 `viewerid` VARCHAR(100) NOT NULL,
@@ -168,6 +168,9 @@ CREATE TABLE IF NOT EXISTS `app_user_preferences` (
 `religion` VARCHAR(70) DEFAULT NULL,
 `dress` VARCHAR(20) DEFAULT NULL,
 `dates` VARCHAR(20) DEFAULT NULL,
+`havekids` VARCHAR(20) DEFAULT NULL,
+`wantkids` VARCHAR(20) DEFAULT NULL,
+`maritalstatus` VARCHAR(50) DEFAULT NULL,
 `seeking` VARCHAR(20) DEFAULT NULL,
 `details` longtext,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
@@ -194,6 +197,9 @@ CREATE TABLE IF NOT EXISTS `app_user_self` (
 `religion` VARCHAR(70) DEFAULT NULL,
 `dress` VARCHAR(20) DEFAULT NULL,
 `dates` VARCHAR(20) DEFAULT NULL,
+`havekids` VARCHAR(20) DEFAULT NULL,
+`wantkids` VARCHAR(20) DEFAULT NULL,
+`maritalstatus` VARCHAR(50) DEFAULT NULL,
 `seeking` VARCHAR(20) DEFAULT NULL,
 `details` longtext,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
@@ -211,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `app_users_posts` (
 `url` VARCHAR(150) NOT NULL,
 `file` VARCHAR(100) DEFAULT NULL,
 `details` longtext NOT NULL,
+`reports` INT(10) DEFAULT '0',
 `type` ENUM('Video', 'Image') DEFAULT 'Image',
 `status` ENUM('New', 'Publish', 'Draft', 'Trash') DEFAULT 'New',
 `updated` DATETIME DEFAULT NULL, 
@@ -236,14 +243,31 @@ PRIMARY KEY  (`id`)
 
 
 
+-- Table structure for User Posts Messages `app_user_buddy_message` 
+CREATE TABLE IF NOT EXISTS `app_user_buddy_messages` ( 
+`id` INT(11) AUTO_INCREMENT,
+`sentby` VARCHAR(50) NOT NULL,
+`receiver` VARCHAR(50) NOT NULL,
+`postid` VARCHAR(20) NOT NULL,
+`commentid` VARCHAR(20) NOT NULL,
+`details` longtext NOT NULL,
+`status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
+`updated` DATETIME DEFAULT NULL, 
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
 -- Table structure for User Post Images `app_Post_actions` 
 CREATE TABLE IF NOT EXISTS `app_post_actions` ( 
 `id` INT(11) AUTO_INCREMENT,
 `postid` VARCHAR(20) NOT NULL,
-`likes` INT(11) NOT NULL,
-`dislikes` INT(11) DEFAULT NULL,
-`views` INT(11) DEFAULT NULL,
-`reports` INT(11) DEFAULT NULL,
+`likes` INT(11) DEFAULT '0',
+`dislikes` INT(11) DEFAULT '0',
+`views` INT(11) DEFAULT '0',
+`reports` INT(11) DEFAULT '0',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
@@ -256,7 +280,8 @@ CREATE TABLE IF NOT EXISTS `app_user_post_actions` (
 `id` INT(11) AUTO_INCREMENT,
 `uniqueid` VARCHAR(50) NOT NULL,
 `postid` VARCHAR(20) NOT NULL,
-`action` VARCHAR(20) NOT NULL,
+`action` VARCHAR(20) DEFAULT NULL,
+`views` INT(11) DEFAULT '0',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
@@ -435,14 +460,14 @@ PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 --
 
 INSERT INTO `app_users` (`id`, `uniqueid`, `email`, `username`, `password`, `profile`, `code`, `status`, `log_session`, `login_status`, `notify`, `hash`, `lastlogin`, `ip`, `user_agent`, `created`) VALUES
-(1, 'REDfTc35','admintester@admin.com', 'adminTester', '$2y$10$hEjHAQrERtIEOicsWzrqPeuYbALGeGdkNzA5n3orsk/PUHUtP.E4.', 'Admin', 'Hwjvh', 'Activated', '', 'Logged_out', 'Off', '63dc7ed1010d3c3b8269faf0ba7491d4', '2023-01-19 09:24:18', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36', '2022-12-24 05:32:18');
+(1, 'uid0FTgh','admintester@admin.com', 'adminTester', '$2y$10$hEjHAQrERtIEOicsWzrqPeuYbALGeGdkNzA5n3orsk/PUHUtP.E4.', 'Admin', 'Hwjvh', 'Activated', '', 'Logged_out', 'Off', '63dc7ed1010d3c3b8269faf0ba7491d4', '2023-01-19 09:24:18', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36', '2022-12-24 05:32:18');
 
 
 
 --
 -- Dumping data for table `Profile`
 --
-INSERT INTO `app_profile` (`id`, `uniqueid`, `fname`, `lname`) VALUES (1, 'REDfTc35', 'Admin', 'Tester'); 
+INSERT INTO `app_profile` (`id`, `uniqueid`, `fname`, `lname`) VALUES (1, 'uid0FTgh', 'Admin', 'Tester'); 
 
 
                                         

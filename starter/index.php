@@ -864,11 +864,88 @@ $endpoints["user-create-post"] = function (array $requestData): void {
     } else {
         //Connect to Controller
         $api_connect = new UserController();
-        $info = $api_connect->user_create_post($requestData, $requestData['images']);
+        $info = $api_connect->user_create_post($requestData, $requestData['allImages']);
 
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+
+//Get All Latest Posts
+$endpoints["get-latest-posts"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->get_latest_posts();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Single Post Details
+$endpoints["get-post"] = function (array $requestData): void {
+
+    if (!isset($requestData["postid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->get_post_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Single Post Details
+$endpoints["new-message-count"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->message_info_count($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+//Get All User Profiles
+$endpoints["get-latest-posts-files"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->get_latest_posts_files();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
 
 
 
@@ -1115,6 +1192,179 @@ $endpoints["user-buddies-list"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+
+//User Chat Messages
+$endpoints["user-chat-messages"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["buddyid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_chat_messages($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//User Post Interaction
+$endpoints["user-post-interaction"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_post_interaction($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Fetch Post Interaction
+$endpoints["get-post-interactions"] = function (array $requestData): void {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->get_post_actions();
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//User Post Action
+$endpoints["user-post-action"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_post_actions($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//User Post Reports
+$endpoints["user-post-reports"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_post_reports($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+//User Post Status
+$endpoints["user-post-comment"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_post_comment($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+//User Post Status
+$endpoints["user-post-status"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_post_status($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
 
 
 
