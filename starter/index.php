@@ -910,7 +910,7 @@ $endpoints["get-post"] = function (array $requestData): void {
 
 
 
-//Get Single Post Details
+//Get New Message Count Details
 $endpoints["new-message-count"] = function (array $requestData): void {
 
     if (!isset($requestData["uniqueid"])) {
@@ -933,6 +933,81 @@ $endpoints["new-message-count"] = function (array $requestData): void {
     }
 };
 
+
+
+//Get New Message Details
+$endpoints["new-message-details"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->new_message_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get New CHat Count Details
+$endpoints["new-chat-count"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->chat_info_count($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Get New Chat Details
+$endpoints["new-chat-details"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->new_chat_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
 
 
 
@@ -1221,6 +1296,31 @@ $endpoints["user-chat-messages"] = function (array $requestData): void {
 
 
 
+//User Post Status
+$endpoints["user-chat-reply"] = function (array $requestData): void {
+
+    if ((!isset($requestData["sender"])) && (!isset($requestData["receiver"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->create_user_chat($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
 //User Post Interaction
 $endpoints["user-post-interaction"] = function (array $requestData): void {
 
@@ -1316,7 +1416,7 @@ $endpoints["user-post-reports"] = function (array $requestData): void {
 //User Post Status
 $endpoints["user-post-comment"] = function (array $requestData): void {
 
-    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["postid"]))) {
+    if ((!isset($requestData["postid"]))) {
         
         $info = array(
             'result_info' => 
@@ -1336,6 +1436,82 @@ $endpoints["user-post-comment"] = function (array $requestData): void {
     }
 };
 
+
+//User Post Status
+$endpoints["my-post-action"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->my_post_action($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//User Post Comments And Inbox
+$endpoints["all-user-messages"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->all_message_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+//User Post Comments And Inbox
+$endpoints["all-comment-chats"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->fetch_comment_chats($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
 
 
 

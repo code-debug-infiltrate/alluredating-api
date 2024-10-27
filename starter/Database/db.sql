@@ -138,13 +138,30 @@ PRIMARY KEY  (`id`)
 -- Table structure for app_user_buddy `app_user_buddy_chats` 
 CREATE TABLE IF NOT EXISTS `app_user_buddy_chats` ( 
 `id` INT(11) AUTO_INCREMENT,
+`chatid` VARCHAR(20) NOT NULL,
 `uniqueid` VARCHAR(50) NOT NULL,
 `buddyid` VARCHAR(50) NOT NULL,
-`status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
-`details` text NOT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+
+-- Table structure for User Posts Comment Reply `app_post_comment_reply` 
+CREATE TABLE IF NOT EXISTS `app_user_buddy_chat_reply` ( 
+`id` INT(11) AUTO_INCREMENT,
+`chatid` VARCHAR(20) NOT NULL,
+`sender` VARCHAR(50) NOT NULL,
+`receiver` VARCHAR(50) NOT NULL,
+`details` longtext NOT NULL,
+`status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
+`updated` DATETIME DEFAULT NULL, 
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
 
 
 
@@ -243,19 +260,37 @@ PRIMARY KEY  (`id`)
 
 
 
--- Table structure for User Posts Messages `app_user_buddy_message` 
-CREATE TABLE IF NOT EXISTS `app_user_buddy_messages` ( 
+
+
+
+-- Table structure for User Post Comments `app_post_comments` 
+CREATE TABLE IF NOT EXISTS `app_post_comments` ( 
 `id` INT(11) AUTO_INCREMENT,
-`sentby` VARCHAR(50) NOT NULL,
-`receiver` VARCHAR(50) NOT NULL,
 `postid` VARCHAR(20) NOT NULL,
 `commentid` VARCHAR(20) NOT NULL,
+`postedby` VARCHAR(20) NOT NULL,
+`commentby` VARCHAR(20) NOT NULL,
+`title` longtext NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+-- Table structure for User Posts Comment Reply `app_post_comment_reply` 
+CREATE TABLE IF NOT EXISTS `app_post_comment_reply` ( 
+`id` INT(11) AUTO_INCREMENT,
+`postid` VARCHAR(20) NOT NULL,
+`commentid` VARCHAR(20) NOT NULL,
+`sender` VARCHAR(50) NOT NULL,
+`receiver` VARCHAR(50) NOT NULL,
 `details` longtext NOT NULL,
 `status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
 `updated` DATETIME DEFAULT NULL, 
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
 
 
 
@@ -267,10 +302,12 @@ CREATE TABLE IF NOT EXISTS `app_post_actions` (
 `likes` INT(11) DEFAULT '0',
 `dislikes` INT(11) DEFAULT '0',
 `views` INT(11) DEFAULT '0',
+`comments` INT(11) DEFAULT '0',
 `reports` INT(11) DEFAULT '0',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
 
 
 

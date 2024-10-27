@@ -64,8 +64,10 @@ Set Basic Info in the htaccess file
 [user-add-buddy] Add Buddy Request (uniqueid, buddyid, request)
 [user-accept-buddy] Accept Buddy Request (uniqueid, buddyid)
 [user-buddies-count] User Buddies Count (uniqueid)
+[user-chat-reply] User Buddies Chat (uniqueid, sender, receiver, details, chatid)
 [user-chat-messages] User Buddies Messages (uniqueid, buddyid)
 [user-buddies-list] User Buddies List (uniqueid)
+[user-create-post] User Create New Post (uniqueid, post, Images)
 [get-latest-posts] New User Posts ()
 [get-post] New User Posts (postid)
 [get-latest-posts-files] New User Posts Files()
@@ -80,6 +82,13 @@ Set Basic Info in the htaccess file
 [user-post-status] Post Delete (postid, uniqueid, username, status)
 [get-post-interactions] Post Interactions (postid)
 [new-message-count] New Message Count (uniqueid)
+[new-message-details] New Message Count (uniqueid)
+[new-chat-count] New Message Count (uniqueid)
+[new-chat-details] New Message Count (uniqueid)
+[all-user-messages] Get all User Emails/Comments (uniqueid)
+[all-comment-chats] Get all Post Comments Chats (uniqueid, buddyid, postid, commentid, )
+[my-post-action] Get Action Of User On Each Post (uniqueid)
+
 
 
 ## Admin Dashboard

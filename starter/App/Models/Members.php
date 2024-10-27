@@ -23,6 +23,7 @@ class Members extends Model
     protected $actions_table = "app_user_profile_actions";  //User Actions Table
     protected $buddy_table = "app_user_buddy";  //User Buddy Table
     protected $buddychats_table = "app_user_buddy_chats";  //User Buddy Chats
+    protected $buddychatreply_table = "app_user_buddy_chat_reply";  //User Buddy Chat Reply
     protected $views_table = "app_user_views";  //User Views Table
     protected $pref_table = "app_user_preferences";  //User Preferences Table
     protected $lng_table = "app_user_languages";  //Languages Table
@@ -31,7 +32,8 @@ class Members extends Model
     protected $uact_table = "app_user_activity";  //Activity For Users Table
     protected $post_table = "app_users_posts";  //Posts For Users Table
     protected $postimg_table = "app_post_files";  //Posts Images For Users Table
-    protected $postcomments_table = "app_user_buddy_messages";  //Post Comments/Messages
+    protected $postcomments_table = "app_post_comments";  //Post Comments/Messages
+    protected $postcommentreply_table = "app_post_comment_reply";  //Post Comment Reply
     protected $postact_table = "app_post_actions";  //Post Actions
     protected $urpostact_table = "app_user_post_actions";  //User Post Actions
     protected $postreport_table = "app_post_reports"; //User Post Reports
@@ -730,7 +732,7 @@ class Members extends Model
 
                 $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' OR ethnicity = 'Any' OR religion = 'Any' OR color = 'Any' OR employment = 'Any' OR seeking = 'Any' OR smoking = 'Any' OR drinking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' ORDER BY created DESC";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND uniqueid != :uniqueid OR ethnicity = 'Any' AND uniqueid != :uniqueid OR religion = 'Any' AND uniqueid != :uniqueid OR color = 'Any' AND uniqueid != :uniqueid OR employment = 'Any' AND uniqueid != :uniqueid OR seeking = 'Any' AND uniqueid != :uniqueid OR smoking = 'Any' AND uniqueid != :uniqueid OR drinking = 'Any' AND uniqueid != :uniqueid AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY created DESC";
                 $matchInfo = $this->fetch_spec($prefMatch, $query0); 
 
                 return $matchInfo;
@@ -1037,7 +1039,7 @@ class Members extends Model
                 }
                
                //Record Activity
-               $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Registration", 'details' => $params['username']." Just Made a Post", ); 
+               $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Just Made a Post", ); 
                $admin_model->record_activity($info);
 
                return true;
@@ -1328,6 +1330,32 @@ class Members extends Model
 
 
 
+      
+    
+    //User Post Actions 
+    public function my_post_action($params)
+    {
+       $d = array('uniqueid' => $params['uniqueid'], );
+
+        try {
+            $query="SELECT * FROM ". $this->urpostact_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC";
+
+            $postDetail = $this->fetch_spec($d, $query);
+
+            return $postDetail;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
 
     //Method to Create Or Update Post Reports
     public function user_post_reports($params)
@@ -1382,55 +1410,53 @@ class Members extends Model
     }
 
 
-
     //Method to Create Or Update Post Comment
-    public function user_post_comment($params)
+    public function user_post_new_comment($params)
     {
         //Admin Model
         $admin_model = new Admin();
-        $chek = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'details' => $params['details'], );
-        $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'commentid' => $params['commentid'], 'details' => $params['details'], );
-         
+        $pst = array('postid' => $params['postid'], );
+        $chek = array('postid' => $params['postid'], 'commentby' => $params['uniqueid'], );
+
         try {
-            $query = "SELECT * FROM " . $this->postcomments_table ." WHERE uniqueid = :uniqueid AND postid = :postid AND details = :details LIMIT 1";
-            $actview = $this->fetch_row($chek, $query); 
+            $query = "SELECT * FROM " . $this->post_table ." WHERE postid = :postid LIMIT 1";
+            $postDetails = $this->fetch_row($pst, $query);
+
+            $query = "SELECT * FROM " . $this->postcomments_table ." WHERE postid = :postid AND commentby = :commentby LIMIT 1";
+            $newSend = $this->fetch_row($chek, $query); 
+
+            $newParams = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'postedby' => $postDetails['uniqueid'], 'commentby' => $params['uniqueid'], 'title' => substr($postDetails['details'], 0, 70), );
+
+            $newParams0 = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'receiver' => $postDetails['uniqueid'], 'sender' => $params['uniqueid'], 'details' => $params['details'], );
+
             // Checking all User credentials...
-            if ($actview) {
+            if (!$newSend) {
 
-                // if ($actview['details'] != $params['details']) { 
+                $query = "INSERT INTO ". $this->postcomments_table ." (postid, commentid, postedby, commentby, title) VALUES (:postid, :commentid, :postedby, :commentby, :title)";
+                $userComment = $this->insert($newParams, $query); 
 
-                //     $query = "UPDATE ". $this->postcomments_table ." SET details = :details WHERE uniqueid = :uniqueid AND postid = :postid AND commentid = :commentid LIMIT 1";
-                //     $this->update($newParams, $query);
+                if ($userComment) {
+                
+                    $this->user_post_comment($newParams0);
 
-                //     //Record Activity
-                //     $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Updated a Comment On a Post With ID: ".$params['postid'], ); 
-                //     $admin_model->record_activity($info);
+                    $query = "SELECT * FROM " . $this->postact_table ." WHERE postid = :postid LIMIT 1";
+                    $postActivity = $this->fetch_row($pst, $query); 
 
-                //     return true;
-                // }
+                    $pos2 = array('postid' => $params['postid'], 'comments' => $postActivity['comments'] + 1,);
 
-                return false;
+                    $query = "UPDATE ". $this->postact_table ." SET comments = :comments WHERE postid = :postid LIMIT 1";
+                    $this->update($pos2, $query);
+
+                    //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Commented On a Post With ID: ".$params['postid'], ); 
+                    $admin_model->record_activity($info);
+                }
+
+                return true;
 
             } else {
 
-                $pos = array('postid' => $params['postid'], );
-        
-                $query = "INSERT INTO ". $this->postcomments_table ." (uniqueid, postid, commentid, details) VALUES (:uniqueid, :postid, :commentid, :details)";
-                $this->insert($newParams, $query); 
-
-                $query = "SELECT * FROM " . $this->postact_table ." WHERE postid = :postid LIMIT 1";
-                $postDetails = $this->fetch_row($pos, $query); 
-
-                $pos2 = array('postid' => $params['postid'], 'comments' => $postDetails['comments'] + 1,);
-
-                $query = "UPDATE ". $this->postact_table ." SET comments = :comments WHERE postid = :postid LIMIT 1";
-                $this->update($pos2, $query);
-
-                //Record Activity
-                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Commented On a Post With ID: ".$params['postid'], ); 
-                $admin_model->record_activity($info);
-
-                return true;
+                return false;
             }
  
         } catch (Exception $e) {
@@ -1438,6 +1464,229 @@ class Members extends Model
             return "There is some errors: " . $e->getMessage();
         }
     }
+
+
+
+
+
+    //Method to Create Or Update Post Comment
+    public function user_post_comment($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $new = array('postid' => $params['postid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+
+        try {
+
+            $query = "SELECT * FROM " . $this->postcommentreply_table ." WHERE postid = :postid AND sender = :sender AND receiver = :receiver AND details = :details LIMIT 1";
+            $actview = $this->fetch_row($new, $query); 
+            // Checking all User credentials...
+            if (!$actview) {
+
+                $newP = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+         
+                $query = "INSERT INTO ". $this->postcommentreply_table ." (postid, commentid, sender, receiver, details) VALUES (:postid, :commentid, :sender, :receiver, :details)";
+                $this->insert($newP, $query); 
+
+                return true;
+            } else {
+
+                return false;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+    
+    //All Posts List
+    public function all_message_details($params)
+    {
+        $a = array('postedby' => $params['uniqueid'], );
+        $b = array('receiver' => $params['uniqueid'], 'status' => "Unread", );
+        try {
+            $query="SELECT * FROM ". $this->postcomments_table ." WHERE postedby = :postedby OR commentby = :postedby ORDER BY created DESC";
+
+            $msgList = $this->fetch_spec($a, $query);
+
+            if ($msgList) {
+
+                $query="SELECT * FROM ". $this->postcommentreply_table ." WHERE receiver = :receiver AND status = :status ORDER BY created DESC";
+
+                $msgDetails = $this->fetch_spec($b, $query);
+
+                $list = array('msgList' => $msgList, 'msgDetails' => $msgDetails, );
+
+                return $list;
+
+            } else {
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+
+    //Method to Create Or Update Post Comment
+    public function create_new_user_chat($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $pst = array('postid' => $params['postid'], );
+        $chek = array('postid' => $params['postid'], 'commentby' => $params['uniqueid'], );
+
+        try {
+            $query = "SELECT * FROM " . $this->post_table ." WHERE postid = :postid LIMIT 1";
+            $postDetails = $this->fetch_row($pst, $query);
+
+            $query = "SELECT * FROM " . $this->postcomments_table ." WHERE postid = :postid AND commentby = :commentby LIMIT 1";
+            $newSend = $this->fetch_row($chek, $query); 
+
+            $newParams = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'postedby' => $postDetails['uniqueid'], 'commentby' => $params['uniqueid'], 'title' => substr($postDetails['details'], 0, 70), );
+
+            $newParams0 = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'receiver' => $postDetails['uniqueid'], 'sender' => $params['uniqueid'], 'details' => $params['details'], );
+
+            // Checking all User credentials...
+            if (!$newSend) {
+
+                $query = "INSERT INTO ". $this->postcomments_table ." (postid, commentid, postedby, commentby, title) VALUES (:postid, :commentid, :postedby, :commentby, :title)";
+                $userComment = $this->insert($newParams, $query); 
+
+                if ($userComment) {
+                
+                    $this->create_user_chat($newParams0);
+
+                    $query = "SELECT * FROM " . $this->postact_table ." WHERE postid = :postid LIMIT 1";
+                    $postActivity = $this->fetch_row($pst, $query); 
+
+                    $pos2 = array('postid' => $params['postid'], 'comments' => $postActivity['comments'] + 1,);
+
+                    $query = "UPDATE ". $this->postact_table ." SET comments = :comments WHERE postid = :postid LIMIT 1";
+                    $this->update($pos2, $query);
+
+                    //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Commented On a Post With ID: ".$params['postid'], ); 
+                    $admin_model->record_activity($info);
+                }
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    //Method to Create Or Update Post Comment
+    public function create_user_chat($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $new = array('postid' => $params['postid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+
+        try {
+
+            $query = "SELECT * FROM " . $this->buddychatreply_table ." WHERE postid = :postid AND sender = :sender AND receiver = :receiver AND details = :details LIMIT 1";
+            $actview = $this->fetch_row($new, $query); 
+            // Checking all User credentials...
+            if (!$actview) {
+
+                $newP = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+         
+                $query = "INSERT INTO ". $this->buddychatreply_table ." (postid, commentid, sender, receiver, details) VALUES (:postid, :commentid, :sender, :receiver, :details)";
+                $this->insert($newP, $query); 
+
+                return true;
+            } else {
+
+                return false;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    //Get User Post Comment Chat History
+    public function fetch_comment_chats($data)
+    {   
+        $first = array('postedby' => $data['receiver'], 'commentby' => $data['sender'], 'postid' => $data['postid'], );
+        
+        try {
+
+                $query="SELECT * FROM ". $this->postcomments_table ." WHERE postedby = :postedby AND commentby = :commentby AND postid = :postid OR postedby = :commentby AND commentby = :postedby AND postid = :postid LIMIT 1";
+                $chatmates = $this->fetch_row($first, $query);
+             
+                if ($chatmates) {
+
+                    $a = array('receiver' => $data['receiver'], 'sender' => $data['sender'], 'postid' => $data['postid'], 'commentid' => $chatmates['commentid'], 'status' => "Trash", );
+
+                    $query = "SELECT * FROM ". $this->postcommentreply_table ." WHERE  receiver = :receiver AND sender = :sender AND postid = :postid AND commentid = :commentid AND status != :status OR receiver = :sender AND sender = :receiver AND postid = :postid AND commentid = :commentid AND status != :status "; 
+
+                    $chat = $this->fetch_spec($a, $query);
+
+                    if ($chat){
+                        $a1 = array('postid' => $data['postid'], 'commentid' => $data['commentid'], 'status' => "Unread", );
+                        $query="SELECT * FROM ". $this->postcommentreply_table ." WHERE status = :status AND postid = :postid AND commentid = :commentid";
+                        $list = $this->fetch_spec($a1, $query);
+
+                        if ($list) {
+                            foreach ($list as $key => $li) {
+                                if ($data['sender'] != $li['receiver']) {
+                                    $pos = array('id' => $li['id'], 'postid' => $data['postid'], 'commentid' => $data['commentid'], 'status' => "Read", );
+
+                                    $query = "UPDATE ". $this->postcommentreply_table ." SET status = :status WHERE postid = :postid AND commentid = :commentid AND id = :id";
+                                    $this->update($pos, $query);
+                                }
+                            }
+                        }
+                    }
+
+                    return $chat;
+                } else {
+
+                return false;
+                }
+
+            }catch (Exception $e) {
+                $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            );
+            return $data;   
+        }
+    }
+
+
 
 
 
@@ -1492,7 +1741,7 @@ class Members extends Model
     {
         $d = array('receiver' => $params['uniqueid'], );
         try {
-            $query="SELECT count(*) FROM ". $this->postcomments_table ." WHERE receiver = :receiver AND status = 'Unread'";
+            $query="SELECT count(*) FROM ". $this->postcommentreply_table ." WHERE receiver = :receiver AND status = 'Unread'";
 
             $count = $this->counter_spec($d, $query);
 
@@ -1508,6 +1757,30 @@ class Members extends Model
             }
     }
 
+
+
+
+        //Unread Messages Count (Post COmments)
+        public function chat_info_count($params)
+        {
+            $d = array('receiver' => $params['uniqueid'], );
+            try {
+                $query="SELECT count(*) FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND status = 'Unread'";
+    
+                $count = $this->counter_spec($d, $query);
+    
+                return $count;
+    
+                } catch (Exception $e) {
+    
+                    $data = array(
+                        "type" => "error",
+                        "message" => $e->getMessage()
+                        ); 
+                        return $data;  
+                }
+        }
+    
 
 
 
@@ -1558,9 +1831,9 @@ class Members extends Model
    //User CHat Messages
    public function user_chat_messages($params)
    {
-       $d = array('uniqueid' => $params['uniqueid'], 'buddyid' => $params['buddyid'], 'status' => "Trash");
+       $d = array('receiver' => $params['uniqueid'], 'sender' => $params['buddyid'], 'status' => "Trash");
         try {
-           $query = "(SELECT * FROM ". $this->buddychats_table ." WHERE uniqueid = :uniqueid AND buddyid = :buddyid AND status != :status ORDER BY created DESC) UNION (SELECT * FROM ". $this->buddychats_table ." WHERE buddyid = :uniqueid AND uniqueid = :buddyid AND status != :status ORDER BY created DESC)";
+           $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status ORDER BY created DESC";
 
            $chatMsgs = $this->fetch_spec($d, $query);
 
@@ -1753,6 +2026,52 @@ class Members extends Model
         $d = array('uniqueid' => $params['uniqueid'], 'status' => "Unread", );
         try {
             $query="SELECT * FROM ". $this->uact_table ." WHERE uniqueid = :uniqueid AND status = :status";
+
+            $info = $this->fetch_spec($d, $query);
+
+            return $info;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+                ); 
+                return $data;  
+        }
+    }
+
+
+
+    //Fetch All New Message Details For Buddy
+    public function new_message_details($params)
+    {
+        $d = array('receiver' => $params['uniqueid'], 'status' => "Unread", );
+        try {
+            $query="SELECT * FROM ". $this->postcommentreply_table ." WHERE receiver = :receiver AND status = :status";
+
+            $info = $this->fetch_spec($d, $query);
+
+            return $info;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+                ); 
+                return $data;  
+        }
+    }
+
+
+
+    //Fetch All New Chat Details For Buddy
+    public function new_chat_details($params)
+    {
+        $d = array('receiver' => $params['uniqueid'], 'status' => "Unread", );
+        try {
+            $query="SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND status = :status";
 
             $info = $this->fetch_spec($d, $query);
 

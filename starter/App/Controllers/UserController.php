@@ -1129,7 +1129,7 @@ require_once __DIR__.'/../Models/Members.php';
             //Model Function Call
             $member = $model_connect->user_create_post($fillable, $images);
 
-            if ($member == true) {
+            if ($member != false) {
 
                 $data = array(
                     'result_info' => 
@@ -1138,8 +1138,10 @@ require_once __DIR__.'/../Models/Members.php';
                             'type' => "success",
                             'message' => "Successfully Posted.",
                         ),
-                    'post_info' => $member,
-                    );
+                    //'post_info' => $member,
+                );
+            
+                return $data; 
 
             } else {
 
@@ -1150,11 +1152,13 @@ require_once __DIR__.'/../Models/Members.php';
                             'type' => "error",
                             'message' => "Sorry, This Post Already Exists In Our Records, Be More Creative.",
                         ),
-                    );
-            }
+                );
             
-            return $data; 
+                return $data; 
+            }
         }
+
+
 
 
         //Method To Fetch All Latest Posts
@@ -1173,6 +1177,7 @@ require_once __DIR__.'/../Models/Members.php';
 
             return $data; 
         }
+
 
 
 
@@ -1196,6 +1201,32 @@ require_once __DIR__.'/../Models/Members.php';
 
             return $data; 
         }
+
+
+
+
+
+        //Method To Fetch All Latest Posts
+        public function my_post_action($params)
+        {
+             //User Model
+             $model_connect = new Members();
+ 
+             $fillable = array(
+                 'uniqueid' => htmlspecialchars($params['uniqueid']),
+             );
+ 
+             //Model Function Call
+             $actInfo = $model_connect->my_post_action($fillable);
+ 
+             $data = array(
+                 'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                 'my_post_actions' => $actInfo,
+             );
+ 
+             return $data; 
+        }
+ 
 
 
 
@@ -1259,7 +1290,7 @@ require_once __DIR__.'/../Models/Members.php';
        
         
 
-        //Method For User To Count Buddy
+        //Method For User To Count New Messages
         public function message_info_count($params)
         {
             //User Model
@@ -1283,7 +1314,204 @@ require_once __DIR__.'/../Models/Members.php';
 
                 $data = array(
                     'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
-                    'buddiesCount_info' => $actInfo,
+                    'newmsg_count' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+
+        //Method For User To Get New Messages Details
+        public function new_message_details($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->new_message_details($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'newmsg_details' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'newmsg_details' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+
+        //Method to Create New User Post Comment 
+        public function all_message_details($params)
+        {
+             //Member Model
+             $model_connect = new Members();
+             
+            //User Account Parameters
+            
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                );
+ 
+             //Model Function Call
+             $postAct = $model_connect->all_message_details($fillable);
+ 
+             if ($postAct != false) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Comment Posted!",
+                         ),
+                     'all_msgs' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'all_msgs' => array('msgList' => '', 'msgDetails' => ''),
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+
+
+        //Get User Post Comment Chat History
+        public function fetch_comment_chats($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            
+            //User Account Parameters
+            
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'sender' => htmlspecialchars($params['sender']),
+                    'receiver' => htmlspecialchars($params['receiver']),
+                    'postid' => htmlspecialchars($params['postid']),
+                    'commentid' => htmlspecialchars($params['commentid']),
+                );
+
+            //Model Function Call
+            $postAct = $model_connect->fetch_comment_chats($fillable);
+
+            if ($postAct) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Comment Posted!",
+                        ),
+                    'comment_chats' => $postAct,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Aborted!",
+                        ),
+                    'comment_chats' => "",
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+        //Method For User To Count New Chats
+        public function chat_info_count($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->chat_info_count($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'newchat_count' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'newchat_count' => $actInfo,
+                );
+
+                return $data;
+            }
+        }
+
+
+
+
+        //Method For User To Get New Chat Details
+        public function new_chat_details($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            //User Account Parameters
+            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->new_chat_details($fillable);
+
+            if ($actInfo) {
+
+                $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'newchat_details' => $actInfo,
+                );
+
+                return $data;
+
+            } else {
+
+                $data = array(
+                    'result_info' => array('code' => "401", 'type' => "error", 'message' => "An Error Occured", ),
+                    'newchat_details' => $actInfo,
                 );
 
                 return $data;
@@ -1446,7 +1674,7 @@ require_once __DIR__.'/../Models/Members.php';
              $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
             //User Account Parameters
-            if (!$params['commentid']) {
+            if ($params['commentid'] == NULL) {
                 $fillable = array(
                     'uniqueid' => htmlspecialchars($params['uniqueid']),
                     'username' => htmlspecialchars($params['username']),
@@ -1454,18 +1682,26 @@ require_once __DIR__.'/../Models/Members.php';
                     'postid' => htmlspecialchars($params['postid']),
                     'details' => htmlspecialchars($params['details']),
                 );
+
+                //Model Function Call
+                $postAct = $model_connect->user_post_new_comment($fillable);
+
             } else {
                 $fillable = array(
                     'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'sender' => htmlspecialchars($params['sender']),
                     'username' => htmlspecialchars($params['username']),
+                    'receiver' => htmlspecialchars($params['receiver']),
                     'commentid' => htmlspecialchars($params['commentid']),
                     'postid' => htmlspecialchars($params['postid']),
                     'details' => htmlspecialchars($params['details']),
                 );
+
+                //Model Function Call
+                $postAct = $model_connect->user_post_comment($fillable);
             }
  
-             //Model Function Call
-             $postAct = $model_connect->user_post_comment($fillable);
+            
  
              if ($postAct == true) {
  
@@ -1551,16 +1787,38 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //Member Model
             $model_connect = new Members();
+            $length = 5;
+            $chars = getenv('COMBINATION');
+            $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+            $chatid = preg_replace('/\s+/', '', trim('chat').trim($code));
             
             //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-                'buddyid' => htmlspecialchars($params['buddyid']),
-                'details' => htmlspecialchars($params['details']),
-            );
+            if ($params['chatid'] != NULL) {
+                $fillable = array(
+                    'chatid' => $params['chatid'],
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'receiver' => htmlspecialchars($params['receiver']),
+                    'username' => htmlspecialchars($params['username']),
+                    'sender' => htmlspecialchars($params['sender']),
+                    'details' => htmlspecialchars($params['details']),
+                );
+    
+                //Model Function Call
+                $chatInfo = $model_connect->create_user_chat($fillable);
 
-            //Model Function Call
-            $chatInfo = $model_connect->create_user_chat($fillable);
+            } else {
+                $fillable = array(
+                    'chatid' => $chatid,
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'receiver' => htmlspecialchars($params['receiver']),
+                    'username' => htmlspecialchars($params['username']),
+                    'sender' => htmlspecialchars($params['sender']),
+                    'details' => htmlspecialchars($params['details']),
+                );
+    
+                //Model Function Call
+                $chatInfo = $model_connect->create_new_user_chat($fillable);
+            }
 
             if ($chatInfo == true) {
 
