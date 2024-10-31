@@ -418,6 +418,7 @@ CREATE TABLE IF NOT EXISTS `app_coy_info` (
 `email1` VARCHAR(150) DEFAULT NULL,
 `phone` VARCHAR(50) NOT NULL,
 `phone1` VARCHAR(50) DEFAULT NULL,
+`channel` VARCHAR(250) DEFAULT NULL,
 `facebook` VARCHAR(50) NOT NULL,
 `instagram` VARCHAR(50) NOT NULL,
 `twitter` VARCHAR(50) NOT NULL,
@@ -437,7 +438,7 @@ PRIMARY KEY  (`id`)
 CREATE TABLE IF NOT EXISTS `app_currency` ( 
 `id` INT NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(50)  NOT NULL,
-`currency` VARCHAR(10) NOT NULL,
+`currency` VARCHAR(50) DEFAULT NULL,
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 
@@ -447,8 +448,9 @@ PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 -- Table structure for Currency Exchan `app_currency_exchange` 
 CREATE TABLE IF NOT EXISTS `app_currency_exchange` ( 
 `id` INT NOT NULL AUTO_INCREMENT,
-`rate` INT(10)  NOT NULL,
-`currency` VARCHAR(10) NOT NULL,
+`rate` VARCHAR(50)  NOT NULL,
+`currency` VARCHAR(50) NOT NULL,
+`status` ENUM('Publish', 'Deactivated', 'Trash') DEFAULT 'Deactivated',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 
@@ -457,11 +459,36 @@ PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 -- Table structure for Bank Details `app_bank_details` 
 CREATE TABLE IF NOT EXISTS `app_bank_details` ( 
 `id` INT NOT NULL AUTO_INCREMENT,
+`swiftcode` VARCHAR(50)  NOT NULL,
 `bankname` VARCHAR(100)  NOT NULL,
 `acctname` VARCHAR(100)  NOT NULL,
-`swift` VARCHAR(50)  NOT NULL,
-`number` INT(10) NOT NULL,
-`status` ENUM('Active', 'Deactivate', 'Trash') DEFAULT 'Deactivate',
+`acctnum` VARCHAR(50) NOT NULL,
+`status` ENUM('Publish', 'Deactivated', 'Trash') DEFAULT 'Deactivated',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+-- Table structure for Subscription Plan `app_subscription` 
+CREATE TABLE IF NOT EXISTS `app_subscription` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`status` ENUM('Paid', 'Free') DEFAULT 'Free',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+
+
+-- Table structure for Subscription Plan `app_subscription_plan` 
+CREATE TABLE IF NOT EXISTS `app_subscription_plan` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`planid` VARCHAR(50)  NOT NULL,
+`type` varchar(100) DEFAULT NULL,
+`amount` VARCHAR(10) DEFAULT NULL,
+`expiry` varchar(20) DEFAULT NULL,
+`details` varchar(500) DEFAULT NULL,
+`details1` varchar(500) DEFAULT NULL,
+`detail2` varchar(500) DEFAULT NULL,
+`status` ENUM('Publish', 'Deactivated', 'Trash') DEFAULT 'Publish',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 

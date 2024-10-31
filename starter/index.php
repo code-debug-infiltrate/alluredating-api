@@ -1663,7 +1663,7 @@ $endpoints["get-bank-info"] = function (array $requestData): void {
 //Create Currency Information
 $endpoints["create-currency-info"] = function (array $requestData): void {
 
-    if (!isset($requestData["name"]) || (!isset($requestData["currency"]))) {
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["currency"]))) {
         
         $info = array(
             'result_info' => 
@@ -1701,7 +1701,7 @@ $endpoints["get-currency-info"] = function (array $requestData): void {
 //Create Exchange Rate Information
 $endpoints["create-exchange-info"] = function (array $requestData): void {
 
-    if (!isset($requestData["name"]) || (!isset($requestData["rate"]))) {
+    if (!isset($requestData["currency"]) || (!isset($requestData["rate"]))) {
         
         $info = array(
             'result_info' => 
@@ -1731,6 +1731,94 @@ $endpoints["get-exchange-info"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+
+//Create Subscription Priviledge Information
+$endpoints["create-subscription-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["status"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_subscription_info($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Subscription Priviledge Information
+$endpoints["get-subscription-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_subscription_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Create Subscription Plan Information
+$endpoints["create-subscription-plan"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["amount"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_subscription_plan($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Subscription  Plan Information
+$endpoints["get-subscription-plan"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_subscription_plan();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

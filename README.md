@@ -96,12 +96,23 @@ Set Basic Info in the htaccess file
 
 ## Admin Dashboard
 [create-coy-info] Create Coy Credentails (uniqueid, username, coyname, slogan, email, email1, phone, phone1, channel, instagram, facebook, linkedin, twitter, address, status)
-[create-bank-info] Create Coy Credentails (bankswift, bankname, acctname, acctnum)
+[create-bank-info] Create Coy Credentails (uniqueid, username, bankswift, bankname, acctname, acctnum)
 [get-bank-info] Get Coy Credentails ()
-[create-currency-info] Create Currency Credentails (name, currency)
+[create-currency-info] Create Currency Credentails (uniqueid, username, name, currency)
 [get-currency-info] Get Currency Credentails ()
-[create-exchange-info] Create Exchange Rate Credentails (name, currency, rate)
+[create-exchange-info] Create Exchange Rate Credentails (uniqueid, username, name, currency, rate)
 [get-exchange-info] Get Exchange Rate Credentails ()
+[create-subscription-info] Create Subscription Priviledge  (uniqueid, username, status)
+[get-subscription-info] Get Subscription Priviledge  ()
+[create-subscription-plan] Create Subscription Priviledge  (uniqueid, username, type, amount, expiry, details, details1, details2, status)
+[get-subscription-plan] Get Subscription Priviledge  ()
+
+
+
+
+
+
+
 
 
 

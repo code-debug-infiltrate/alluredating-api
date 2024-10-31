@@ -73,9 +73,6 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
-
-        
-
         //Method to Create Bank Transfer Info
         public function create_bank_information($params)
         {
@@ -95,6 +92,7 @@ require_once __DIR__.'/../Models/Admin.php';
                     'swiftcode' => htmlspecialchars($params['swiftcode']),
                     'acctname' => htmlspecialchars($params['acctname']),
                     'acctnum' => htmlspecialchars($params['acctnum']),
+                    'status' => htmlspecialchars($params['status']),
                 );
                 //Model Function Call
                 $postAct = $model_connect->create_bank_information($fillable);
@@ -140,7 +138,7 @@ require_once __DIR__.'/../Models/Admin.php';
 
             $data = array(
                     'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
-                    'user_profiles' => $actInfo,
+                    'result_message' => $actInfo,
                 );
 
             return $data; 
@@ -154,19 +152,32 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-
-            //  $length = 5;
-            //  $chars = getenv('COMBINATION');
-            //  $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
-            //  $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'name' => htmlspecialchars($params['name']),
-                    'currency' => htmlspecialchars($params['currency']),
-                );
+            if ($params['currency'] == "AED") {
+                $fillable = array('currency' => "₳", 'name' => "AED", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "EUR") {
+                $fillable = array('currency' => "€", 'name' => "Euro", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "USD") {
+                $fillable = array('currency' => "$", 'name' => "USD", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "CAD") {
+                $fillable = array('currency' => "$", 'name' => "CAD", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "NGN") {
+                $fillable = array('currency' => "#", 'name' => "NGN", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']),);
+            }
+            if ($params['currency'] == "YEN") {
+                $fillable = array('currency' => "¥", 'name' => "YEN", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "GBP") {
+                $fillable = array('currency' => "£", 'name' => "GBP", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+            if ($params['currency'] == "EGP") {
+                $fillable = array('currency' => "E£", 'name' => "EGP", 'uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), );
+            }
+
                 //Model Function Call
                 $postAct = $model_connect->create_currency_information($fillable);
 
@@ -212,15 +223,13 @@ require_once __DIR__.'/../Models/Admin.php';
 
             $data = array(
                     'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
-                    'user_profiles' => $actInfo,
+                    'result_message' => $actInfo,
                 );
 
             return $data; 
         }
         
         
-
-
 
         //Method to Create Exchange Rate Info
         public function create_exchange_information($params)
@@ -239,6 +248,7 @@ require_once __DIR__.'/../Models/Admin.php';
                     'username' => htmlspecialchars($params['username']),
                     'currency' => htmlspecialchars($params['currency']),
                     'rate' => htmlspecialchars($params['rate']),
+                    'status' => htmlspecialchars($params['status']),
                 );
                 //Model Function Call
                 $postAct = $model_connect->create_exchange_information($fillable);
@@ -250,7 +260,7 @@ require_once __DIR__.'/../Models/Admin.php';
                          array(
                              'code' => "200",
                              'type' => "success",
-                             'message' => "Bank Transfer Detail Updated",
+                             'message' => "Exchange Rate Detail Updated",
                          ),
                      'result_message' => $postAct,
                      );
@@ -283,12 +293,167 @@ require_once __DIR__.'/../Models/Admin.php';
 
             $data = array(
                     'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
-                    'user_profiles' => $actInfo,
+                    'result_message' => $actInfo,
                 );
 
             return $data; 
         }
         
+
+
+        //Method to Create Subscription Plan Info
+        public function create_subscription_plan($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+
+             $length = 5;
+             $chars = getenv('COMBINATION');
+             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+             $planid = preg_replace('/\s+/', '', trim('subplan').trim($code));
+             
+            //Coy Info Parameters
+                $fillable = array(
+                    'planid' => $planid,
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'type' => htmlspecialchars($params['type']),
+                    'amount' => htmlspecialchars($params['amount']),
+                    'expiry' => htmlspecialchars($params['expiry']),
+                    'details' => htmlspecialchars($params['details']),
+                    'details1' => htmlspecialchars($params['details1']),
+                    'details2' => htmlspecialchars($params['details2']),
+                    'status' => htmlspecialchars($params['status']),
+                );
+                //Model Function Call
+                $postAct = $model_connect->create_subscription_plan($fillable);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Exchange Rate Detail Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        //Method To Fetch All Subscription Plan
+        public function get_subscription_plan()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_subscription_plan();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+        
+        
+
+        //Method to Create Subscription Priviledge Info
+        public function create_subscription_info($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             
+            //Coy Info Parameters
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'status' => htmlspecialchars($params['status']),
+                );
+                //Model Function Call
+                $postAct = $model_connect->create_subscription_info($fillable);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Exchange Rate Detail Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        //Method To Fetch All Subscription Priviledge
+        public function get_subscription_info()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_subscription_info();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+        
+        
+        
+
+
+
+
+        
+        
+
+
+
+
+        
+
+
+
+
         
         
 

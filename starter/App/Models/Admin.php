@@ -18,6 +18,9 @@ class Admin extends Model
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    protected $newsletter_table = "app_subscribe";  //Newsletter Subscribers API Table
+    protected $sub_table = "app_subscription";  //Subscription API Table
+    protected $subplan_table = "app_subscription_plan";  //Subscription Plan API Table
     protected $delAcc_table = "app_delete_account";  //Delete Account  Table
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
@@ -45,8 +48,129 @@ class Admin extends Model
 
 
 
+    
+    
+
+    //Create & Update Bank Transfer Information
+    public function create_coy_information($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $a = array('id' => "1", );
+        $c = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->coy_table ." WHERE id = :id LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                $b = array('id' => "1", 'coyname' => $data['coyname'], 'slogan' => $data['slogan'], 'email' => $data['email'], 'email1' => $data['email1'], 'phone' => $data['phone'], 'phone1' => $data['phone1'], 'channel' => $data['channel'], 'facebook' => $data['facebook'], 'instagram' => $data['instagram'], 'linkedin' => $data['linkedin'], 'twitter' => $data['twitter'], 'address' => $data['address'], 'status' => $data['status'], );
+        
+                $query = "UPDATE ". $this->coy_table ." SET `coyname` = :coyname, `slogan` = :slogan, `status` = :status, `email` = :email, `email1` = :email1, `phone` = :phone, `phone1` = :phone1, `channel` = :channel, `facebook` = :facebook, `instagram` = :instagram, `linkedin` = :linkedin, `twitter` = :twitter, `address` = :address WHERE `id` = :id LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Company Contact Details", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                $b = array('coyname' => $data['coyname'], 'slogan' => $data['slogan'], 'email' => $data['email'], 'email1' => $data['email1'], 'phone' => $data['phone'], 'phone1' => $data['phone1'], 'channel' => $data['channel'], 'facebook' => $data['facebook'], 'instagram' => $data['instagram'], 'linkedin' => $data['linkedin'], 'twitter' => $data['twitter'], 'address' => $data['address'], 'status' => $data['status'], );
+        
+                $query = "INSERT INTO ". $this->coy_table ."(coyname, slogan, email, email1, phone, phone1, channel, facebook, instagram, linkedin, twitter, address, status) VALUES (:coyname, :slogan, :email, :email1, :phone, :phone1, :channel, :facebook, :instagram, :linkedin, :twitter, :address, :status)";
+                $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Company Contact Details.", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
 
 
+
+
+    //Company Record
+    public function coy_info()
+    {
+        try {
+            $data = array('status' => "Publish");
+            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = :status LIMIT 1";
+            $coy = $this->fetch_row($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+    //Create & Update Bank Transfer Information
+    public function create_bank_information($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $a = array('id' => "1", );
+        $c = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->bank_table ." WHERE id = :id LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+                $b = array('id' => "1", 'bankname' => $data['bankname'], 'swiftcode' => $data['swiftcode'], 'acctname' => $data['acctname'], 'acctnum' => $data['acctnum'], 'status' => $data['status'], );
+        
+                $query = "UPDATE ". $this->bank_table ." SET `swiftcode` = :swiftcode, `status` = :status, `acctnum` = :acctnum, `acctname` = :acctname, `bankname` = :bankname WHERE `id` = :id LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Bank Transfer Details", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+                $b = array('bankname' => $data['bankname'], 'swiftcode' => $data['swiftcode'], 'acctname' => $data['acctname'], 'acctnum' => $data['acctnum'], 'status' => $data['status'], );
+        
+                $query = "INSERT INTO ". $this->bank_table ."(swiftcode, bankname, acctname, acctnum, status) VALUES (:swiftcode, :bankname, :acctname, :acctnum, :status)";
+                $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Bank Transfer Details.", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
 
 
 
@@ -55,8 +179,8 @@ class Admin extends Model
     public function get_bank_info()
     {
         try {
-            $data = array('status' => "Publish");
-            $query = "SELECT * FROM ". $this->bank_table ." WHERE status = :status LIMIT 1";
+            $data = array('id' => "1");
+            $query = "SELECT * FROM ". $this->bank_table ." WHERE id = :id LIMIT 1";
             $coy = $this->fetch_row($data, $query);
             return $coy;
 
@@ -75,32 +199,32 @@ class Admin extends Model
         //Admin Model
         $admin_model = new Admin();
 
-        $a = array('currency' => $data['currency'], );
-        $b = array('currency' => $data['currency'], 'rate' => $data['rate'], );
+        $a = array('id' => "1", );
+        $b = array('id' => "1", 'currency' => $data['currency'], 'name' => $data['name'], );
         $c = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], );
 
         try {
-            $query = "SELECT * FROM ". $this->cur_table ." WHERE currency = :currency LIMIT 1";
+            $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id LIMIT 1";
             $check = $this->fetch_row($a, $query);
 
             if ($check) {
 
-                $query = "UPDATE ". $this->cur_table ." SET `rate` = :rate WHERE `currency` = :currency LIMIT 1";
+                $query = "UPDATE ". $this->cur_table ." SET `name` = :name, `currency` = :currency WHERE `id` = :id LIMIT 1";
                 $this->update($b, $query); 
 
                 //Record Activity
-                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Exchange Rate ".$data['currency']." To ".$data['rate'], ); 
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Currency ".$data['currency']." To ".$data['name'], ); 
                 $admin_model->record_activity($info);
 
                 return true;
 
             } else {
 
-                $query = "INSERT INTO ". $this->cur_table ."(rate, currency) VALUES (:rate, :currency)";
+                $query = "INSERT INTO ". $this->cur_table ."(id, name, currency) VALUES (:id, :name, :currency)";
                 $this->insert($b, $query); 
 
                 //Record Activity
-                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Exchange Rate ".$data['currency']." To ".$data['rate'], ); 
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Currency ".$data['currency']." To ".$data['name'], ); 
                 $admin_model->record_activity($info);
 
                 return true;
@@ -142,16 +266,15 @@ class Admin extends Model
         $admin_model = new Admin();
 
         $a = array('currency' => $data['currency'], );
-        $b = array('currency' => $data['currency'], 'rate' => $data['rate'], );
-        $c = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], );
+        $b = array('currency' => $data['currency'], 'rate' => $data['rate'], 'status' => $data['status'], );
 
         try {
             $query = "SELECT * FROM ". $this->exchange_table ." WHERE currency = :currency LIMIT 1";
             $check = $this->fetch_row($a, $query);
 
-            if ($check) {
+            if ($check != NULL) {
 
-                $query = "UPDATE ". $this->exchange_table ." SET `rate` = :rate WHERE `currency` = :currency LIMIT 1";
+                $query = "UPDATE ". $this->exchange_table ." SET `rate` = :rate, `status` = :status WHERE `currency` = :currency LIMIT 1";
                 $this->update($b, $query); 
 
                 //Record Activity
@@ -162,7 +285,7 @@ class Admin extends Model
 
             } else {
 
-                $query = "INSERT INTO ". $this->exchange_table ."(rate, currency) VALUES (:rate, :currency)";
+                $query = "INSERT INTO ". $this->exchange_table ." (rate, currency, status) VALUES (:rate, :currency, :status)";
                 $this->insert($b, $query); 
 
                 //Record Activity
@@ -202,6 +325,154 @@ class Admin extends Model
 
 
 
+    //Create & Update Subscription Priviledge Information
+    public function create_subscription_info($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $a = array('id' => "1", );
+        $b = array('id' => "1", 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->sub_table ." WHERE id = :id LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                $query = "UPDATE ". $this->sub_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Dating App Subscription ".$data['status'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                $query = "INSERT INTO ". $this->sub_table ."(id, status) VALUES (:id, :status)";
+                $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Dating App Subscription ".$data['status'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+    //Subscription Priviledge Record
+    public function get_subscription_info()
+    {
+        try {
+            $data = array('id' => "1");
+            $query = "SELECT * FROM ". $this->sub_table ." WHERE id = :id LIMIT 1";
+            $coy = $this->fetch_row($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+    //Create & Update Subscription Plan Information
+    public function create_subscription_plan($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $a = array('type' => $data['type'], );
+        $b = array('type' => $data['type'], 'expiry' => $data['expiry'], 'amount' => $data['amount'], 'details' => $data['details'], 'details1' => $data['details1'], 'details2' => $data['details2'], 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->subplan_table ." WHERE type = :type LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                $query = "UPDATE ". $this->subplan_table ." SET `amount` = :amount, `expiry` = :expiry, `details` = :details, `details1` = :details1, `details2` = :details2, `status` = :status WHERE `type` = :type LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Dating App Subscription Plan ".$data['type'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                $query = "INSERT INTO ". $this->subplan_table ."(planid, type, amount, expiry, details, details1, details2, status) VALUES (:planid, :type, :amount, :expiry, :details, :details1, :details2, :status)";
+                $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Dating App Subscription Plan ".$data['type'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+    //Subscription Plan Record
+    public function get_subscription_plan()
+    {
+        try {
+            $data = array('status' => "Trash");
+            $query = "SELECT * FROM ". $this->subplan_table ." WHERE status != :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -223,27 +494,6 @@ class Admin extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
-
-
-
-
-    //Company Record
-    public function coy_info()
-    {
-        try {
-            $data = array('status' => "Publish");
-            $query = "SELECT * FROM ". $this->coy_table ." WHERE status = :status LIMIT 1";
-            $coy = $this->fetch_row($data, $query);
-            return $coy;
-
-        } catch (Exception $e) {
-
-        	return "There is some errors: " . $e->getMessage();
-        }
-    }
-
-
-
 
 
 
