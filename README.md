@@ -88,11 +88,22 @@ Set Basic Info in the htaccess file
 [all-user-messages] Get all User Emails/Comments (uniqueid)
 [all-comment-chats] Get all Post Comments Chats (uniqueid, buddyid, postid, commentid, )
 [my-post-action] Get Action Of User On Each Post (uniqueid)
+[user-subscription-plan] Get User Subscription Plan (uniqueid)
+[user-make-payment] User Make Payment (uniqueid, username, amount, type)
+
 
 
 
 ## Admin Dashboard
-[admin-info] User Credentails (uniqueid)
+[create-coy-info] Create Coy Credentails (uniqueid, username, coyname, slogan, email, email1, phone, phone1, channel, instagram, facebook, linkedin, twitter, address, status)
+[create-bank-info] Create Coy Credentails (bankswift, bankname, acctname, acctnum)
+[get-bank-info] Get Coy Credentails ()
+[create-currency-info] Create Currency Credentails (name, currency)
+[get-currency-info] Get Currency Credentails ()
+[create-exchange-info] Create Exchange Rate Credentails (name, currency, rate)
+[get-exchange-info] Get Exchange Rate Credentails ()
+
+
 
 ## General
 [user-info] User Credentails (uniqueid)

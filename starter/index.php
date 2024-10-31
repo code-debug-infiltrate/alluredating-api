@@ -6,6 +6,7 @@ require_once __DIR__.'/App/Controllers/RegisterController.php';
 require_once __DIR__.'/App/Controllers/LoginController.php';
 require_once __DIR__.'/App/Controllers/UserController.php';
 require_once __DIR__.'/App/Controllers/HomeController.php';
+require_once __DIR__.'/App/Controllers/AdminController.php';
 
 $BASE_URI = "/starter/";
 $endpoints = array();
@@ -1274,7 +1275,7 @@ $endpoints["user-buddies-list"] = function (array $requestData): void {
 //User Chat Messages
 $endpoints["user-chat-messages"] = function (array $requestData): void {
 
-    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["buddyid"]))) {
+    if (!isset($requestData["uniqueid"])) {
         
         $info = array(
             'result_info' => 
@@ -1299,7 +1300,7 @@ $endpoints["user-chat-messages"] = function (array $requestData): void {
 //User Post Status
 $endpoints["user-chat-reply"] = function (array $requestData): void {
 
-    if ((!isset($requestData["sender"])) && (!isset($requestData["receiver"]))) {
+    if ((!isset($requestData["sender"])) || (!isset($requestData["receiver"]))) {
         
         $info = array(
             'result_info' => 
@@ -1538,6 +1539,211 @@ $endpoints["user-post-status"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+
+
+//User Subscription Plan
+$endpoints["user-subscription-plan"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_subscription_plan($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+//User Subscription Plan
+$endpoints["user-make-payment"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_subscription_payment($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Create Company Information
+$endpoints["create-coy-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["coyname"]) || (!isset($requestData["address"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_coy_information($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Create Bank Information
+$endpoints["create-bank-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["bankname"]) || (!isset($requestData["swiftcode"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_bank_information($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Bank Information
+$endpoints["get-bank-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_bank_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Create Currency Information
+$endpoints["create-currency-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["name"]) || (!isset($requestData["currency"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_currency_information($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Currency Information
+$endpoints["get-currency-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_currency_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Create Exchange Rate Information
+$endpoints["create-exchange-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["name"]) || (!isset($requestData["rate"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_exchange_information($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Exchange Rate Information
+$endpoints["get-exchange-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_exchange_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

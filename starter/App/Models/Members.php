@@ -13,6 +13,7 @@ class Members extends Model
     protected $act_table = "app_activity"; //Activity Table
     protected $u_table = "app_users";  //Users Table
     protected $p_table = "app_profile";  //Profile Table
+    protected $coy_table = "app_coy_info";  //Users Table
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
@@ -37,6 +38,7 @@ class Members extends Model
     protected $postact_table = "app_post_actions";  //Post Actions
     protected $urpostact_table = "app_user_post_actions";  //User Post Actions
     protected $postreport_table = "app_post_reports"; //User Post Reports
+    protected $subpayment_table = "app_subscription_payment"; //User Subscription Payment
 
 
 
@@ -1547,42 +1549,29 @@ class Members extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $pst = array('postid' => $params['postid'], );
-        $chek = array('postid' => $params['postid'], 'commentby' => $params['uniqueid'], );
+        $chek = array('uniqueid' => $params['sender'], 'buddyid' => $params['receiver'], );
 
         try {
-            $query = "SELECT * FROM " . $this->post_table ." WHERE postid = :postid LIMIT 1";
-            $postDetails = $this->fetch_row($pst, $query);
+            $query = "SELECT * FROM " . $this->buddychats_table ." WHERE uniqueid = :uniqueid AND buddyid = :buddyid OR uniqueid = :buddyid AND buddyid = :uniqueid LIMIT 1";
+            $chatPals = $this->fetch_row($chek, $query);
 
-            $query = "SELECT * FROM " . $this->postcomments_table ." WHERE postid = :postid AND commentby = :commentby LIMIT 1";
-            $newSend = $this->fetch_row($chek, $query); 
+            if (!$chatPals) {
 
-            $newParams = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'postedby' => $postDetails['uniqueid'], 'commentby' => $params['uniqueid'], 'title' => substr($postDetails['details'], 0, 70), );
+                $newP = array('chatid' => $params['chatid'], 'uniqueid' => $params['sender'], 'buddyid' => $params['receiver'], );
 
-            $newParams0 = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'receiver' => $postDetails['uniqueid'], 'sender' => $params['uniqueid'], 'details' => $params['details'], );
+                $query = "INSERT INTO ". $this->buddychats_table ." (chatid, uniqueid, buddyid) VALUES (:chatid, :uniqueid, :buddyid)";
+                $newChat = $this->insert($newP, $query); 
 
-            // Checking all User credentials...
-            if (!$newSend) {
+                if ($newChat) {
 
-                $query = "INSERT INTO ". $this->postcomments_table ." (postid, commentid, postedby, commentby, title) VALUES (:postid, :commentid, :postedby, :commentby, :title)";
-                $userComment = $this->insert($newParams, $query); 
+                    $chatRecord = array('chatid' => $params['chatid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'file' => $params['file'], 'details' => $params['details'], );
 
-                if ($userComment) {
-                
-                    $this->create_user_chat($newParams0);
-
-                    $query = "SELECT * FROM " . $this->postact_table ." WHERE postid = :postid LIMIT 1";
-                    $postActivity = $this->fetch_row($pst, $query); 
-
-                    $pos2 = array('postid' => $params['postid'], 'comments' => $postActivity['comments'] + 1,);
-
-                    $query = "UPDATE ". $this->postact_table ." SET comments = :comments WHERE postid = :postid LIMIT 1";
-                    $this->update($pos2, $query);
-
-                    //Record Activity
-                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Commented On a Post With ID: ".$params['postid'], ); 
-                    $admin_model->record_activity($info);
+                    $this->create_user_chat($chatRecord);
                 }
+
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Chats", 'details' => $params['username']." Started a Chat With ID: ".$params['receiver'], ); 
+                $admin_model->record_activity($info);
 
                 return true;
 
@@ -1606,21 +1595,22 @@ class Members extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $new = array('postid' => $params['postid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+        $new = array('chatid' => $params['chatid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
 
         try {
 
-            $query = "SELECT * FROM " . $this->buddychatreply_table ." WHERE postid = :postid AND sender = :sender AND receiver = :receiver AND details = :details LIMIT 1";
+            $query = "SELECT * FROM " . $this->buddychatreply_table ." WHERE chatid = :chatid AND sender = :sender AND receiver = :receiver AND details = :details LIMIT 1";
             $actview = $this->fetch_row($new, $query); 
             // Checking all User credentials...
             if (!$actview) {
 
-                $newP = array('postid' => $params['postid'], 'commentid' => $params['commentid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'details' => $params['details'], );
+                $newP = array('chatid' => $params['chatid'], 'sender' => $params['sender'], 'receiver' => $params['receiver'], 'file' => $params['file'], 'details' => $params['details'], );
          
-                $query = "INSERT INTO ". $this->buddychatreply_table ." (postid, commentid, sender, receiver, details) VALUES (:postid, :commentid, :sender, :receiver, :details)";
+                $query = "INSERT INTO ". $this->buddychatreply_table ." (chatid, sender, receiver, file, details) VALUES (:chatid, :sender, :receiver, :file, :details)";
                 $this->insert($newP, $query); 
 
                 return true;
+
             } else {
 
                 return false;
@@ -1760,26 +1750,26 @@ class Members extends Model
 
 
 
-        //Unread Messages Count (Post COmments)
-        public function chat_info_count($params)
-        {
-            $d = array('receiver' => $params['uniqueid'], );
-            try {
+    //Unread Messages Count (Post COmments)
+    public function chat_info_count($params)
+    {
+        $d = array('receiver' => $params['uniqueid'], );
+        try {
                 $query="SELECT count(*) FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND status = 'Unread'";
-    
+
                 $count = $this->counter_spec($d, $query);
-    
+
                 return $count;
-    
-                } catch (Exception $e) {
-    
-                    $data = array(
-                        "type" => "error",
-                        "message" => $e->getMessage()
-                        ); 
-                        return $data;  
-                }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
         }
+    }
     
 
 
@@ -1828,16 +1818,58 @@ class Members extends Model
    }
 
 
-   //User CHat Messages
-   public function user_chat_messages($params)
-   {
-       $d = array('receiver' => $params['uniqueid'], 'sender' => $params['buddyid'], 'status' => "Trash");
+    //User CHat Messages
+    public function user_chat_messages($params)
+    {
+        
         try {
-           $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status ORDER BY created DESC";
+            if ($params['buddyid'] != NULL) {
 
-           $chatMsgs = $this->fetch_spec($d, $query);
+                $c = array('uniqueid' => $params['uniqueid'], 'buddyid' => $params['buddyid'], );
+                
+                $query = "SELECT * FROM ". $this->buddychats_table ." WHERE uniqueid = :uniqueid AND buddyid = :buddyid OR buddyid = :uniqueid AND uniqueid = :buddyid LIMIT 1";
+                $chatUser = $this->fetch_row($c, $query);
 
-           return $chatMsgs;
+                if ($chatUser) {
+
+                    $d = array('sender' => $params['uniqueid'], 'receiver' => $params['buddyid'], 'chatid' => $chatUser['chatid'], 'status' => "Trash");
+
+                    $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status";
+
+                    $chatMsgs = $this->fetch_spec($d, $query);
+                    
+                    if ($chatMsgs) {
+
+                        foreach ($chatMsgs as $key => $li) {
+                            if ($params['uniqueid'] == $li['receiver'] && $li['status'] == "Unread") {
+        
+                                $pos = array('id' => $li['id'], 'chatid' => $li['chatid'], 'status' => "Read", );
+        
+                                $query = "UPDATE ". $this->buddychatreply_table ." SET status = :status WHERE chatid = :chatid AND id = :id";
+                                $this->update($pos, $query);
+                            }
+                        }
+        
+                        return $chatMsgs;
+
+                    } else {
+                        return false;
+                    }
+
+                } else {
+
+                    return false;
+                }
+
+            } else {
+
+                $c = array('receiver' => $params['uniqueid'],  );
+
+                $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver  ORDER BY CREATED DESC";
+                $chatUser = $this->fetch_spec($c, $query);
+                
+                return $chatUser;
+            }
 
         } catch (Exception $e) {
 
@@ -1852,6 +1884,54 @@ class Members extends Model
 
 
 
+    //User Subscription Payment
+    public function user_subscription_payment($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        try {
+                $c = array('uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'status' => "Processing", );
+                
+                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
+                $chatUser = $this->fetch_row($c, $query);
+
+                if ($chatUser == NULL) {
+
+                    $d = array('trancid' => $params['trancid'], 'uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'amount' => $params['amount'], 'details' => $params['details'], );
+
+                    $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, amount, details) VALUES (:trancid, :uniqueid, :type, :amount, :details)";
+
+                    $chatMsgs = $this->insert($d, $query);
+                    
+                    if ($chatMsgs) {
+
+                        //Record Activity
+                        $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Payment", 'details' => $params['username']." Used ".$params['type']." Payment For: ".$params['amount'], ); 
+                        $admin_model->record_activity($info);
+                    }
+
+                    return $chatMsgs;
+
+                } else {
+
+                    $pos = array('id' => $chatUser['id'], 'trancid' => $params['trancid'], 'uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'amount' => $params['amount'], 'details' => $params['details'], );
+
+                    $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
+                    $chatMsgs = $this->update($pos, $query);
+
+                    return $chatMsgs;
+                }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
 
 
 
@@ -1862,7 +1942,19 @@ class Members extends Model
 
 
 
-    //Login method For All Users
+
+
+
+
+
+
+
+
+
+
+
+
+    //Deactivate Account method For All Users
     public function deactivate_account($params)
     {
         $admin_model = new Admin();
@@ -1927,7 +2019,29 @@ class Members extends Model
 
 
 
+    //Fetch Subscription Plan Record
+    public function user_subscription_plan($params)
+    {
+        try {
+            $query = "SELECT * FROM " . $this->subpayment_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $actview = $this->fetch_row($params, $query); 
+            
+            if($actview){
+                
+                return $actview;
 
+            } else {
+
+            return false;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+     
 
     //Record Activity
     public function record_user_activity($params)

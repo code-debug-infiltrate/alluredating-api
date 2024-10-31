@@ -1795,11 +1795,12 @@ require_once __DIR__.'/../Models/Members.php';
             //User Account Parameters
             if ($params['chatid'] != NULL) {
                 $fillable = array(
-                    'chatid' => $params['chatid'],
+                    'chatid' => htmlspecialchars($params['chatid']),
                     'uniqueid' => htmlspecialchars($params['uniqueid']),
                     'receiver' => htmlspecialchars($params['receiver']),
                     'username' => htmlspecialchars($params['username']),
                     'sender' => htmlspecialchars($params['sender']),
+                    'file' => htmlspecialchars($params['file']),
                     'details' => htmlspecialchars($params['details']),
                 );
     
@@ -1813,6 +1814,7 @@ require_once __DIR__.'/../Models/Members.php';
                     'receiver' => htmlspecialchars($params['receiver']),
                     'username' => htmlspecialchars($params['username']),
                     'sender' => htmlspecialchars($params['sender']),
+                    'file' => htmlspecialchars($params['file']),
                     'details' => htmlspecialchars($params['details']),
                 );
     
@@ -1861,10 +1863,17 @@ require_once __DIR__.'/../Models/Members.php';
             $model_connect = new Members();
             
             //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-                'buddyid' => htmlspecialchars($params['buddyid']),
-            );
+            if (isset($params['buddyid'])) {
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'buddyid' => htmlspecialchars($params['buddyid']),
+                );
+            } else {
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'buddyid' => "",
+                );
+            }
 
             //Model Function Call
             $chatInfo = $model_connect->user_chat_messages($fillable);
@@ -1898,10 +1907,112 @@ require_once __DIR__.'/../Models/Members.php';
         }
 
 
+        //Method to Fetch User Subscription Plan
+        public function user_subscription_plan($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+             
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+            );
 
+            //Model Function Call
+            $postAct = $model_connect->user_subscription_plan($fillable);
+            
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Found User Result!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "No Result Found",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
 
 
         
+        //Method to Create Subscription Payment Plan
+        public function user_subscription_payment($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            $length = 5;
+            $chars = getenv('COMBINATION');
+            $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+            $trancid = preg_replace('/\s+/', '', trim('tranc').trim($code));
+             
+            //User Account Parameters
+            $fillable = array(
+                'trancid' => $trancid,
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'username' => htmlspecialchars($params['username']),
+                'amount' => htmlspecialchars($params['amount']),
+                'type' => htmlspecialchars($params['type']),
+                'details' => htmlspecialchars($params['details']),
+            );
+
+            //Model Function Call
+            $postAct = $model_connect->user_subscription_payment($fillable);
+            
+ 
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Processing... Awaiting Confirmation!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted Prematuredly... Try Again",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        
+
+
+
+
+
+
+
 
 
 

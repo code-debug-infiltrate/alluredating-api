@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `app_user_buddy_chat_reply` (
 `chatid` VARCHAR(20) NOT NULL,
 `sender` VARCHAR(50) NOT NULL,
 `receiver` VARCHAR(50) NOT NULL,
+`file` VARCHAR(100) DEFAULT NULL,
 `details` longtext NOT NULL,
 `status` ENUM('Unread', 'Read', 'Trash') DEFAULT 'Unread',
 `updated` DATETIME DEFAULT NULL, 
@@ -437,6 +438,47 @@ CREATE TABLE IF NOT EXISTS `app_currency` (
 `id` INT NOT NULL AUTO_INCREMENT,
 `name` VARCHAR(50)  NOT NULL,
 `currency` VARCHAR(10) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+
+
+-- Table structure for Currency Exchan `app_currency_exchange` 
+CREATE TABLE IF NOT EXISTS `app_currency_exchange` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`rate` INT(10)  NOT NULL,
+`currency` VARCHAR(10) NOT NULL,
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+
+-- Table structure for Bank Details `app_bank_details` 
+CREATE TABLE IF NOT EXISTS `app_bank_details` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`bankname` VARCHAR(100)  NOT NULL,
+`acctname` VARCHAR(100)  NOT NULL,
+`swift` VARCHAR(50)  NOT NULL,
+`number` INT(10) NOT NULL,
+`status` ENUM('Active', 'Deactivate', 'Trash') DEFAULT 'Deactivate',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
+
+
+
+
+-- Table structure for Currency Setting `app_subscription_payment` 
+CREATE TABLE IF NOT EXISTS `app_subscription_payment` ( 
+`id` INT NOT NULL AUTO_INCREMENT,
+`trancid` VARCHAR(50)  NOT NULL,
+`uniqueid` VARCHAR(50)  NOT NULL,
+`currency` VARCHAR(10) DEFAULT NULL,
+`type` varchar(50) DEFAULT NULL,
+`amount` VARCHAR(10) DEFAULT NULL,
+`expiry` varchar(20) DEFAULT NULL,
+`details` varchar(100) DEFAULT NULL,
+`status` ENUM('Processing', 'Paid', 'Cancelled', 'Trash') DEFAULT 'Processing',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 
