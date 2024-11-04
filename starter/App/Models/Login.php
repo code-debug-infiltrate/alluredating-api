@@ -43,7 +43,7 @@ class Login extends Model
                     } else {
 
                         $length = 6;
-                        $chars = trim(getenv('COMBINATION'));
+                        $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                         $code = substr(str_shuffle(trim($chars)), 0, $length);
                         $log_session = substr($params['email'], 0, $length).substr(str_shuffle(trim($chars)), 0, $length);
                         //Update DB with New Code
@@ -151,7 +151,7 @@ class Login extends Model
             if ($user != NULL) {
                 // Derive the code by shuffle
                 $length = 6;
-                $chars = trim(getenv('COMBINATION'));
+                $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                 $code = substr(str_shuffle(trim($chars)), 0, $length);
 
                 //Update DB with New Code
@@ -203,7 +203,7 @@ class Login extends Model
             if ($user != NULL) {
                 // Derive the code by shuffle
                 $length = 5;
-                $chars = trim(getenv('COMBINATION'));
+                $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                 $code = substr(str_shuffle(trim($chars)), 0, $length);
 
                 //Update DB with New Password

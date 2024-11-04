@@ -234,6 +234,10 @@ CREATE TABLE IF NOT EXISTS `app_users_posts` (
 `postid` VARCHAR(20) NOT NULL,
 `url` VARCHAR(150) NOT NULL,
 `file` VARCHAR(100) DEFAULT NULL,
+`file1` VARCHAR(100) DEFAULT NULL,
+`file2` VARCHAR(100) DEFAULT NULL,
+`file3` VARCHAR(100) DEFAULT NULL,
+`file4` VARCHAR(100) DEFAULT NULL,
 `details` longtext NOT NULL,
 `reports` INT(10) DEFAULT '0',
 `type` ENUM('Video', 'Image') DEFAULT 'Image',
@@ -242,23 +246,6 @@ CREATE TABLE IF NOT EXISTS `app_users_posts` (
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
-
-
-
--- Table structure for User Post Files `app_Post_files` 
-CREATE TABLE IF NOT EXISTS `app_post_files` ( 
-`id` INT(11) AUTO_INCREMENT,
-`uniqueid` VARCHAR(50) NOT NULL,
-`postid` VARCHAR(20) NOT NULL,
-`file1` VARCHAR(100) DEFAULT NULL,
-`file2` VARCHAR(100) DEFAULT NULL,
-`file3` VARCHAR(100) DEFAULT NULL,
-`file4` VARCHAR(100) DEFAULT NULL,
-`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
-PRIMARY KEY  (`id`)
-) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
-
-
 
 
 
@@ -487,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `app_subscription_plan` (
 `expiry` varchar(20) DEFAULT NULL,
 `details` varchar(500) DEFAULT NULL,
 `details1` varchar(500) DEFAULT NULL,
-`detail2` varchar(500) DEFAULT NULL,
+`details2` varchar(500) DEFAULT NULL,
 `status` ENUM('Publish', 'Deactivated', 'Trash') DEFAULT 'Publish',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
@@ -531,10 +518,12 @@ PRIMARY KEY  (`id`)
 -- Table structure for Crypto Payment `API` 
 CREATE TABLE IF NOT EXISTS `app_thirdPartyApi` ( 
 `id` INT(11) AUTO_INCREMENT,
-`name` VARCHAR(100) DEFAULT NULL,
+`name` VARCHAR(50) DEFAULT NULL,
 `url` VARCHAR(100) DEFAULT NULL,
-`public` text DEFAULT NULL,
-`private` text DEFAULT NULL,
+`code` VARCHAR(100) DEFAULT NULL,
+`public` VARCHAR(100) DEFAULT NULL,
+`private` VARCHAR(100) DEFAULT NULL,
+`wallet` VARCHAR(50) DEFAULT NULL,
 `status` ENUM('Active', 'Deactivated') DEFAULT 'Active',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
@@ -581,7 +570,7 @@ INSERT INTO `app_profile` (`id`, `uniqueid`, `fname`, `lname`) VALUES (1, 'uid0F
 --
 -- Dumping data for table `Company Profile`
 --
-INSERT INTO `app_coy_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `address`, `img`, `status`) VALUES (1, 'Allure-D','Connecting You To Your Soulmate', 'hello@allured.com', '', '+20111111111', '', 'allured', 'allured', 'allured', 'allured', 'No 17, Kudeti Avenue, Flambush, Kignson drive. Uk', 'favicon.png', 'Publish'); 
+INSERT INTO `app_coy_info` (`id`, `coyname`, `slogan`, `email`, `email1`, `phone`, `phone1`, `facebook`, `instagram`, `twitter`, `linkedin`, `channel`, `address`, `img`, `status`) VALUES (1, 'Allure-D','Connecting You To Your Soulmate', 'hello@allured.com', '', '+20111111111', '', 'allured', 'allured', 'allured', 'allured', '', 'No 17, Kudeti Avenue, Flambush, Kignson drive. Uk', 'favicon.png', 'Publish'); 
 
 
 

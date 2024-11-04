@@ -16,11 +16,6 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-
-            //  $length = 5;
-            //  $chars = getenv('COMBINATION');
-            //  $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
-            //  $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
             //Coy Info Parameters
                 $fillable = array(
@@ -78,11 +73,6 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-
-            //  $length = 5;
-            //  $chars = getenv('COMBINATION');
-            //  $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
-            //  $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
             //Coy Info Parameters
                 $fillable = array(
@@ -236,11 +226,6 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-
-            //  $length = 5;
-            //  $chars = getenv('COMBINATION');
-            //  $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
-            //  $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
             //Coy Info Parameters
                 $fillable = array(
@@ -308,7 +293,7 @@ require_once __DIR__.'/../Models/Admin.php';
              $model_connect = new Admin();
 
              $length = 5;
-             $chars = getenv('COMBINATION');
+             $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
              $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
              $planid = preg_replace('/\s+/', '', trim('subplan').trim($code));
              
@@ -335,7 +320,7 @@ require_once __DIR__.'/../Models/Admin.php';
                          array(
                              'code' => "200",
                              'type' => "success",
-                             'message' => "Exchange Rate Detail Updated",
+                             'message' => "Subscription Plan Detail Updated",
                          ),
                      'result_message' => $postAct,
                      );
@@ -398,7 +383,7 @@ require_once __DIR__.'/../Models/Admin.php';
                          array(
                              'code' => "200",
                              'type' => "success",
-                             'message' => "Exchange Rate Detail Updated",
+                             'message' => "App Priviledge Detail Updated",
                          ),
                      'result_message' => $postAct,
                      );
@@ -438,11 +423,224 @@ require_once __DIR__.'/../Models/Admin.php';
         }
         
         
+        //Method to Create Subscription Priviledge Info
+        public function create_api_connect($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             
+            //Coy Info Parameters
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'name' => htmlspecialchars($params['name']),
+                    'url' => htmlspecialchars($params['url']),
+                    'code' => htmlspecialchars($params['code']),
+                    'wallet' => htmlspecialchars($params['wallet']),
+                    'private' => htmlspecialchars($params['private']),
+                    'public' => htmlspecialchars($params['public']),
+                    'status' => htmlspecialchars($params['status']),
+                );
+                //Model Function Call
+                $postAct = $model_connect->create_api_connect($fillable);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "ThirdParty API Added Info Added",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        //Method To Fetch All Subscription Priviledge
+        public function get_api_connect()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_api_connect();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
         
 
 
+        //Method To Fetch All Transactions
+        public function get_transactions_info()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_transactions_info();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+        
 
 
+        //Method to Update Transaction Status Info
+        public function update_transaction_status($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             
+            //Coy Info Parameters
+                $fillable = array(
+                    'uniqueid' => htmlspecialchars($params['uniqueid']),
+                    'username' => htmlspecialchars($params['username']),
+                    'trancid' => htmlspecialchars($params['trancid']),
+                    'status' => htmlspecialchars($params['status']),
+                );
+                //Model Function Call
+                $postAct = $model_connect->update_transaction_status($fillable);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Transaction Detail Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        //Method To Fetch All Users
+        public function get_users_info($params)
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            $fillable = array('profile' => htmlspecialchars($params['profile']), );
+
+            //Model Function Call
+            $actInfo = $model_connect->get_users_info($fillable);
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+        
+
+
+        //Method to Update User STatus Info
+        public function update_user_status($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             
+            //Coy Info Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+                'username' => htmlspecialchars($params['username']),
+                'uUniqueid' => htmlspecialchars($params['uUniqueid']),
+                'status' => htmlspecialchars($params['status']),
+            );
+            //Model Function Call
+            $postAct = $model_connect->update_user_status($fillable);
+
+            if ($postAct == true) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "User Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
+        //Method To Fetch All Newsletters Info
+        public function get_newsletters_info()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_newsletters_info();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+        
+        
         
         
 

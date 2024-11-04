@@ -18,7 +18,7 @@ class RegisterController
         // Generate the UniqueID, Hash and Code
         $hash = md5(rand(0,1000));
         $length = 5;
-        $chars = getenv('COMBINATION');
+        $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
         $uniqueid = preg_replace('/\s+/', '', trim('uid').trim($code));
 
@@ -48,7 +48,7 @@ class RegisterController
                     array(
                         'code' => "200",
                         'type' => "success",
-                        'message' => "Congratulations, You Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Login Credentials.",
+                        'message' => "Successfully Registered. Check Your Email Inbox, Spam Or Junk Folder For Password.",
                     ),
                 'user_info' => $fillable,
                 );
@@ -60,7 +60,7 @@ class RegisterController
                     array(
                         'code' => "401",
                         'type' => "error",
-                        'message' => "Sorry, This Credentials Already Exists In Our Records, Login Or Contact Support.",
+                        'message' => "This Email Already Exists In Our Records, Login Or Reset Password.",
                     ),
                 );
         }
@@ -94,7 +94,7 @@ class RegisterController
                     array(
                         'code' => "200",
                         'type' => "success",
-                        'message' => "Congratulations, Your Email Has Been Verified And Your Account Activated For Full Membership Freebies.",
+                        'message' => "Nice, Your Email Has Been Verified!.",
                     ),
                 );
 
@@ -105,7 +105,7 @@ class RegisterController
                     array(
                         'code' => "401",
                         'type' => "error",
-                        'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials, Contact Support For Help.",
+                        'message' => "Aborted, Contact Support For Help.",
                     ),
                 );
         }
@@ -152,7 +152,7 @@ class RegisterController
                     array(
                         'code' => "401",
                         'type' => "error",
-                        'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials.",
+                        'message' => "Sorry, Aborted Untimely.",
                     ),
                 );
         }
@@ -193,7 +193,7 @@ class RegisterController
                     array(
                         'code' => "200",
                         'type' => "success",
-                        'message' => "Congratulations, Your Message Report Has Been Sent Successfully.",
+                        'message' => "Thank You, Message Has Been Sent Successfully.",
                     ),
                 );
 
@@ -204,7 +204,7 @@ class RegisterController
                     array(
                         'code' => "401",
                         'type' => "error",
-                        'message' => "Sorry, Action Aborted Untimely Due To Wrong Credentials.",
+                        'message' => "Aborted Untimely!.",
                     ),
                 );
         }

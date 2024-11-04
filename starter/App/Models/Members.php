@@ -14,9 +14,14 @@ class Members extends Model
     protected $u_table = "app_users";  //Users Table
     protected $p_table = "app_profile";  //Profile Table
     protected $coy_table = "app_coy_info";  //Users Table
+    protected $bank_table = "app_bank_details";  //Bank Transfer Table
+    protected $exchange_table = "app_currency_exchange";  //Exchange Rate Table
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    protected $newsletter_table = "app_subscribe";  //Newsletter Subscribers API Table
+    protected $sub_table = "app_subscription";  //Subscription Priviledge Table
+    protected $subplan_table = "app_subscription_plan";  //Subscription Plan API Table
     protected $delAcc_table = "app_delete_account";  //Delete Account  Table
     //User Preferences
     protected $album_table = "app_user_album";  // Album Table
@@ -39,6 +44,7 @@ class Members extends Model
     protected $urpostact_table = "app_user_post_actions";  //User Post Actions
     protected $postreport_table = "app_post_reports"; //User Post Reports
     protected $subpayment_table = "app_subscription_payment"; //User Subscription Payment
+
 
 
 
@@ -1020,7 +1026,7 @@ class Members extends Model
        
        $newP = array('uniqueid' => $params['uniqueid'], 'details' => $params['details'], );
 
-       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'details' => $params['details'], 'file' => $params['file'], 'url' => $params['url'], );
+       $newParams = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'details' => $params['details'], 'file' => $params['file'], 'file1' => $images[1], 'file2' => $images[2], 'file3' => $images[3], 'file4' => $images[4], 'url' => $params['url'], );
 
        try {
            $query = "SELECT * FROM " .$this->post_table." WHERE uniqueid = :uniqueid AND details = :details LIMIT 1";
@@ -1029,16 +1035,16 @@ class Members extends Model
             // Checking all User credentials...
             if (!$RowCount) {
 
-               $query = "INSERT INTO ".$this->post_table." (postid, uniqueid, details, file, url) VALUES (:postid, :uniqueid, :details, :file, :url)";
+               $query = "INSERT INTO ".$this->post_table." (postid, uniqueid, details, file, file1, file2, file3, file4, url) VALUES (:postid, :uniqueid, :details, :file, :file1, :file2, :file3, :file4, :url)";
                $this->insert($newParams, $query); 
 
-                if ($images[1] != null) {
+                // if ($images[1] != null) {
 
-                    $a = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'file1' => $images[1], 'file2' => $images[2], 'file3' => $images[3], 'file4' => $images[4], );
+                //     $a = array('uniqueid' => $params['uniqueid'], 'postid' => $params['postid'], 'file1' => $images[1], 'file2' => $images[2], 'file3' => $images[3], 'file4' => $images[4], );
 
-                    $query = "INSERT INTO ". $this->postimg_table ." (postid, uniqueid, file1, file2, file3, file4) VALUES (:postid, :uniqueid, :file1, :file2, :file3, :file4)";
-                    $this->insert($a, $query);   
-                }
+                //     $query = "INSERT INTO ". $this->postimg_table ." (postid, uniqueid, file1, file2, file3, file4) VALUES (:postid, :uniqueid, :file1, :file2, :file3, :file4)";
+                //     $this->insert($a, $query);   
+                // }
                
                //Record Activity
                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Posts", 'details' => $params['username']." Just Made a Post", ); 
@@ -1640,21 +1646,23 @@ class Members extends Model
 
                     $a = array('receiver' => $data['receiver'], 'sender' => $data['sender'], 'postid' => $data['postid'], 'commentid' => $chatmates['commentid'], 'status' => "Trash", );
 
-                    $query = "SELECT * FROM ". $this->postcommentreply_table ." WHERE  receiver = :receiver AND sender = :sender AND postid = :postid AND commentid = :commentid AND status != :status OR receiver = :sender AND sender = :receiver AND postid = :postid AND commentid = :commentid AND status != :status "; 
+                    $query = "SELECT * FROM ". $this->postcommentreply_table ." WHERE  receiver = :receiver AND sender = :sender AND postid = :postid AND commentid = :commentid AND status != :status OR receiver = :sender AND sender = :receiver AND postid = :postid AND commentid = :commentid AND status != :status ORDER BY id DESC"; 
 
                     $chat = $this->fetch_spec($a, $query);
 
                     if ($chat){
-                        $a1 = array('postid' => $data['postid'], 'commentid' => $data['commentid'], 'status' => "Unread", );
-                        $query="SELECT * FROM ". $this->postcommentreply_table ." WHERE status = :status AND postid = :postid AND commentid = :commentid";
+
+                        $a1 = array('postid' => $data['postid'], 'receiver' => $data['uniqueid'], 'commentid' => $data['commentid'], 'status' => "Unread", );
+                        $query="SELECT * FROM ". $this->postcommentreply_table ." WHERE  receiver = :receiver AND status = :status AND postid = :postid AND commentid = :commentid";
                         $list = $this->fetch_spec($a1, $query);
 
                         if ($list) {
                             foreach ($list as $key => $li) {
-                                if ($data['sender'] != $li['receiver']) {
-                                    $pos = array('id' => $li['id'], 'postid' => $data['postid'], 'commentid' => $data['commentid'], 'status' => "Read", );
-
-                                    $query = "UPDATE ". $this->postcommentreply_table ." SET status = :status WHERE postid = :postid AND commentid = :commentid AND id = :id";
+                                if ($data['uniqueid'] == $li['receiver'] && $li['status'] == "Unread") {
+            
+                                    $pos = array('receiver' => $li['receiver'], 'commentid' => $li['commentid'], 'postid' => $li['postid'], 'status' => "Read", );
+            
+                                    $query = "UPDATE ". $this->postcommentreply_table ." SET status = :status WHERE commentid = :commentid AND postid = :postid AND receiver = :receiver";
                                     $this->update($pos, $query);
                                 }
                             }
@@ -1662,9 +1670,10 @@ class Members extends Model
                     }
 
                     return $chat;
+
                 } else {
 
-                return false;
+                    return false;
                 }
 
             }catch (Exception $e) {
@@ -1834,7 +1843,7 @@ class Members extends Model
 
                     $d = array('sender' => $params['uniqueid'], 'receiver' => $params['buddyid'], 'chatid' => $chatUser['chatid'], 'status' => "Trash");
 
-                    $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status";
+                    $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status ORDER BY id DESC";
 
                     $chatMsgs = $this->fetch_spec($d, $query);
                     
@@ -1843,9 +1852,9 @@ class Members extends Model
                         foreach ($chatMsgs as $key => $li) {
                             if ($params['uniqueid'] == $li['receiver'] && $li['status'] == "Unread") {
         
-                                $pos = array('id' => $li['id'], 'chatid' => $li['chatid'], 'status' => "Read", );
+                                $pos = array('id' => $li['id'], 'sender' => $li['sender'], 'receiver' => $li['receiver'], 'chatid' => $li['chatid'], 'status' => "Read", );
         
-                                $query = "UPDATE ". $this->buddychatreply_table ." SET status = :status WHERE chatid = :chatid AND id = :id";
+                                $query = "UPDATE ". $this->buddychatreply_table ." SET status = :status WHERE chatid = :chatid AND receiver = :receiver AND sender = :sender AND id = :id";
                                 $this->update($pos, $query);
                             }
                         }
@@ -1889,25 +1898,37 @@ class Members extends Model
     {
         //Admin Model
         $admin_model = new Admin();
+        $today = date('Y-m-d');
+        try {   
+                $a = array('id' => "1", );
+                $b = array('planid' => $params['planid'], );
+                
 
-        try {
-                $c = array('uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'status' => "Processing", );
+                $query = "SELECT * FROM ". $this->subplan_table ." WHERE planid = :planid ";
+                $plan = $this->fetch_row($b, $query);
+
+                $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id";
+                $cur = $this->fetch_row($a, $query);
+
+                $c = array('uniqueid' => $params['uniqueid'], 'type' => $plan['type'],  'status' => "Processing", );
                 
                 $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
-                $chatUser = $this->fetch_row($c, $query);
+                $userTranc = $this->fetch_row($c, $query);
 
-                if ($chatUser == NULL) {
+                var_dump($plan);
 
-                    $d = array('trancid' => $params['trancid'], 'uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'amount' => $params['amount'], 'details' => $params['details'], );
+                if ($userTranc == NULL) {
 
-                    $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, amount, details) VALUES (:trancid, :uniqueid, :type, :amount, :details)";
+                    $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'], );
+
+                    $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, currency, expiry, amount, details) VALUES (:trancid, :uniqueid, :type, :currency, :expiry, :amount, :details)";
 
                     $chatMsgs = $this->insert($d, $query);
                     
                     if ($chatMsgs) {
 
                         //Record Activity
-                        $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Payment", 'details' => $params['username']." Used ".$params['type']." Payment For: ".$params['amount'], ); 
+                        $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Payment", 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'] ); 
                         $admin_model->record_activity($info);
                     }
 
@@ -1915,9 +1936,9 @@ class Members extends Model
 
                 } else {
 
-                    $pos = array('id' => $chatUser['id'], 'trancid' => $params['trancid'], 'uniqueid' => $params['uniqueid'], 'type' => $params['type'], 'amount' => $params['amount'], 'details' => $params['details'], );
+                    $pos = array('id' => $userTranc['id'], 'trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'], );
 
-                    $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
+                    $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, currency = :currency, expiry = :expiry, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
                     $chatMsgs = $this->update($pos, $query);
 
                     return $chatMsgs;
@@ -1935,6 +1956,30 @@ class Members extends Model
 
 
 
+    //Method to Fetch All User Transactions
+    public function user_transactions_info($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $new = array('uniqueid' => $params['uniqueid'], 'status' => "Trash", );
+
+        try {
+
+            $query = "SELECT * FROM " . $this->subpayment_table ." WHERE uniqueid = :uniqueid AND status != :status ORDER BY created DESC";
+            $actview = $this->fetch_spec($new, $query); 
+            // Checking all User credentials...
+
+            return $actview;
+    
+        } catch (Exception $e) {
+    
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+    
+    
+    
+    
 
 
 

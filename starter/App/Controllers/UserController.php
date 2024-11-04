@@ -1112,7 +1112,7 @@ require_once __DIR__.'/../Models/Members.php';
             $model_connect = new Members();
             // Generate the postid
             $length = 5;
-            $chars = getenv('COMBINATION');
+            $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
             $postid = preg_replace('/\s+/', '', trim('ads').trim($code));
             $url = htmlspecialchars(str_replace(' ', '', trim($params['url']).trim($postid)."/"));
@@ -1669,7 +1669,7 @@ require_once __DIR__.'/../Models/Members.php';
              $model_connect = new Members();
 
              $length = 5;
-             $chars = getenv('COMBINATION');
+             $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
              $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
              $commentid = preg_replace('/\s+/', '', trim('pcmt').trim($code));
              
@@ -1788,7 +1788,7 @@ require_once __DIR__.'/../Models/Members.php';
             //Member Model
             $model_connect = new Members();
             $length = 5;
-            $chars = getenv('COMBINATION');
+            $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
             $chatid = preg_replace('/\s+/', '', trim('chat').trim($code));
             
@@ -1958,7 +1958,7 @@ require_once __DIR__.'/../Models/Members.php';
             //Member Model
             $model_connect = new Members();
             $length = 5;
-            $chars = getenv('COMBINATION');
+            $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
             $trancid = preg_replace('/\s+/', '', trim('tranc').trim($code));
              
@@ -1967,9 +1967,7 @@ require_once __DIR__.'/../Models/Members.php';
                 'trancid' => $trancid,
                 'uniqueid' => htmlspecialchars($params['uniqueid']),
                 'username' => htmlspecialchars($params['username']),
-                'amount' => htmlspecialchars($params['amount']),
-                'type' => htmlspecialchars($params['type']),
-                'details' => htmlspecialchars($params['details']),
+                'planid' => htmlspecialchars($params['planid']),
             );
 
             //Model Function Call
@@ -1996,6 +1994,52 @@ require_once __DIR__.'/../Models/Members.php';
                              'code' => "401",
                              'type' => "error",
                              'message' => "Aborted Prematuredly... Try Again",
+                         ),
+                     'result_message' => "",
+                     );
+             }
+             
+             return $data; 
+        }
+
+
+        
+
+
+        //Method to Fetch All Payment Transactions
+        public function user_transactions_info($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+             
+            //User Account Parameters
+            $fillable = array(
+                'uniqueid' => htmlspecialchars($params['uniqueid']),
+            );
+
+            //Model Function Call
+            $postAct = $model_connect->user_transactions_info($fillable);
+            
+             if ($postAct != NULL) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Processing... Awaiting Confirmation!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "No Records Found... Create a Payment!",
                          ),
                      'result_message' => "",
                      );

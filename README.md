@@ -90,7 +90,7 @@ Set Basic Info in the htaccess file
 [my-post-action] Get Action Of User On Each Post (uniqueid)
 [user-subscription-plan] Get User Subscription Plan (uniqueid)
 [user-make-payment] User Make Payment (uniqueid, username, amount, type)
-
+[user-transactions-info] User Transactions Record (uniqueid)
 
 
 
@@ -106,10 +106,13 @@ Set Basic Info in the htaccess file
 [get-subscription-info] Get Subscription Priviledge  ()
 [create-subscription-plan] Create Subscription Priviledge  (uniqueid, username, type, amount, expiry, details, details1, details2, status)
 [get-subscription-plan] Get Subscription Priviledge  ()
-
-
-
-
+[create-api-connect] Create API Connection details    (uniqueid, username, name, url, code, wallet, private, public, status)
+[get-api-connect] Get API Connection details    ()
+[get-transactions-info] Get Transactions Info   () 
+[update-transaction-status] Update Transaction Status (uniqueid, username, trancid, status)
+[get-users-info] Get Users Info ()
+[update-user-status] Update User Status (uniqueid, username, uuniqueid, status)
+[get-newsletters-info] Get Newsletter Subscribers Info    ()
 
 
 

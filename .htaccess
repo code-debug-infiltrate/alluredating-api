@@ -1,11 +1,3 @@
-SetEnv APP_NAME Allure-Dating
-SetEnv API_URL http://alluredating-api.test
-SetEnv MAIN_APP_URL http://alluredating.test/
-SetEnv COMBINATION 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
-SetEnv APP_EMAIL no-reply@alluredating.test
-SetEnv COY_EMAIL contact@alluredating.test
-
-
 <Files "*.php">
     Require ip 127.0.0.1
 </Files>

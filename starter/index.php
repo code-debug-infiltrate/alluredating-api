@@ -1574,7 +1574,7 @@ $endpoints["user-subscription-plan"] = function (array $requestData): void {
 //User Subscription Plan
 $endpoints["user-make-payment"] = function (array $requestData): void {
 
-    if (!isset($requestData["uniqueid"])) {
+    if (!isset($requestData["uniqueid"]) || !isset($requestData["planid"])) {
         
         $info = array(
             'result_info' => 
@@ -1593,6 +1593,34 @@ $endpoints["user-make-payment"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+
+//User Subscription Plan
+$endpoints["user-transactions-info"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_transactions_info($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
 
 
 
@@ -1805,6 +1833,128 @@ $endpoints["get-subscription-plan"] = function (array $requestData): void {
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
 
+
+
+//Create Subscription Plan Information
+$endpoints["create-api-connect"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["name"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_api_connect($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get Subscription  Plan Information
+$endpoints["get-api-connect"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_api_connect();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Subscription  Plan Information
+$endpoints["get-transactions-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_transactions_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Update Transaction Information
+$endpoints["update-transaction-status"] = function (array $requestData): void {
+    
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["trancid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->update_transaction_status($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Get Users Information
+$endpoints["get-users-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_users_info($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Update User Information
+$endpoints["update-user-status"] = function (array $requestData): void {
+    
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["uUniqueid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->update_user_status($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Get Newsletters Info Information
+$endpoints["get-newsletters-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_newsletters_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
 
 
 

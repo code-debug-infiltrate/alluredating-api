@@ -19,7 +19,7 @@ class Admin extends Model
     protected $notify_table = "app_notify";  //Notification Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
     protected $newsletter_table = "app_subscribe";  //Newsletter Subscribers API Table
-    protected $sub_table = "app_subscription";  //Subscription API Table
+    protected $sub_table = "app_subscription";  //Subscription Priviledge Table
     protected $subplan_table = "app_subscription_plan";  //Subscription Plan API Table
     protected $delAcc_table = "app_delete_account";  //Delete Account  Table
     //User Preferences
@@ -340,14 +340,21 @@ class Admin extends Model
 
             if ($check) {
 
-                $query = "UPDATE ". $this->sub_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
-                $this->update($b, $query); 
+                if ($check['status'] != $data['status']) {
 
-                //Record Activity
-                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Dating App Subscription ".$data['status'], ); 
-                $admin_model->record_activity($info);
+                    $query = "UPDATE ". $this->sub_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
+                    $this->update($b, $query); 
 
-                return true;
+                    //Record Activity
+                    $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Dating App Subscription ".$data['status'], ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+                }
 
             } else {
 
@@ -403,7 +410,7 @@ class Admin extends Model
             $query = "SELECT * FROM ". $this->subplan_table ." WHERE type = :type LIMIT 1";
             $check = $this->fetch_row($a, $query);
 
-            if ($check) {
+            if ($check != NULL) {
 
                 $query = "UPDATE ". $this->subplan_table ." SET `amount` = :amount, `expiry` = :expiry, `details` = :details, `details1` = :details1, `details2` = :details2, `status` = :status WHERE `type` = :type LIMIT 1";
                 $this->update($b, $query); 
@@ -416,8 +423,10 @@ class Admin extends Model
 
             } else {
 
+                $c = array('planid' => $data['planid'], 'type' => $data['type'], 'expiry' => $data['expiry'], 'amount' => $data['amount'], 'details' => $data['details'], 'details1' => $data['details1'], 'details2' => $data['details2'], 'status' => $data['status'], );
+
                 $query = "INSERT INTO ". $this->subplan_table ."(planid, type, amount, expiry, details, details1, details2, status) VALUES (:planid, :type, :amount, :expiry, :details, :details1, :details2, :status)";
-                $this->insert($b, $query); 
+                $this->insert($c, $query); 
 
                 //Record Activity
                 $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created Dating App Subscription Plan ".$data['type'], ); 
@@ -443,7 +452,7 @@ class Admin extends Model
     {
         try {
             $data = array('status' => "Trash");
-            $query = "SELECT * FROM ". $this->subplan_table ." WHERE status != :status ORDER BY created DESC";
+            $query = "SELECT * FROM ". $this->subplan_table ." WHERE status != :status";
             $coy = $this->fetch_spec($data, $query);
             return $coy;
 
@@ -455,6 +464,262 @@ class Admin extends Model
 
 
 
+    //Create & Update Subscription Plan Information
+    public function create_api_connect($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+
+        $a = array('name' => $data['name'], );
+        $b = array('name' => $data['name'], 'url' => $data['url'], 'code' => $data['code'], 'wallet' => $data['wallet'], 'private' => $data['private'], 'public' => $data['public'], 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->api_table ." WHERE name = :name LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check != NULL) {
+
+                $query = "UPDATE ". $this->api_table ." SET `url` = :url, `code` = :code, `wallet` = :wallet, `private` = :private, `public` = :public, `status` = :status WHERE `name` = :name LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated API Endpoint Details For ".$data['name'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                $query = "INSERT INTO ". $this->api_table ."(name, url, code, wallet, private, public, status) VALUES (:name, :url, :code, :wallet, :private, :public, :status)";
+                $w = $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Created API Endpoint Details For ".$data['name'], ); 
+                $admin_model->record_activity($info);
+
+                return $w;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+    //Subscription Plan Record
+    public function get_api_connect()
+    {
+        try {
+            $data = array('status' => "Trash");
+            $query = "SELECT * FROM ". $this->api_table ." WHERE status != :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+    //All Users Record
+    public function get_users_info($params)
+    {
+        try {
+            $data = array('profile' => $params['profile'], 'status' => "Trash");
+            $query = "SELECT * FROM ". $this->u_table ." WHERE profile = :profile AND status != :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+    // Update User Status
+    public function update_user_status($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $today = date_create(date("Y-m-d"));
+        $a = array('uniqueid' => $data['uUniqueid'], );
+        $b = array('uniqueid' => $data['uUniqueid'], 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->u_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                if ($data['status'] != $check['status']) {
+
+                    $query = "UPDATE ". $this->u_table ." SET `status` = :status WHERE `uniqueid` = :uniqueid LIMIT 1";
+                    $this->update($b, $query); 
+
+                    //Record Activity
+                    $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated User: ".$data['uUniqueid']." Status To ".$data['status'], ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+                }
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+ 
+ //Transactions Record
+ public function get_transactions_info()
+ {
+     try {
+         $data = array('status' => "Trash");
+         $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status != :status ORDER BY created DESC";
+         $coy = $this->fetch_spec($data, $query);
+         return $coy;
+
+     } catch (Exception $e) {
+
+         return "There is some errors: " . $e->getMessage();
+     }
+ }
+
+
+ //Create & Update Subscription Plan Information
+ public function update_transaction_status($data = array())
+ {
+     //Admin Model
+     $admin_model = new Admin();
+     $today = date_create(date("Y-m-d"));
+     $a = array('trancid' => $data['trancid'], );
+     $b = array('trancid' => $data['trancid'], 'status' => $data['status'], );
+
+     try {
+         $query = "SELECT * FROM ". $this->subpayment_table ." WHERE trancid = :trancid LIMIT 1";
+         $check = $this->fetch_row($a, $query);
+
+         if ($check) {
+
+             if ($data['status'] === "Paid") {
+                 
+                 if ($data['status'] != $check['status']) {
+
+                     $a1 = array('amount' => $data['amount'], );
+                     $query = "SELECT * FROM ". $this->subplan_table ." WHERE amount = :amount LIMIT 1";
+                     $plan = $this->fetch_row($a1, $query);
+
+                     $b1 = array('trancid' => $data['trancid'], 'status' => $data['status'], 'expiry' => date_add($today, date_interval_create_from_date_string($plan['expiry'])), );
+                     
+                     $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status, `expiry` = :expiry WHERE `trancid` = :trancid LIMIT 1";
+                     $this->update($b1, $query); 
+
+                     //Record Activity
+                     $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
+                     $admin_model->record_activity($info);
+
+                     return true;
+
+                 } else {
+
+                     return false;
+                 }
+
+             } else {
+
+                 if ($data['status'] != $check['status']) {
+
+                     $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `trancid` = :trancid LIMIT 1";
+                     $this->update($b, $query); 
+
+                     //Record Activity
+                     $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
+                     $admin_model->record_activity($info);
+
+                     return true;
+
+                 } else {
+
+                     return false;
+                 }
+             }
+
+         } else {
+
+             return false;
+         }
+
+     } catch (Exception $e) {
+
+         $data = array(
+             "type" => "error",
+             "message" => $e->getMessage()
+         ); 
+
+         return $data;  
+     }
+ }
+
+
+
+ 
+ //Newsletters Subscribers Record
+ public function get_newsletters_info()
+ {
+     try {
+         $data = array('status' => "Trash");
+         $query = "SELECT * FROM ". $this->newsletter_table ." WHERE status != :status ORDER BY created DESC";
+         $coy = $this->fetch_spec($data, $query);
+         return $coy;
+
+     } catch (Exception $e) {
+
+         return "There is some errors: " . $e->getMessage();
+     }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
