@@ -640,6 +640,52 @@ require_once __DIR__.'/../Models/Admin.php';
             return $data; 
         }
         
+
+
+
+        //Method to Update User STatus Info
+        public function card_payment_information($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             
+            //Coy Info Parameters
+            $fillable = array(
+                'name' => htmlspecialchars($params['name']),
+            );
+            //Model Function Call
+            $postAct = $model_connect->card_payment_information($fillable);
+
+            if ($postAct == true) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "User Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
         
         
         

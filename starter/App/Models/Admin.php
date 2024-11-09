@@ -17,7 +17,7 @@ class Admin extends Model
     protected $exchange_table = "app_currency_exchange";  //Exchange Rate Table
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
-    protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    protected $api_table = "app_thirdPartyApi";  //Third Party API Table
     protected $newsletter_table = "app_subscribe";  //Newsletter Subscribers API Table
     protected $sub_table = "app_subscription";  //Subscription Priviledge Table
     protected $subplan_table = "app_subscription_plan";  //Subscription Plan API Table
@@ -48,6 +48,22 @@ class Admin extends Model
 
 
 
+    //Company Record
+    public function card_payment_information($params)
+    {
+        try {
+            $data = array('name' => $params['name'], 'status' => "Active");
+
+            $query = "SELECT * FROM ". $this->api_table ." WHERE name = :name AND status = :status LIMIT 1";
+            $api = $this->fetch_row($data, $query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
     
     
 

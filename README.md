@@ -91,6 +91,10 @@ Set Basic Info in the htaccess file
 [user-subscription-plan] Get User Subscription Plan (uniqueid)
 [user-make-payment] User Make Payment (uniqueid, username, amount, type)
 [user-transactions-info] User Transactions Record (uniqueid)
+[card-payment-info] Card Payment Information For Users    ()
+[get-exchange-info] Get Exchange Rate For User To Make Payment   (currency)
+
+
 
 
 
@@ -113,7 +117,7 @@ Set Basic Info in the htaccess file
 [get-users-info] Get Users Info ()
 [update-user-status] Update User Status (uniqueid, username, uuniqueid, status)
 [get-newsletters-info] Get Newsletter Subscribers Info    ()
-
+[card-payment-information] Get Card Payment Info For Single API (name)
 
 
 

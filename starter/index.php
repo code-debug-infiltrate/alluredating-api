@@ -1961,6 +1961,57 @@ $endpoints["get-newsletters-info"] = function (array $requestData): void {
 
 
 
+//Get Newsletters Info Information
+$endpoints["card-payment-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->card_payment_info();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Get Newsletters Info Information
+$endpoints["get-exchange-rate"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new UserController();
+    $info = $api_connect->get_exchange_info($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Update User Information
+$endpoints["card-payment-information"] = function (array $requestData): void {
+    
+    if (!isset($requestData["name"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->card_payment_information($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
 
 
 

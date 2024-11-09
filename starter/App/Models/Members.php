@@ -18,7 +18,7 @@ class Members extends Model
     protected $exchange_table = "app_currency_exchange";  //Exchange Rate Table
     protected $cur_table = "app_currency";  //Currency Table
     protected $notify_table = "app_notify";  //Notification Table
-    protected $api_table = "app_thirdpartyapi";  //Third Party API Table
+    protected $api_table = "app_thirdPartyApi";  //Third Party API Table
     protected $newsletter_table = "app_subscribe";  //Newsletter Subscribers API Table
     protected $sub_table = "app_subscription";  //Subscription Priviledge Table
     protected $subplan_table = "app_subscription_plan";  //Subscription Plan API Table
@@ -738,10 +738,15 @@ class Members extends Model
             
             if ($myselfInfo) {
 
-                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
+                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], 'wantkids' => $myselfInfo['wantkids'], 'havekids' => $myselfInfo['havekids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND uniqueid != :uniqueid OR ethnicity = 'Any' AND uniqueid != :uniqueid OR religion = 'Any' AND uniqueid != :uniqueid OR color = 'Any' AND uniqueid != :uniqueid OR employment = 'Any' AND uniqueid != :uniqueid OR seeking = 'Any' AND uniqueid != :uniqueid OR smoking = 'Any' AND uniqueid != :uniqueid OR drinking = 'Any' AND uniqueid != :uniqueid AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY created DESC";
-                $matchInfo = $this->fetch_spec($prefMatch, $query0); 
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND havekids = :havekids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid ORDER BY created DESC";
+                $veryClose = $this->fetch_spec($prefMatch, $query0); 
+
+                $query = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND havekids = :havekids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND uniqueid != :uniqueid OR ethnicity = 'Any' AND uniqueid != :uniqueid OR religion = 'Any' AND uniqueid != :uniqueid OR color = 'Any' AND uniqueid != :uniqueid OR employment = 'Any' AND uniqueid != :uniqueid OR seeking = 'Any' AND uniqueid != :uniqueid OR smoking = 'Any' AND uniqueid != :uniqueid OR drinking = 'Any' AND uniqueid != :uniqueid AND wantkids = 'Any' AND havekids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY created DESC";
+                $slightlyClose = $this->fetch_spec($prefMatch, $query);
+
+                $matchInfo = array('veryClose' => $veryClose, 'slightlyClose' => $slightlyClose, );
 
                 return $matchInfo;
 
@@ -774,7 +779,7 @@ class Members extends Model
 
                 $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'seeking' => $myselfInfo['seeking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND seeking = :seeking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = :orientation AND seeking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 50";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND seeking = :seeking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = :orientation AND seeking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 30";
                 $matchInfo = $this->fetch_spec($prefMatch, $query0); 
 
                 return $matchInfo;
@@ -890,6 +895,11 @@ class Members extends Model
                 $info = array('uniqueid' => $params['viewerid'], 'username' => $params['username'], 'category' => "Dating", 'details' => $params['username']." Viewed a Buddy Profile", ); 
                 $admin_model->record_activity($info);
             }
+
+            $query = "SELECT * FROM " . $this->views_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $newview = $this->fetch_row($newParams, $query); 
+
+            return $newview;
 
         } catch (Exception $e) {
 
@@ -1070,7 +1080,7 @@ class Members extends Model
    public function get_latest_posts()
    {
         try {
-           $query="SELECT * FROM ". $this->post_table ." WHERE reports < '10' AND status = 'New' OR status = 'Published'  ORDER BY created DESC ";
+           $query="SELECT * FROM ". $this->post_table ." WHERE reports < '10' AND status = 'New' OR status = 'Published' ORDER BY RAND() DESC LIMIT 300";
 
            $list = $this->fetch_all($query);
 
@@ -1212,9 +1222,9 @@ class Members extends Model
            $urPostAct = $this->fetch_row($newP, $query); 
 
             // Checking all User credentials...
-            if (!$urPostAct) {
+            if ($urPostAct == NULL) {
 
-               $query0 = "INSERT INTO ".$this->urpostact_table." (postid, uniqueid, action) VALUES (:postid, :uniqueid, action)";
+               $query0 = "INSERT INTO ".$this->urpostact_table." (postid, uniqueid, action) VALUES (:postid, :uniqueid, :action)";
                $new = $this->insert($newParams, $query0); 
 
                 if ($new == true) {
@@ -1223,8 +1233,8 @@ class Members extends Model
                     $query1 = "SELECT * FROM " .$this->postact_table." WHERE postid = :postid LIMIT 1";
                     $postAct = $this->fetch_row($newQ, $query1);
 
-                    if (!$postAct) {
-                        if ($params['action'] == "Like") { 
+                    if ($postAct == NULL) {
+                        if ($params['action'] == "like") { 
 
                             $a = array('postid' => $params['postid'], 'likes' => "1");
                             $query2 = "INSERT INTO ". $this->postact_table ." (postid, likes) VALUES (:postid, :likes)";
@@ -1915,8 +1925,6 @@ class Members extends Model
                 $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
                 $userTranc = $this->fetch_row($c, $query);
 
-                var_dump($plan);
-
                 if ($userTranc == NULL) {
 
                     $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'], );
@@ -2041,6 +2049,57 @@ class Members extends Model
         }
     }
 
+
+
+
+
+
+      
+    
+    //Post Views Count
+    public function card_payment_info()
+    {
+       //$d = array('postid' => $params['postid'], );
+
+        try {
+            $query="SELECT * FROM ". $this->api_table ." ORDER BY created DESC";
+
+            $postDetail = $this->fetch_all($query);
+
+            return $postDetail;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+//Get Exchange Rate Info When Paying With Card
+public function get_exchange_info($params)
+{
+   $d = array('currency' => $params['currency'], 'status' => "Publish", );
+
+    try {
+        $query="SELECT * FROM ". $this->exchange_table ." WHERE currency = :currency AND status = :status LIMIT 1";
+
+        $postDetail = $this->fetch_row($d, $query);
+
+        return $postDetail;
+
+    } catch (Exception $e) {
+
+        $data = array(
+            "type" => "error",
+            "message" => $e->getMessage()
+        ); 
+        return $data;  
+    }
+}
 
 
 

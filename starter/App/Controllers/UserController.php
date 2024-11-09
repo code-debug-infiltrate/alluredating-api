@@ -9,6 +9,46 @@ require_once __DIR__.'/../Models/Members.php';
     {
 
 
+        //Method To Fetch All Latest Posts
+        public function card_payment_info()
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->card_payment_info();
+
+            $data = array(
+                'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                'post_details' => $actInfo,
+            );
+
+            return $data; 
+        }
+
+
+
+
+        //Method To Fetch Exchange Rate Details
+        public function get_exchange_info($params)
+        {
+            //User Model
+            $model_connect = new Members();
+
+            //Model Function Call
+            $actInfo = $model_connect->get_exchange_info($params);
+
+            $data = array(
+                'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                'post_details' => $actInfo,
+            );
+
+            return $data; 
+        }
+
+
+
+
         //Method To Fetch All User Profiles
         public function user_profiles()
         {
