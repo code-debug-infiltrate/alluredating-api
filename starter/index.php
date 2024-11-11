@@ -2017,6 +2017,88 @@ $endpoints["card-payment-information"] = function (array $requestData): void {
 
 
 
+// Counts Of Database Entries
+
+
+//Get Count Of New Users 
+$endpoints["count-new-users"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_new_users();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All Users 
+$endpoints["count-all-users"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_all_users();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All App Visitors
+$endpoints["count-all-visitors"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_all_visitors();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All General Activities
+$endpoints["count-all-activities"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_all_activities();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+//Get Count Of All General Messages
+$endpoints["count-all-messages"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_all_messages();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All New Messages
+$endpoints["count-new-messages"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_new_messages();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
 
 
 

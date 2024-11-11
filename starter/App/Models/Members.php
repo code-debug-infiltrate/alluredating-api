@@ -1756,14 +1756,14 @@ class Members extends Model
 
             return $count;
 
-            } catch (Exception $e) {
+        } catch (Exception $e) {
 
-                $data = array(
-                    "type" => "error",
-                    "message" => $e->getMessage()
-                    ); 
-                    return $data;  
-            }
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
     }
 
 

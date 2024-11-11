@@ -10,6 +10,8 @@ class Admin extends Model
 
     //Tables In Use
     protected $act_table = "app_activity"; //Activity Table
+    protected $vis_table = "app_visitors"; //Visitors Table
+    protected $msg_table = "app_msgreport"; //Message report Table
     protected $u_table = "app_users";  //Users Table
     protected $p_table = "app_profile";  //Profile Table
     protected $coy_table = "app_coy_info";  //Users Table
@@ -609,113 +611,116 @@ class Admin extends Model
         }
     }
  
- //Transactions Record
- public function get_transactions_info()
- {
-     try {
-         $data = array('status' => "Trash");
-         $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status != :status ORDER BY created DESC";
-         $coy = $this->fetch_spec($data, $query);
-         return $coy;
-
-     } catch (Exception $e) {
-
-         return "There is some errors: " . $e->getMessage();
-     }
- }
-
-
- //Create & Update Subscription Plan Information
- public function update_transaction_status($data = array())
- {
-     //Admin Model
-     $admin_model = new Admin();
-     $today = date_create(date("Y-m-d"));
-     $a = array('trancid' => $data['trancid'], );
-     $b = array('trancid' => $data['trancid'], 'status' => $data['status'], );
-
-     try {
-         $query = "SELECT * FROM ". $this->subpayment_table ." WHERE trancid = :trancid LIMIT 1";
-         $check = $this->fetch_row($a, $query);
-
-         if ($check) {
-
-             if ($data['status'] === "Paid") {
-                 
-                 if ($data['status'] != $check['status']) {
-
-                     $a1 = array('amount' => $data['amount'], );
-                     $query = "SELECT * FROM ". $this->subplan_table ." WHERE amount = :amount LIMIT 1";
-                     $plan = $this->fetch_row($a1, $query);
-
-                     $b1 = array('trancid' => $data['trancid'], 'status' => $data['status'], 'expiry' => date_add($today, date_interval_create_from_date_string($plan['expiry'])), );
-                     
-                     $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status, `expiry` = :expiry WHERE `trancid` = :trancid LIMIT 1";
-                     $this->update($b1, $query); 
-
-                     //Record Activity
-                     $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
-                     $admin_model->record_activity($info);
-
-                     return true;
-
-                 } else {
-
-                     return false;
-                 }
-
-             } else {
-
-                 if ($data['status'] != $check['status']) {
-
-                     $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `trancid` = :trancid LIMIT 1";
-                     $this->update($b, $query); 
-
-                     //Record Activity
-                     $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
-                     $admin_model->record_activity($info);
-
-                     return true;
-
-                 } else {
-
-                     return false;
-                 }
-             }
-
-         } else {
-
-             return false;
-         }
-
-     } catch (Exception $e) {
-
-         $data = array(
-             "type" => "error",
-             "message" => $e->getMessage()
-         ); 
-
-         return $data;  
-     }
- }
 
 
 
- 
- //Newsletters Subscribers Record
- public function get_newsletters_info()
- {
-     try {
-         $data = array('status' => "Trash");
-         $query = "SELECT * FROM ". $this->newsletter_table ." WHERE status != :status ORDER BY created DESC";
-         $coy = $this->fetch_spec($data, $query);
-         return $coy;
+    //Transactions Record
+    public function get_transactions_info()
+    {
+        try {
+            $data = array('status' => "Trash");
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status != :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
+            return $coy;
 
-     } catch (Exception $e) {
+        } catch (Exception $e) {
 
-         return "There is some errors: " . $e->getMessage();
-     }
- }
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+    //Create & Update Subscription Plan Information
+    public function update_transaction_status($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $today = date_create(date("Y-m-d"));
+        $a = array('trancid' => $data['trancid'], );
+        $b = array('trancid' => $data['trancid'], 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE trancid = :trancid LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                if ($data['status'] === "Paid") {
+                    
+                    if ($data['status'] != $check['status']) {
+
+                        $a1 = array('amount' => $data['amount'], );
+                        $query = "SELECT * FROM ". $this->subplan_table ." WHERE amount = :amount LIMIT 1";
+                        $plan = $this->fetch_row($a1, $query);
+
+                        $b1 = array('trancid' => $data['trancid'], 'status' => $data['status'], 'expiry' => date_add($today, date_interval_create_from_date_string($plan['expiry'])), );
+                        
+                        $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status, `expiry` = :expiry WHERE `trancid` = :trancid LIMIT 1";
+                        $this->update($b1, $query); 
+
+                        //Record Activity
+                        $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
+                        $admin_model->record_activity($info);
+
+                        return true;
+
+                    } else {
+
+                        return false;
+                    }
+
+                } else {
+
+                    if ($data['status'] != $check['status']) {
+
+                        $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `trancid` = :trancid LIMIT 1";
+                        $this->update($b, $query); 
+
+                        //Record Activity
+                        $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$data['trancid'], ); 
+                        $admin_model->record_activity($info);
+
+                        return true;
+
+                    } else {
+
+                        return false;
+                    }
+                }
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+
+    
+    //Newsletters Subscribers Record
+    public function get_newsletters_info()
+    {
+        try {
+            $data = array('status' => "Trash");
+            $query = "SELECT * FROM ". $this->newsletter_table ." WHERE status != :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
 
 
 
@@ -775,6 +780,213 @@ class Admin extends Model
         	return "There is some errors: " . $e->getMessage();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+        ******* 
+
+        Count Of Major Database Entries
+
+        ********
+    */
+
+   
+    //Count Of All New Members
+    public function count_new_users()
+    {
+        $d = array('status' => "New", );
+        try {
+            $query="SELECT count(*) FROM ". $this->u_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+    //Count Of All All Members
+    public function count_all_users()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->u_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All All Messages
+    public function count_all_messages()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->msg_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+    //Count Of New Messages
+    public function count_new_messages()
+    {
+        $d = array('status' => "Unread", );
+        try {
+            $query="SELECT count(*) FROM ". $this->msg_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All All Visitors
+    public function count_all_visitors()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->vis_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+ 
+    //Count Of All All Activities
+    public function count_all_activities()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->act_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

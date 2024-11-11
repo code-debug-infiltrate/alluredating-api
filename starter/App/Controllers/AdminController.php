@@ -693,11 +693,136 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
+
+
+
+
+
+
+
+
+
+
+        //Method To Fetch New Users Count
+        public function count_new_users()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_new_users();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+    
+    
+        //Method To Fetch All Users Count
+        public function count_all_users()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_all_users();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
         
+        
+        //Method To Fetch All Messages Count
+        public function count_new_messages()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_new_messages();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
 
 
 
 
+        //Method To Fetch All Messages Count
+        public function count_all_messages()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_all_messages();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+            
+
+        //Method To Fetch All Visitors Count
+        public function count_all_visitors()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_all_visitors();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+            
+
+
+        //Method To Fetch All Activities Count
+        public function count_all_activities()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_all_activities();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+        
+     
         
         
 

@@ -119,6 +119,12 @@ Set Basic Info in the htaccess file
 [get-newsletters-info] Get Newsletter Subscribers Info    ()
 [card-payment-information] Get Card Payment Info For Single API (name)
 
+[count-new-users] Get The Total Count Of New Users    ()
+[count-all-users] Get The Total Count Of All Users    ()
+[count-all-visitors] Get The Total Count Of All App Visitors ()
+[count-all-activities] Get The Total Count Of All App Activities ()
+[count-all-messages] Get The Total Count Of All App Messages ()
+[count-new-messages] Get The Total Count Of All App Messages ()
 
 
 
