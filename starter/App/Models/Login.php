@@ -46,9 +46,10 @@ class Login extends Model
                         $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
                         $code = substr(str_shuffle(trim($chars)), 0, $length);
                         $log_session = substr($params['email'], 0, $length).substr(str_shuffle(trim($chars)), 0, $length);
+                        $login = date('Y-m-d H:i:s');
                         //Update DB with New Code
-                        $newParams1 = array('uniqueid' => $user['uniqueid'], 'code' => $code, 'log_session' => $log_session,  'login_status' => "Logged_in", );
-                        $query = "UPDATE ". $this->u_table ." SET `code` = :code, log_session = :log_session, login_status = :login_status WHERE uniqueid = :uniqueid LIMIT 1";
+                        $newParams1 = array('uniqueid' => $user['uniqueid'], 'code' => $code, 'log_session' => $log_session, 'login_status' => "Logged_in", 'lastlogin' => date('Y-m-d H:i:s'), );
+                        $query = "UPDATE ". $this->u_table ." SET `code` = :code, log_session = :log_session, login_status = :login_status, lastlogin = :lastlogin WHERE uniqueid = :uniqueid LIMIT 1";
                         $updatedLogin = $this->update($newParams1, $query);
 
                         if ($user['notify'] === "On") {

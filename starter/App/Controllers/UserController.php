@@ -34,9 +34,10 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
-            $actInfo = $model_connect->get_exchange_info($params);
+            $actInfo = $model_connect->get_exchange_info($fillable);
 
             $data = array(
                 'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
@@ -91,8 +92,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $userInfo = $model_connect->user_info($fillable);
@@ -112,8 +112,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_interests($fillable);
@@ -134,8 +133,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_preference($fillable);
@@ -155,8 +153,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_myself($fillable);
@@ -177,8 +174,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_album($fillable);
@@ -198,8 +194,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_workeducation($fillable);
@@ -219,8 +214,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_language($fillable);
@@ -239,8 +233,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_activity($fillable);
@@ -260,12 +253,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'interest' => htmlspecialchars($params['interest']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->create_interest($fillable);
@@ -304,12 +292,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'lang' => htmlspecialchars($params['lang']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->create_language($fillable);
@@ -350,12 +333,7 @@ require_once __DIR__.'/../Models/Members.php';
             //User Model
             $model_connect = new Members();
             //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'oldpass' => htmlspecialchars($params['oldpass']), 
-                'newpass' => htmlspecialchars($params['newpass']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_password($fillable);
@@ -394,12 +372,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'newUsername' => htmlspecialchars($params['newUsername']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_username($fillable);
@@ -437,14 +410,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'address' => htmlspecialchars($params['address']), 
-                'city' => htmlspecialchars($params['city']), 
-                'country' => htmlspecialchars($params['country']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_location($fillable);
@@ -483,17 +449,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'name' => htmlspecialchars($params['name']), 
-                'from' => htmlspecialchars($params['from']), 
-                'to' => htmlspecialchars($params['to']), 
-                'category' => htmlspecialchars($params['category']), 
-                'details' => htmlspecialchars($params['details']), 
-            );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $result = $model_connect->update_workneducation($fillable);
 
@@ -531,19 +487,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'fname' => htmlspecialchars($params['fname']), 
-                'lname' => htmlspecialchars($params['lname']), 
-                'number' => htmlspecialchars($params['number']),
-                'occupation' => htmlspecialchars($params['occupation']), 
-                'gender' => htmlspecialchars($params['gender']),
-                'dob' => htmlspecialchars($params['dob']),
-                'details' => htmlspecialchars($params['details']),
-            );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $result = $model_connect->update_bio($fillable);
 
@@ -580,12 +524,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'profileimage' => htmlspecialchars($params['profileimage']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_profile_photo($fillable);
@@ -623,12 +562,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'coverimage' => htmlspecialchars($params['coverimage']), 
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_cover_photo($fillable);
@@ -666,31 +600,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'orientation' => htmlspecialchars($params['orientation']), 
-                'height' => htmlspecialchars($params['height']), 
-                'weight' => htmlspecialchars($params['weight']), 
-                'bodytype' => htmlspecialchars($params['bodytype']), 
-                'seeking' => htmlspecialchars($params['seeking']),
-                'ethnicity' => htmlspecialchars($params['ethnicity']),
-                'religion' => htmlspecialchars($params['religion']),
-                'pets' => htmlspecialchars($params['pets']),
-                'dates' => htmlspecialchars($params['dates']),
-                'havekids' => htmlspecialchars($params['havekids']),
-                'wantkids' => htmlspecialchars($params['wantkids']),
-                'maritalstatus' => htmlspecialchars($params['maritalstatus']),
-                'dress' => htmlspecialchars($params['dress']), 
-                'eating' => htmlspecialchars($params['eating']),
-                'smoking' => htmlspecialchars($params['smoking']),
-                'drinking' => htmlspecialchars($params['drinking']),
-                'color' => htmlspecialchars($params['color']),
-                'employment' => htmlspecialchars($params['employment']),
-                'details' => htmlspecialchars($params['details']),
-               
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_myself($fillable);
@@ -728,32 +638,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']), 
-                'username' => htmlspecialchars($params['username']), 
-                'gender' => htmlspecialchars($params['gender']),
-                'orientation' => htmlspecialchars($params['orientation']), 
-                'height' => htmlspecialchars($params['height']), 
-                'weight' => htmlspecialchars($params['weight']), 
-                'bodytype' => htmlspecialchars($params['bodytype']), 
-                'seeking' => htmlspecialchars($params['seeking']),
-                'ethnicity' => htmlspecialchars($params['ethnicity']),
-                'religion' => htmlspecialchars($params['religion']),
-                'pets' => htmlspecialchars($params['pets']),
-                'dates' => htmlspecialchars($params['dates']),
-                'havekids' => htmlspecialchars($params['havekids']),
-                'wantkids' => htmlspecialchars($params['wantkids']),
-                'maritalstatus' => htmlspecialchars($params['maritalstatus']),
-                'dress' => htmlspecialchars($params['dress']), 
-                'eating' => htmlspecialchars($params['eating']),
-                'smoking' => htmlspecialchars($params['smoking']),
-                'drinking' => htmlspecialchars($params['drinking']),
-                'color' => htmlspecialchars($params['color']),
-                'employment' => htmlspecialchars($params['employment']),
-                'details' => htmlspecialchars($params['details']),
-               
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->update_preference($fillable);
@@ -791,9 +676,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_find_people($fillable);
 
@@ -822,9 +705,7 @@ require_once __DIR__.'/../Models/Members.php';
          {
              //User Model
              $model_connect = new Members();
-             //User Account Parameters
-             $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
- 
+             $fillable = array_map("htmlspecialchars", $params);
              //Model Function Call
              $actInfo = $model_connect->user_random_people($fillable);
  
@@ -866,7 +747,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->count_user_activity($fillable);
 
@@ -879,7 +760,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->count_user_views($fillable);
 
@@ -892,7 +773,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->count_user_likes($fillable);
 
@@ -905,7 +786,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->buddy_activities($fillable);
 
@@ -919,7 +800,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->new_user_activity($fillable);
 
@@ -949,13 +830,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-                'username' => htmlspecialchars($params['username']),
-                'viewerid' => htmlspecialchars($params['viewerid']),
-                'action' => htmlspecialchars($params['action']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->user_actions($fillable);
@@ -986,9 +861,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'viewerid' => htmlspecialchars($params['viewerid']), 'username' => htmlspecialchars($params['username']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_views($fillable);
 
@@ -1018,9 +891,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), 'buddyid' => htmlspecialchars($params['buddyid']), 'buddyname' => htmlspecialchars($params['buddyname']), 'request' => htmlspecialchars($params['request']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_add_buddy($fillable);
 
@@ -1051,9 +922,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), 'username' => htmlspecialchars($params['username']), 'buddyid' => htmlspecialchars($params['buddyid']), 'buddyname' => htmlspecialchars($params['buddyname']), 'request' => htmlspecialchars($params['request']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_accept_buddy($fillable);
 
@@ -1084,9 +953,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_buddies_count($fillable);
 
@@ -1117,9 +984,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->user_buddies_list($fillable);
 
@@ -1226,10 +1091,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-
-            $fillable = array(
-                'postid' => htmlspecialchars($params['postid']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $actInfo = $model_connect->get_post_details($fillable);
@@ -1251,11 +1113,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
              //User Model
              $model_connect = new Members();
- 
-             $fillable = array(
-                 'uniqueid' => htmlspecialchars($params['uniqueid']),
-             );
- 
+             $fillable = array_map("htmlspecialchars", $params);
              //Model Function Call
              $actInfo = $model_connect->my_post_action($fillable);
  
@@ -1335,9 +1193,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->message_info_count($fillable);
 
@@ -1368,9 +1224,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->new_message_details($fillable);
 
@@ -1401,12 +1255,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
              //Member Model
              $model_connect = new Members();
-             
-            //User Account Parameters
-            
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                );
+             $fillable = array_map("htmlspecialchars", $params);
  
              //Model Function Call
              $postAct = $model_connect->all_message_details($fillable);
@@ -1447,17 +1296,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //Member Model
             $model_connect = new Members();
-            
-            //User Account Parameters
-            
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'sender' => htmlspecialchars($params['sender']),
-                    'receiver' => htmlspecialchars($params['receiver']),
-                    'postid' => htmlspecialchars($params['postid']),
-                    'commentid' => htmlspecialchars($params['commentid']),
-                );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $postAct = $model_connect->fetch_comment_chats($fillable);
 
@@ -1498,9 +1337,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->chat_info_count($fillable);
 
@@ -1532,9 +1369,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //User Model
             $model_connect = new Members();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->new_chat_details($fillable);
 
@@ -1564,13 +1399,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
              //Member Model
              $model_connect = new Members();
-             
-             //User Account Parameters
-             $fillable = array(
-                 'uniqueid' => htmlspecialchars($params['uniqueid']),
-                 'username' => htmlspecialchars($params['username']),
-                 'postid' => htmlspecialchars($params['postid']),
-             );
+             $fillable = array_map("htmlspecialchars", $params);
  
              //Model Function Call
              $postAct = $model_connect->user_post_interaction($fillable);
@@ -1612,15 +1441,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
               //Member Model
               $model_connect = new Members();
-              
-              //User Account Parameters
-              $fillable = array(
-                  'uniqueid' => htmlspecialchars($params['uniqueid']),
-                  'username' => htmlspecialchars($params['username']),
-                  'postid' => htmlspecialchars($params['postid']),
-                  'action' => htmlspecialchars($params['action']),
-              );
-  
+              $fillable = array_map("htmlspecialchars", $params);
               //Model Function Call
               $postAct = $model_connect->user_post_actions($fillable);
   
@@ -1660,14 +1481,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
              //Member Model
              $model_connect = new Members();
-             
-             //User Account Parameters
-             $fillable = array(
-                 'uniqueid' => htmlspecialchars($params['uniqueid']),
-                 'username' => htmlspecialchars($params['username']),
-                 'postid' => htmlspecialchars($params['postid']),
-                 'reason' => htmlspecialchars($params['reason']),
-             );
+             $fillable = array_map("htmlspecialchars", $params);
  
              //Model Function Call
              $postAct = $model_connect->user_post_reports($fillable);
@@ -1727,15 +1541,8 @@ require_once __DIR__.'/../Models/Members.php';
                 $postAct = $model_connect->user_post_new_comment($fillable);
 
             } else {
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'sender' => htmlspecialchars($params['sender']),
-                    'username' => htmlspecialchars($params['username']),
-                    'receiver' => htmlspecialchars($params['receiver']),
-                    'commentid' => htmlspecialchars($params['commentid']),
-                    'postid' => htmlspecialchars($params['postid']),
-                    'details' => htmlspecialchars($params['details']),
-                );
+
+                $fillable = array_map("htmlspecialchars", $params);
 
                 //Model Function Call
                 $postAct = $model_connect->user_post_comment($fillable);
@@ -1778,14 +1585,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
              //Member Model
              $model_connect = new Members();
-             
-             //User Account Parameters
-             $fillable = array(
-                 'uniqueid' => htmlspecialchars($params['uniqueid']),
-                 'username' => htmlspecialchars($params['username']),
-                 'postid' => htmlspecialchars($params['postid']),
-                 'status' => htmlspecialchars($params['status']),
-             );
+             $fillable = array_map("htmlspecialchars", $params);
  
              //Model Function Call
              $postAct = $model_connect->user_post_status($fillable);
@@ -1834,15 +1634,8 @@ require_once __DIR__.'/../Models/Members.php';
             
             //User Account Parameters
             if ($params['chatid'] != NULL) {
-                $fillable = array(
-                    'chatid' => htmlspecialchars($params['chatid']),
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'receiver' => htmlspecialchars($params['receiver']),
-                    'username' => htmlspecialchars($params['username']),
-                    'sender' => htmlspecialchars($params['sender']),
-                    'file' => htmlspecialchars($params['file']),
-                    'details' => htmlspecialchars($params['details']),
-                );
+
+                $fillable = array_map("htmlspecialchars", $params);
     
                 //Model Function Call
                 $chatInfo = $model_connect->create_user_chat($fillable);
@@ -1892,28 +1685,12 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
-
-
-
-
         //Method to Get User Chats 
         public function user_chat_messages($params)
         {
             //Member Model
             $model_connect = new Members();
-            
-            //User Account Parameters
-            if (isset($params['buddyid'])) {
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'buddyid' => htmlspecialchars($params['buddyid']),
-                );
-            } else {
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'buddyid' => "",
-                );
-            }
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $chatInfo = $model_connect->user_chat_messages($fillable);
@@ -1952,11 +1729,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //Member Model
             $model_connect = new Members();
-             
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $postAct = $model_connect->user_subscription_plan($fillable);
@@ -2051,11 +1824,7 @@ require_once __DIR__.'/../Models/Members.php';
         {
             //Member Model
             $model_connect = new Members();
-             
-            //User Account Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $postAct = $model_connect->user_transactions_info($fillable);
@@ -2113,14 +1882,7 @@ public function deactivate_account($params)
 {
     //User Model
     $model_connect = new Members();
-    //User Account Parameters
-    $fillable = array(
-        'uniqueid' => htmlspecialchars($params['uniqueid']), 
-        'username' => htmlspecialchars($params['username']), 
-        'password' => htmlspecialchars($params['password']),
-        'details' => htmlspecialchars($params['details']), 
-    );
-
+    $fillable = array_map("htmlspecialchars", $params);
     //Model Function Call
     $result = $model_connect->deactivate_account($fillable);
 

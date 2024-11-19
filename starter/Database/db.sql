@@ -492,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `app_subscription_payment` (
 `amount` VARCHAR(10) DEFAULT NULL,
 `expiry` varchar(20) DEFAULT NULL,
 `details` varchar(100) DEFAULT NULL,
-`status` ENUM('Processing', 'Paid', 'Cancelled', 'Trash') DEFAULT 'Processing',
+`status` ENUM('Processing', 'Paid', 'Expired', 'Cancelled', 'Trash') DEFAULT 'Processing',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)) ENGINE = InnoDB DEFAULT CHARSET=latin1   ;
 

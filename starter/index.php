@@ -659,6 +659,33 @@ $endpoints["update-bio"] = function (array $requestData): void {
 };
 
 
+
+//Update User Bio
+$endpoints["update-personal-info"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["lname"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->update_personal_info($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
 //Update User Attributes
 $endpoints["update-myself"] = function (array $requestData): void {
 
@@ -1412,8 +1439,6 @@ $endpoints["user-post-reports"] = function (array $requestData): void {
 
 
 
-
-
 //User Post Status
 $endpoints["user-post-comment"] = function (array $requestData): void {
 
@@ -1489,8 +1514,6 @@ $endpoints["all-user-messages"] = function (array $requestData): void {
 
 
 
-
-
 //User Post Comments And Inbox
 $endpoints["all-comment-chats"] = function (array $requestData): void {
 
@@ -1513,7 +1536,6 @@ $endpoints["all-comment-chats"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
-
 
 
 
@@ -1542,8 +1564,6 @@ $endpoints["user-post-status"] = function (array $requestData): void {
 
 
 
-
-
 //User Subscription Plan
 $endpoints["user-subscription-plan"] = function (array $requestData): void {
 
@@ -1566,8 +1586,6 @@ $endpoints["user-subscription-plan"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
-
-
 
 
 
@@ -1596,7 +1614,6 @@ $endpoints["user-make-payment"] = function (array $requestData): void {
 
 
 
-
 //User Subscription Plan
 $endpoints["user-transactions-info"] = function (array $requestData): void {
 
@@ -1622,9 +1639,6 @@ $endpoints["user-transactions-info"] = function (array $requestData): void {
 
 
 
-
-
-
 //Create Company Information
 $endpoints["create-coy-info"] = function (array $requestData): void {
 
@@ -1647,7 +1661,6 @@ $endpoints["create-coy-info"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
-
 
 
 
@@ -1687,7 +1700,6 @@ $endpoints["get-bank-info"] = function (array $requestData): void {
 
 
 
-
 //Create Currency Information
 $endpoints["create-currency-info"] = function (array $requestData): void {
 
@@ -1721,8 +1733,6 @@ $endpoints["get-currency-info"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
 
 
 
@@ -1908,7 +1918,6 @@ $endpoints["update-transaction-status"] = function (array $requestData): void {
 
 
 
-
 //Get Users Information
 $endpoints["get-users-info"] = function (array $requestData): void {
     //Connect to Controller
@@ -1946,6 +1955,31 @@ $endpoints["update-user-status"] = function (array $requestData): void {
 
 
 
+//Update Message Status Information
+$endpoints["update-message-status"] = function (array $requestData): void {
+    
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["id"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->update_message_status($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
 
 //Get Newsletters Info Information
 $endpoints["get-newsletters-info"] = function (array $requestData): void {
@@ -1958,6 +1992,14 @@ $endpoints["get-newsletters-info"] = function (array $requestData): void {
 
 
 
+//Get Messages Information
+$endpoints["get-messages-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->get_messages_info($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
 
 
 
@@ -1972,8 +2014,6 @@ $endpoints["card-payment-info"] = function (array $requestData): void {
 
 
 
-
-
 //Get Newsletters Info Information
 $endpoints["get-exchange-rate"] = function (array $requestData): void {
     //Connect to Controller
@@ -1982,8 +2022,6 @@ $endpoints["get-exchange-rate"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
-
-
 
 
 
@@ -2010,6 +2048,88 @@ $endpoints["card-payment-information"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+//Get Payment Transactions
+$endpoints["all-payment-Transactions"] = function (array $requestData): void {
+    
+    if (!isset($requestData["status"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->all_payment_transactions($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//Get  All App Visitors
+$endpoints["recent-visitors"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->recent_visitors();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get  All App Activities
+$endpoints["recent-activities"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->recent_activities();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Payment Transactions
+$endpoints["users-posts"] = function (array $requestData): void {
+    
+    if (!isset($requestData["status"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->users_posts($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -2089,6 +2209,141 @@ $endpoints["count-new-messages"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+
+//Get Count Of All User Myself Settings
+$endpoints["user-myself-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_user_myself();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of All User Preferences
+$endpoints["user-preference-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->count_user_preference();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of All User Transactions
+$endpoints["new-transactions-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->new_transactions_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All User Transactions
+$endpoints["all-transactions-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->all_transactions_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of All Paid Transactions
+$endpoints["paid-transactions-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->paid_transactions_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of Expired User Transactions
+$endpoints["expired-transactions-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->expired_transactions_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of All User Transactions
+$endpoints["new-userposts-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->new_userposts_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get Count Of All User Transactions
+$endpoints["all-userposts-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->all_userposts_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+//Get Count Of All User Transactions
+$endpoints["new-blogposts-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->new_blogposts_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Count Of All User Transactions
+$endpoints["all-blogposts-count"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->all_blogposts_count();
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

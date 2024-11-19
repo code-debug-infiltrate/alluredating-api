@@ -112,12 +112,16 @@ Set Basic Info in the htaccess file
 [get-subscription-plan] Get Subscription Priviledge  ()
 [create-api-connect] Create API Connection details    (uniqueid, username, name, url, code, wallet, private, public, status)
 [get-api-connect] Get API Connection details    ()
-[get-transactions-info] Get Transactions Info   () 
+[get-transactions-info] Get All Payment Transactions Info   () 
+[all-payment-Transactions] Get Payment Transactions Info   (status) 
 [update-transaction-status] Update Transaction Status (uniqueid, username, trancid, status)
 [get-users-info] Get Users Info ()
 [update-user-status] Update User Status (uniqueid, username, uuniqueid, status)
+[update-message-status] Update Message Status (uniqueid, username, id, status)
 [get-newsletters-info] Get Newsletter Subscribers Info    ()
+[get-messages-info]   Get Messages Info rmation   (status)
 [card-payment-information] Get Card Payment Info For Single API (name)
+[update-personal-info] Update Peersonal Information (uniqueid, username, email, fname, lname, number, occupation, gender, dob, address, city, country, status, details)
 
 [count-new-users] Get The Total Count Of New Users    ()
 [count-all-users] Get The Total Count Of All Users    ()
@@ -125,6 +129,14 @@ Set Basic Info in the htaccess file
 [count-all-activities] Get The Total Count Of All App Activities ()
 [count-all-messages] Get The Total Count Of All App Messages ()
 [count-new-messages] Get The Total Count Of All App Messages ()
+[user-myself-count] Get The Total Count Of Users Myself Settings ()
+[user-preference-count] Get The Total Count Of Users Preferences Settings ()
+[new-transactions-count] Get The Total Count Of New Transactions ()
+[all-transactions-count] Get The Total Count Of All Transactions ()
+[new-userposts-count] Get The Total Count Of New User-Posts()
+[all-userposts-count] Get The Total Count Of All User-Posts ()
+[new-blogposts-count] Get The Total Count Of New Blog-Posts ()
+[all-blogposts-count] Get The Total Count Of All Blog-Posts ()
 
 
 

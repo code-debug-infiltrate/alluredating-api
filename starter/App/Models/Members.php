@@ -405,7 +405,7 @@ class Members extends Model
 
         try {
             //Fetch User Credentials For Use!
-            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC LIMIT 50";
+            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC LIMIT 20";
             $activityInfo = $this->fetch_spec($newParams, $query1); 
 
             return $activityInfo;
@@ -1910,47 +1910,45 @@ class Members extends Model
         $admin_model = new Admin();
         $today = date('Y-m-d');
         try {   
-                $a = array('id' => "1", );
-                $b = array('planid' => $params['planid'], );
+            $a = array('id' => "1", );
+            $b = array('planid' => $params['planid'], );
+            
+            $query = "SELECT * FROM ". $this->subplan_table ." WHERE planid = :planid ";
+            $plan = $this->fetch_row($b, $query);
+
+            $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id";
+            $cur = $this->fetch_row($a, $query);
+
+            $c = array('uniqueid' => $params['uniqueid'], 'type' => $plan['type'],  'status' => "Processing", );
+            
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
+            $userTranc = $this->fetch_row($c, $query);
+
+            if ($userTranc == NULL) {
+
+                $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$params['type'], );
+
+                $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, currency, expiry, amount, details) VALUES (:trancid, :uniqueid, :type, :currency, :expiry, :amount, :details)";
+                $chatMsgs = $this->insert($d, $query);
                 
+                if ($chatMsgs) {
 
-                $query = "SELECT * FROM ". $this->subplan_table ." WHERE planid = :planid ";
-                $plan = $this->fetch_row($b, $query);
-
-                $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id";
-                $cur = $this->fetch_row($a, $query);
-
-                $c = array('uniqueid' => $params['uniqueid'], 'type' => $plan['type'],  'status' => "Processing", );
-                
-                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
-                $userTranc = $this->fetch_row($c, $query);
-
-                if ($userTranc == NULL) {
-
-                    $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'], );
-
-                    $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, currency, expiry, amount, details) VALUES (:trancid, :uniqueid, :type, :currency, :expiry, :amount, :details)";
-
-                    $chatMsgs = $this->insert($d, $query);
-                    
-                    if ($chatMsgs) {
-
-                        //Record Activity
-                        $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Payment", 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'] ); 
-                        $admin_model->record_activity($info);
-                    }
-
-                    return $chatMsgs;
-
-                } else {
-
-                    $pos = array('id' => $userTranc['id'], 'trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'], );
-
-                    $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, currency = :currency, expiry = :expiry, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
-                    $chatMsgs = $this->update($pos, $query);
-
-                    return $chatMsgs;
+                    //Record Activity
+                    $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Payment", 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username'] ); 
+                    $admin_model->record_activity($info);
                 }
+
+                return $chatMsgs;
+
+            } else {
+
+                $pos = array('id' => $userTranc['id'], 'trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$params['type'], );
+
+                $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, currency = :currency, expiry = :expiry, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
+                $chatMsgs = $this->update($pos, $query);
+
+                return $chatMsgs;
+            }
 
         } catch (Exception $e) {
 

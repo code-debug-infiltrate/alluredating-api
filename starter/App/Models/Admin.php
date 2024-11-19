@@ -50,7 +50,84 @@ class Admin extends Model
 
 
 
-    //Company Record
+    //Transaction Records
+    public function all_payment_transactions($params)
+    {
+        try {
+            $data = array('status' => $params['status'], );
+
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status = :status ORDER BY created DESC";
+            $api = $this->fetch_spec($data, $query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+     
+
+
+    //Users Posts Records
+    public function users_posts($params)
+    {
+        try {
+            $data = array('status' => $params['status'], );
+
+            $query = "SELECT * FROM ". $this->post_table ." WHERE status = :status ORDER BY created DESC";
+            $api = $this->fetch_spec($data, $query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+     
+     
+
+
+    //Activities Records
+    public function recent_activities()
+    {
+        try {
+            $data = array('status' => "Unread", );
+
+            $query = "SELECT * FROM ". $this->act_table ." WHERE status = :status ORDER BY created DESC";
+            $api = $this->fetch_spec($data, $query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+     
+
+    //Visitors Records
+    public function recent_visitors()
+    {
+        try {
+            $data = array('status' => "Unread", );
+
+            $query = "SELECT * FROM ". $this->vis_table ." WHERE status = :status ORDER BY created DESC";
+            $api = $this->fetch_spec($data, $query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+     
+
+ 
+
+    //Card Payment Record
     public function card_payment_information($params)
     {
         try {
@@ -551,10 +628,62 @@ class Admin extends Model
     public function get_users_info($params)
     {
         try {
-            $data = array('profile' => $params['profile'], 'status' => "Trash");
-            $query = "SELECT * FROM ". $this->u_table ." WHERE profile = :profile AND status != :status ORDER BY created DESC";
-            $coy = $this->fetch_spec($data, $query);
-            return $coy;
+            $a = array('status' => "Trash");
+            $b = array('profile' => $params['profile'], 'status' => "Trash");
+            
+            if ($params['profile'] == "All") {
+
+                $query = "SELECT * FROM ". $this->u_table ." WHERE status != :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($a, $query);
+                return $coy;
+
+            } else {
+
+                $query = "SELECT * FROM ". $this->u_table ." WHERE profile = :profile AND status != :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($b, $query);
+                return $coy;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+    
+    //Method to Update Bio
+    public function update_personal_info($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $a = array('uniqueid' => $params['uniqueid'], );
+        $pars = array('uniqueid' => $params['uniqueid'], 'email' => $params['email'], 'status' => $params['status'], );
+        $newParams = array('uniqueid' => $params['uniqueid'], 'fname' => $params['fname'], 'lname' => $params['lname'], 'number' => $params['number'], 'occupation' => $params['occupation'], 'gender' => $params['gender'], 'dob' => $params['dob'], 'address' => $params['address'], 'city' => $params['city'], 'country' => $params['country'], 'details' => $params['details'], );
+        
+        try {
+            $query = "SELECT * FROM " . $this->p_table ." WHERE uniqueid = :uniqueid LIMIT 1";
+            $bio = $this->fetch_row($a, $query); 
+            // Checking all User credentials...
+            if ($bio) {
+                
+                $query0 = "UPDATE ". $this->u_table ." SET email = :email, status = :status WHERE uniqueid = :uniqueid LIMIT 1";
+                $this->update($pars, $query0);
+
+                $query = "UPDATE ". $this->p_table ." SET fname = :fname, lname = :lname, number = :number, occupation = :occupation, gender = :gender, dob = :dob, address = :address, city = :city, country = :country, details = :details WHERE uniqueid = :uniqueid LIMIT 1";
+                $this->update($newParams, $query);
+                
+                //Record Activity
+                $info = array('uniqueid' => $params['uniqueid'], 'username' => $params['username'], 'category' => "Settings", 'details' => $params['username']." Updated Their Bio Details", ); 
+                $admin_model->record_activity($info);
+
+                return true;
+
+            } else {
+
+                return false;
+        }
 
         } catch (Exception $e) {
 
@@ -611,6 +740,55 @@ class Admin extends Model
         }
     }
  
+
+
+    // Update Message Status
+    public function update_message_status($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $today = date_create(date("Y-m-d"));
+        $a = array('id' => $data['id'], );
+        $b = array('id' => $data['id'], 'status' => $data['status'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->msg_table ." WHERE id = :id LIMIT 1";
+            $check = $this->fetch_row($a, $query);
+
+            if ($check) {
+
+                if ($data['status'] != $check['status']) {
+
+                    $query = "UPDATE ". $this->msg_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
+                    $this->update($b, $query); 
+
+                    //Record Activity
+                    $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Message: ".$check['subject']." Status To ".$data['status'], ); 
+                    $admin_model->record_activity($info);
+
+                    return true;
+
+                } else {
+
+                    return false;
+                }
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
 
 
 
@@ -723,6 +901,31 @@ class Admin extends Model
     }
 
 
+    //All Messages Record
+    public function get_messages_info($params)
+    {
+        try {
+            $a = array('status' => "Trash");
+            $b = array('status' => $params['status'], );
+            
+            if ($params['status'] == "All") {
+
+                $query = "SELECT * FROM ". $this->msg_table ." WHERE status != :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($a, $query);
+                return $coy;
+
+            } else {
+
+                $query = "SELECT * FROM ". $this->msg_table ." WHERE status = :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($b, $query);
+                return $coy;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
 
 
 
@@ -827,7 +1030,6 @@ class Admin extends Model
 
 
 
-
     //Count Of All All Members
     public function count_all_users()
     {
@@ -871,6 +1073,8 @@ class Admin extends Model
             return $data;  
         }
     }
+
+
 
     //Count Of New Messages
     public function count_new_messages()
@@ -917,7 +1121,6 @@ class Admin extends Model
     }
 
 
-
  
     //Count Of All All Activities
     public function count_all_activities()
@@ -942,11 +1145,246 @@ class Admin extends Model
 
 
 
+    //Count Of All All Transactions
+    public function all_transactions_count()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->subpayment_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All New User Transactions
+    public function new_transactions_count()
+    {
+        $d = array('status' => "Processing", );
+        try {
+            $query="SELECT count(*) FROM ". $this->subpayment_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+    //Count Of All Paid User Transactions
+    public function paid_transactions_count()
+    {
+        $d = array('status' => "Paid", );
+        try {
+            $query="SELECT count(*) FROM ". $this->subpayment_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+    //Count Of All New User Transactions
+    public function expired_transactions_count()
+    {
+        $d = array('status' => "Expired", );
+        try {
+            $query="SELECT count(*) FROM ". $this->subpayment_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All User Preferences
+    public function count_user_preference()
+    {
+        try {
+            $query="SELECT count(*) FROM ". $this->pref_table ."";
+
+            $count = $this->counter($query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All User Myself Settings
+    public function count_user_myself()
+    {
+        try {
+            $query="SELECT count(*) FROM ". $this->self_table ."";
+
+            $count = $this->counter($query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All New User Posts
+    public function new_userposts_count()
+    {
+        $d = array('status' => "New", );
+        try {
+            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All User Posts
+    public function all_userposts_count()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+    
+
+
+    //Count Of All New Blog Posts
+    public function new_blogposts_count()
+    {
+        $d = array('status' => "New", );
+        try {
+            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status = :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
+
+
+
+    //Count Of All Blog Posts
+    public function all_blogposts_count()
+    {
+        $d = array('status' => "Trash", );
+        try {
+            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status != :status";
+
+            $count = $this->counter_spec($d, $query);
+
+            return $count;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
+        }
+    }
 
 
 
 
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  

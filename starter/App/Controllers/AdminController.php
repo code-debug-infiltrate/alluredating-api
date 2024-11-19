@@ -17,26 +17,9 @@ require_once __DIR__.'/../Models/Admin.php';
              //Admin Model
              $model_connect = new Admin();
              
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'coyname' => htmlspecialchars($params['coyname']),
-                    'slogan' => htmlspecialchars($params['slogan']),
-                    'email' => htmlspecialchars($params['email']),
-                    'email1' => htmlspecialchars($params['email1']),
-                    'phone' => htmlspecialchars($params['phone']),
-                    'phone1' => htmlspecialchars($params['phone1']),
-                    'channel' => htmlspecialchars($params['channel']),
-                    'instagram' => htmlspecialchars($params['instagram']),
-                    'facebook' => htmlspecialchars($params['facebook']),
-                    'linkedin' => htmlspecialchars($params['linkedin']),
-                    'twitter' => htmlspecialchars($params['twitter']),
-                    'status' => htmlspecialchars($params['status']),
-                    'address' => htmlspecialchars($params['address']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->create_coy_information($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_coy_information($fillable);
 
              if ($postAct == true) {
  
@@ -73,19 +56,9 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'bankname' => htmlspecialchars($params['bankname']),
-                    'swiftcode' => htmlspecialchars($params['swiftcode']),
-                    'acctname' => htmlspecialchars($params['acctname']),
-                    'acctnum' => htmlspecialchars($params['acctnum']),
-                    'status' => htmlspecialchars($params['status']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->create_bank_information($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_bank_information($fillable);
 
              if ($postAct == true) {
  
@@ -227,16 +200,9 @@ require_once __DIR__.'/../Models/Admin.php';
              //Admin Model
              $model_connect = new Admin();
              
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'currency' => htmlspecialchars($params['currency']),
-                    'rate' => htmlspecialchars($params['rate']),
-                    'status' => htmlspecialchars($params['status']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->create_exchange_information($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_exchange_information($fillable);
 
              if ($postAct == true) {
  
@@ -366,15 +332,9 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'status' => htmlspecialchars($params['status']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->create_subscription_info($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_subscription_info($fillable);
 
              if ($postAct == true) {
  
@@ -428,21 +388,9 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'name' => htmlspecialchars($params['name']),
-                    'url' => htmlspecialchars($params['url']),
-                    'code' => htmlspecialchars($params['code']),
-                    'wallet' => htmlspecialchars($params['wallet']),
-                    'private' => htmlspecialchars($params['private']),
-                    'public' => htmlspecialchars($params['public']),
-                    'status' => htmlspecialchars($params['status']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->create_api_connect($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_api_connect($fillable);
 
              if ($postAct == true) {
  
@@ -516,16 +464,9 @@ require_once __DIR__.'/../Models/Admin.php';
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-                $fillable = array(
-                    'uniqueid' => htmlspecialchars($params['uniqueid']),
-                    'username' => htmlspecialchars($params['username']),
-                    'trancid' => htmlspecialchars($params['trancid']),
-                    'status' => htmlspecialchars($params['status']),
-                );
-                //Model Function Call
-                $postAct = $model_connect->update_transaction_status($fillable);
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->update_transaction_status($fillable);
 
              if ($postAct == true) {
  
@@ -561,9 +502,7 @@ require_once __DIR__.'/../Models/Admin.php';
         {
             //User Model
             $model_connect = new Admin();
-
-            $fillable = array('profile' => htmlspecialchars($params['profile']), );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->get_users_info($fillable);
 
@@ -577,19 +516,50 @@ require_once __DIR__.'/../Models/Admin.php';
         
 
 
+        //Method For Update Bio Details
+        public function update_personal_info($params)
+        {
+            //User Model
+            $model_connect = new Admin();
+            $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $result = $model_connect->update_personal_info($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Bio Details Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
         //Method to Update User STatus Info
         public function update_user_status($params)
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-            $fillable = array(
-                'uniqueid' => htmlspecialchars($params['uniqueid']),
-                'username' => htmlspecialchars($params['username']),
-                'uUniqueid' => htmlspecialchars($params['uUniqueid']),
-                'status' => htmlspecialchars($params['status']),
-            );
+             $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $postAct = $model_connect->update_user_status($fillable);
 
@@ -601,6 +571,45 @@ require_once __DIR__.'/../Models/Admin.php';
                              'code' => "200",
                              'type' => "success",
                              'message' => "User Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
+        //Method to Update Message STatus Info
+        public function update_message_status($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->update_message_status($fillable);
+
+            if ($postAct == true) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Message Status Updated",
                          ),
                      'result_message' => $postAct,
                      );
@@ -642,17 +651,31 @@ require_once __DIR__.'/../Models/Admin.php';
         
 
 
+        //Method To Fetch All Users
+        public function get_messages_info($params)
+        {
+            //User Model
+            $model_connect = new Admin();
+            $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $actInfo = $model_connect->get_messages_info($fillable);
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
 
         //Method to Update User STatus Info
         public function card_payment_information($params)
         {
              //Admin Model
              $model_connect = new Admin();
-             
-            //Coy Info Parameters
-            $fillable = array(
-                'name' => htmlspecialchars($params['name']),
-            );
+             $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $postAct = $model_connect->card_payment_information($fillable);
 
@@ -686,9 +709,125 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
+        //Method to Get Payment Transactions
+        public function all_payment_transactions($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->all_payment_transactions($fillable);
+
+            if ($postAct == true) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "User Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
+        //Method To Fetch Recent Visitors
+        public function recent_visitors()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->recent_visitors();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch Recent Activities
+        public function recent_activities()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->recent_activities();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method to Get Payment Transactions
+        public function users_posts($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $postAct = $model_connect->users_posts($fillable);
+
+            if ($postAct == true) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "User Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
         
         
-        
 
 
 
@@ -698,7 +837,7 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
-
+        // Counts Of Entries
 
 
 
@@ -821,7 +960,201 @@ require_once __DIR__.'/../Models/Admin.php';
         }
 
 
+
+        //Method To Fetch All Transactions Count
+        public function all_transactions_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->all_transactions_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch New Transactions Count
+        public function new_transactions_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->new_transactions_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+        //Method To Fetch All Transactions Count
+        public function paid_transactions_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->paid_transactions_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+        //Method To Fetch All Transactions Count
+        public function expired_transactions_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->expired_transactions_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch User Preferences Count
+        public function count_user_preference()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_user_preference();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
         
+     
+        //Method To Fetch User Myself Count
+        public function count_user_myself()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->count_user_myself();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+        
+        
+        //Method To Fetch All User Posts Count
+        public function all_userposts_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->all_userposts_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch New User Posts Count
+        public function new_userposts_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->new_userposts_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch All User Posts Count
+        public function all_blogposts_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->all_blogposts_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch New User Posts Count
+        public function new_blogposts_count()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->new_blogposts_count();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+
+
+        
+     
+        
+
      
         
         
