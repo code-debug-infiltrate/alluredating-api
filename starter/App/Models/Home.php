@@ -19,7 +19,9 @@ class Home extends Model
     protected $sub_table = "app_subscribe";  //Subscribe Table
     protected $v_table = "app_visitors";  //Visitors Table
     protected $api_table = "app_thirdpartyapi";  //Third Party API Table
-
+    //Blog Posts
+    protected $blog_table = "app_blogposts"; //Blog Posts Table
+    protected $blog_action_table = "app_blogposts_actions"; //Blog Posts Table
 
 
 
@@ -32,6 +34,25 @@ class Home extends Model
             $data = array('status' => "Publish");
             $query = "SELECT * FROM ". $this->coy_table ." WHERE status = :status LIMIT 1";
             $coy = $this->fetch_row($data, $query);
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    //Company Record
+    public function get_latest_blog_posts()
+    {
+        try {
+            $data = array('status' => "Publish");
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status ORDER BY created DESC";
+            $coy = $this->fetch_spec($data, $query);
             return $coy;
 
         } catch (Exception $e) {

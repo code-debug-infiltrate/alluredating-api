@@ -45,10 +45,92 @@ class Admin extends Model
     protected $urpostact_table = "app_user_post_actions";  //User Post Actions
     protected $postreport_table = "app_post_reports"; //User Post Reports
     protected $subpayment_table = "app_subscription_payment"; //User Subscription Payment
+    //Blog Posts
+    protected $blog_table = "app_blogposts"; //Blog Posts Table
+    protected $blog_action_table = "app_blogposts_actions"; //Blog Posts Table
 
 
 
 
+    //Create & Update Subscription Plan Information
+    public function auto_update_transaction_status()
+    {
+        $today = date('Y-m-d');
+
+        try {
+            $query = "SELECT * FROM ". $this->subpayment_table ." ORDER BY created DESC";
+            $check = $this->fetch_all($query);
+
+            if ($check) {
+                    
+                foreach ($check as $key => $data) {
+
+                    if ($data['expiry'] <= $today) {
+                        $b1 = array('trancid' => $data['trancid'], 'status' => "Expired", );
+                    
+                        $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `trancid` = :trancid";
+                        $this->update($b1, $query); 
+
+                        return true;
+                    }
+                }
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+    
+
+    //User Self Records
+    public function user_myself_info()
+    {
+        try {
+            //$data = array('status' => $params['status'], );
+
+            $query = "SELECT * FROM ". $this->self_table ."";
+            $use = $this->fetch_all($query);
+
+            return $use;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+    //User Preferences Records
+    public function user_preferences()
+    {
+        try {
+            //$data = array('status' => $params['status'], );
+
+            $query = "SELECT * FROM ". $this->pref_table ."";
+            $api = $this->fetch_all($query);
+
+            return $api;
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+     
+
+
+
+    
 
     //Transaction Records
     public function all_payment_transactions($params)
@@ -637,10 +719,17 @@ class Admin extends Model
                 $coy = $this->fetch_spec($a, $query);
                 return $coy;
 
-            } else {
+            } elseif ($params['profile'] == "User" || ($params['profile'] == "Moderator") || ($params['profile'] == "Admin")) {
 
                 $query = "SELECT * FROM ". $this->u_table ." WHERE profile = :profile AND status != :status ORDER BY created DESC";
                 $coy = $this->fetch_spec($b, $query);
+                return $coy;
+
+            }  else {
+
+                $c = array('status' => $params['profile']);
+                $query = "SELECT * FROM ". $this->u_table ." WHERE status = :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($c, $query);
                 return $coy;
             }
 
@@ -793,13 +882,25 @@ class Admin extends Model
 
 
     //Transactions Record
-    public function get_transactions_info()
+    public function get_transactions_info($params)
     {
         try {
-            $data = array('status' => "Trash");
-            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status != :status ORDER BY created DESC";
-            $coy = $this->fetch_spec($data, $query);
-            return $coy;
+            
+            if ($params['status'] == "All") {
+
+                $data = array('status' => "Trash", );
+                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status != :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($data, $query);
+                return $coy;
+
+            } else {
+
+                $data = array('status' => $params['status'], );
+                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE status = :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($data, $query);
+                return $coy;
+
+            }
 
         } catch (Exception $e) {
 
@@ -813,7 +914,6 @@ class Admin extends Model
     {
         //Admin Model
         $admin_model = new Admin();
-        $today = date_create(date("Y-m-d"));
         $a = array('trancid' => $data['trancid'], );
         $b = array('trancid' => $data['trancid'], 'status' => $data['status'], );
 
@@ -827,11 +927,7 @@ class Admin extends Model
                     
                     if ($data['status'] != $check['status']) {
 
-                        $a1 = array('amount' => $data['amount'], );
-                        $query = "SELECT * FROM ". $this->subplan_table ." WHERE amount = :amount LIMIT 1";
-                        $plan = $this->fetch_row($a1, $query);
-
-                        $b1 = array('trancid' => $data['trancid'], 'status' => $data['status'], 'expiry' => date_add($today, date_interval_create_from_date_string($plan['expiry'])), );
+                        $b1 = array('trancid' => $data['trancid'], 'status' => $data['status'], 'expiry' => date('Y-m-d', strtotime("+ ".$check['expiry'])), );
                         
                         $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status, `expiry` = :expiry WHERE `trancid` = :trancid LIMIT 1";
                         $this->update($b1, $query); 
@@ -928,14 +1024,138 @@ class Admin extends Model
     }
 
 
+    //Create Blog Post Information
+    public function create_blog_post($data, $postid)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        
+        $c = array('title' => $data['title'], );
+
+        try {
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE title = :title LIMIT 1";
+            $check = $this->fetch_row($c, $query);
+
+            if ($check == NULL) {
+                
+                $b = array('uniqueid' => $data['uniqueid'], 'postid' => $postid, 'title' => $data['title'], 'subject' => $data['subject'], 'introduction' => $data['introduction'], 'category' => $data['category'], 'tags' => $data['tags'], 'url' => $data['url'].$postid, 'details' => $data['details'], 'conclusion' => $data['conclusion'], 'file' => $data['file'], 'file1' => $data['file1'], 'status' => $data['status'], );
+        
+                $query = "INSERT INTO ". $this->blog_table ."(uniqueid, postid, subject, title, introduction, category, tags, url, file, file1, details, conclusion, status) VALUES (:uniqueid, :postid, :subject, :title, :introduction, :category, :tags, :url, :file, :file1, :details, :conclusion, :status)";
+                $new = $this->insert($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Blog", 'details' => $data['username']." Created a New Blog Post:- ".$data['title'], ); 
+                $admin_model->record_activity($info);
+
+                return true;
+            } else {
+
+                return false;
+
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
+
+
+    //All Blog Posts Record
+    public function blog_posts($params)
+    {
+        try {
+            $a = array('status' => "Trash");
+            $b = array('status' => $params['status'], );
+            
+            if ($params['status'] == "All") {
+
+                $query = "SELECT * FROM ". $this->blog_table ." WHERE status != :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($a, $query);
+                return $coy;
+
+            } else {
+
+                $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status ORDER BY created DESC";
+                $coy = $this->fetch_spec($b, $query);
+                return $coy;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
 
 
 
+     //Blog Post Details
+     public function blog_post_details($params)
+     {
+        $data = array('postid' => $params['postid'], );
+         try {
+            
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE postid = :postid Limit 1";
+            $coy = $this->fetch_row($data, $query);
 
+            if ($coy != NULL) {
+                return $coy;
+            } else {
+                return false;
+            }
+                 
+         } catch (Exception $e) {
+ 
+             return "There is some errors: " . $e->getMessage();
+         }
+     }
+ 
+ 
 
+     //Update Blog Post Information
+    public function update_blog_post($data)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $c = array('postid' => $data['postid'], );
 
+        try {
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE postid = :postid LIMIT 1";
+            $check = $this->fetch_row($c, $query);
 
+            if ($check != NULL) {
+                
+                $b = array('postid' => $data['postid'], 'title' => $data['title'], 'subject' => $data['subject'], 'introduction' => $data['introduction'], 'category' => $data['category'], 'tags' => $data['tags'], 'updated' => date('Y-m-d'), 'details' => $data['details'], 'conclusion' => $data['conclusion'], 'file' => $data['file'], 'file1' => $data['file1'], 'status' => $data['status'], );
+        
+                $query = "UPDATE ". $this->blog_table ." SET `title` = :title, `subject` = :subject, `introduction` = :introduction, `category` = :category,  `tags` = :tags, `updated` = :updated, `file` = :file, `file1` = :file1, `details` = :details, `conclusion` = :conclusion, `status` = :status WHERE postid = :postid LIMIT 1";
+                $new = $this->update($b, $query); 
 
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Blog", 'details' => $data['username']." Updated Blog Post:- ".$data['title'], ); 
+                $admin_model->record_activity($info);
+
+                return $new;
+            } else {
+
+                return false;
+
+            }
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
 
 
 

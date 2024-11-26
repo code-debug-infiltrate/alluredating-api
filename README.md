@@ -37,18 +37,18 @@ Set Basic Info in the htaccess file
 [confirm-login] User Login to Dashboard (email, password)
 [confirm-subscriber] Subscribe To Newsletter (email, ip, user_agent)
 [contact-us] Send Contact Form (fname, lname, email, phone, subject, details, ip, user_agent)
-
+[get-latest-blog-posts] Get Latest Blog Posts Info ()
 
 ## User Dashboard
 [user-profile] User Profile (fname, lname, email, gender, dob, about)
 [user-profiles] All User Profiles ()
 [users-online-status] All Users ProfiOnline Status ()
 [user-myself] User Attributes (uniqueid)
+[user-preference] User Prefences (uniqueid)
 [user-album] User Photo & Video Album (uniqueid)
 [user-activity] User Profile (uniqueid)
 [new-user-activity] New User Activity (uniqueid)
 [user-interests] User Interests (uniqueid)
-[user-preference] User Prefences (uniqueid)
 [user-language] User Language (uniqueid)
 [user-workeducation] User Work & Education (uniqueid)
 [update-profile-photo] Update Profile Image (uniqueid, username, profileimage)
@@ -91,14 +91,17 @@ Set Basic Info in the htaccess file
 [user-subscription-plan] Get User Subscription Plan (uniqueid)
 [user-make-payment] User Make Payment (uniqueid, username, amount, type)
 [user-transactions-info] User Transactions Record (uniqueid)
+[user-transaction-status] User Transactions Record (uniqueid, status)
 [card-payment-info] Card Payment Information For Users    ()
 [get-exchange-info] Get Exchange Rate For User To Make Payment   (currency)
-
+[update-activity-status] User Notifications Status (uniqueid, status)
+[update-notification-status] User Notifications Status (uniqueid, status)
 
 
 
 
 ## Admin Dashboard
+[auto-update-transaction-status] Update Transaction Status Automatically
 [create-coy-info] Create Coy Credentails (uniqueid, username, coyname, slogan, email, email1, phone, phone1, channel, instagram, facebook, linkedin, twitter, address, status)
 [create-bank-info] Create Coy Credentails (uniqueid, username, bankswift, bankname, acctname, acctnum)
 [get-bank-info] Get Coy Credentails ()
@@ -116,12 +119,19 @@ Set Basic Info in the htaccess file
 [all-payment-Transactions] Get Payment Transactions Info   (status) 
 [update-transaction-status] Update Transaction Status (uniqueid, username, trancid, status)
 [get-users-info] Get Users Info ()
+[user-myself-info] User Attributes ()
+[user-preferences-info] User Prefences ()
 [update-user-status] Update User Status (uniqueid, username, uuniqueid, status)
 [update-message-status] Update Message Status (uniqueid, username, id, status)
 [get-newsletters-info] Get Newsletter Subscribers Info    ()
 [get-messages-info]   Get Messages Info rmation   (status)
 [card-payment-information] Get Card Payment Info For Single API (name)
 [update-personal-info] Update Peersonal Information (uniqueid, username, email, fname, lname, number, occupation, gender, dob, address, city, country, status, details)
+[create-blog-post] Create New Blog Post  (uniqueid, username, title, subject, introduction, tags, category, conclusion, details, url, file, file1, status)
+[update-blog-post] Update Blog Post  (postid, uniqueid, username, title, subject, introduction, tags, category, conclusion, details, url, file, file1, status)
+[blog-posts] All  Blog Posts  (status)
+[blog-post-details]  Blog Post Details  (postid)
+
 
 [count-new-users] Get The Total Count Of New Users    ()
 [count-all-users] Get The Total Count Of All Users    ()

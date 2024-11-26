@@ -29,11 +29,24 @@ class HomeController
     {
         //Register Model
         $model_connect = new Home();
-
-        $info = array('ip' => htmlspecialchars($params['ip']), 'user_agent' => htmlspecialchars($params['user_agent']), 'page' => htmlspecialchars($params['page']), 'date' => htmlspecialchars($params['date']), 'time' => htmlspecialchars($params['time']), );
-
+        $info = array_map("htmlspecialchars", $params);
         //Model Function Call
         $data = $model_connect->visitor_info($info);
+        
+        return $data; 
+    }
+
+
+
+
+    //Method to Get Published Posts
+    public function get_latest_blog_posts($params)
+    {
+        //Register Model
+        $model_connect = new Home();
+        $info = array_map("htmlspecialchars", $params);
+        //Model Function Call
+        $data = $model_connect->get_latest_blog_posts($info);
         
         return $data; 
     }

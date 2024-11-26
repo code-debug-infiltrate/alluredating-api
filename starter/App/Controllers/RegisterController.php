@@ -124,12 +124,7 @@ class RegisterController
     {
         //Register Model
         $model_connect = new Register();
-        //User Account Parameters
-        $fillable = array(
-            'email' => htmlspecialchars($params['email']),
-            'ip' => htmlspecialchars($params['ip']),
-            'user_agent' => htmlspecialchars($params['user_agent']),
-        );
+        $fillable = array_map("htmlspecialchars", $params);
 
         //Model Function Call
         $result = $model_connect->user_subscriber($fillable);
@@ -171,17 +166,7 @@ class RegisterController
     {
         //Register Model
         $model_connect = new Register();
-        //User Account Parameters
-        $fillable = array(
-            'fname' => htmlspecialchars($params['fname']),
-            'lname' => htmlspecialchars($params['lname']),
-            'email' => htmlspecialchars($params['email']),
-            'phone' => htmlspecialchars($params['phone']),
-            'subject' => htmlspecialchars($params['subject']),
-            'details' => htmlspecialchars($params['details']),
-            'ip' => htmlspecialchars($params['ip']),
-            'user_agent' => htmlspecialchars($params['user_agent']),
-        );
+        $fillable = array_map("htmlspecialchars", $params);
 
         //Model Function Call
         $result = $model_connect->contact_us($fillable);

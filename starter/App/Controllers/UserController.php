@@ -519,6 +519,81 @@ require_once __DIR__.'/../Models/Members.php';
 
 
 
+
+        //Method For Update Notification Status
+        public function update_notification_status($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $result = $model_connect->update_notification_status($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Notification Status Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
+        //Method For Update Activity Status
+        public function update_activity_status($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $result = $model_connect->update_activity_status($fillable);
+
+            if ($result == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successful, Activity Status Updated!",
+                        ),
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Retry With New Details",
+                        ),
+                    );
+            }
+
+            return $data; 
+        }
+
+
+
         //Method For Update Profile Photo
         public function update_profile_photo($params)
         {
@@ -789,6 +864,21 @@ require_once __DIR__.'/../Models/Members.php';
             $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $actInfo = $model_connect->buddy_activities($fillable);
+
+            return $actInfo;
+        }
+
+
+
+
+        //Method For Buddy Activity Records
+        public function user_transaction_status($params)
+        {
+            //User Model
+            $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $actInfo = $model_connect->update_transaction_status($fillable);
 
             return $actInfo;
         }

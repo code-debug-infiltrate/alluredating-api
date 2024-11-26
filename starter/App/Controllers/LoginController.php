@@ -15,12 +15,7 @@ require_once __DIR__.'/../Models/Login.php';
         {
             //Register Model
             $model_connect = new Login();
-
-             //User Account Parameters
-            $fillable = array(
-                'email' => htmlspecialchars($params['email']),
-                'password' => htmlspecialchars($params['password']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->confirm_login($fillable);
@@ -85,22 +80,12 @@ require_once __DIR__.'/../Models/Login.php';
 
 
 
-        
-
-
-
-
         //Method to Unlock user account (2FA Auth)
         public function unlock_account($params)
         {
             //Register Model
             $model_connect = new Login();
-
-             //User Account Parameters
-            $fillable = array(
-                'email' => htmlspecialchars($params['email']),
-                'code' => htmlspecialchars($params['key']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->unlock_account($fillable);
@@ -133,20 +118,12 @@ require_once __DIR__.'/../Models/Login.php';
 
 
 
-
-
-
-
-
         //Method to Check Email For Password Reset
         public function check_member($params)
         {
             //Register Model
             $model_connect = new Login();
-
-            //User Account Parameters
-            $fillable = array('email' => htmlspecialchars($params['email']),  );
-
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $checker = $model_connect->check_member($fillable);
 
@@ -179,20 +156,12 @@ require_once __DIR__.'/../Models/Login.php';
 
 
 
-
-
         //Method to Reset user account Password
         public function reset_password($params)
         {
             //Register Model
             $model_connect = new Login();
-
-             //User Account Parameters
-            $fillable = array(
-                'email' => htmlspecialchars($params['email']),
-                'password' => htmlspecialchars($params['password']),
-                'code' => htmlspecialchars($params['key']),
-            );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->reset_password($fillable);
@@ -233,9 +202,7 @@ require_once __DIR__.'/../Models/Login.php';
         {
             //Register Model
             $model_connect = new Login();
-
-             //User Account Parameters
-            $fillable = array('email' => htmlspecialchars($params['email']), );
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
             $result = $model_connect->get_user_passcode($fillable);
@@ -262,8 +229,7 @@ require_once __DIR__.'/../Models/Login.php';
         {
             //Register Model
             $model_connect = new Login();
-            //User Account Parameters
-            $fillable = array('uniqueid' => htmlspecialchars($params['uniqueid']), );
+            $fillable = array_map("htmlspecialchars", $params);
             //Model Function Call
             $result = $model_connect->end_session($fillable);
 

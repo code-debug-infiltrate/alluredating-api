@@ -315,6 +315,48 @@ PRIMARY KEY  (`id`)
 
 
 
+-- Table structure for Blog Posts `app_blogposts` 
+CREATE TABLE IF NOT EXISTS `app_blogposts` ( 
+`id` INT(11) AUTO_INCREMENT,
+`uniqueid` VARCHAR(50) NOT NULL,
+`postid` VARCHAR(20) NOT NULL,
+`title` VARCHAR(150) NOT NULL,
+`subject` VARCHAR(250) NOT NULL,
+`introduction` text NOT NULL,
+`category` VARCHAR(100) NOT NULL,
+`url` VARCHAR(150) NOT NULL,
+`file` VARCHAR(100) DEFAULT NULL,
+`file1` VARCHAR(100) DEFAULT NULL,
+`details` longtext NOT NULL,
+`conclusion` text NOT NULL,
+`tags` text NOT NULL,
+`status` ENUM('New', 'Publish', 'Draft', 'Trash') DEFAULT 'New',
+`updated` DATETIME DEFAULT NULL, 
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+
+-- Table structure for Blog Post Actions `app_blogposts_actions` 
+CREATE TABLE IF NOT EXISTS `app_blogposts_actions` ( 
+`id` INT(11) AUTO_INCREMENT,
+`postid` VARCHAR(20) NOT NULL,
+`likes` INT(11) DEFAULT '0',
+`dislikes` INT(11) DEFAULT '0',
+`views` INT(11) DEFAULT '0',
+`comments` INT(11) DEFAULT '0',
+`reports` INT(11) DEFAULT '0',
+`created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
+PRIMARY KEY  (`id`)
+) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;
+
+
+
+
+
 -- Table structure for msg report `msgreport` 
 CREATE TABLE IF NOT EXISTS `app_msgreport` ( 
 `id` INT(11) AUTO_INCREMENT,

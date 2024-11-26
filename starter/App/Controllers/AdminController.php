@@ -10,6 +10,64 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
+        //Method To Fetch All Exchange Rates
+        public function auto_update_transaction_status()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->auto_update_transaction_status();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'result_message' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
+        //Method To Fetch All Exchange Rates
+        public function user_myself_info()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $myInfo = $model_connect->user_myself_info();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'myself_info' => $myInfo,
+                );
+                
+            return $data; 
+        }
+
+
+
+
+        //Method To Fetch All Exchange Rates
+        public function user_preferences()
+        {
+            //User Model
+            $model_connect = new Admin();
+
+            //Model Function Call
+            $actInfo = $model_connect->user_preferences();
+
+            $data = array(
+                    'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
+                    'preference_info' => $actInfo,
+                );
+
+            return $data; 
+        }
+
+
+
 
         //Method to Create Company Information
         public function create_coy_information($params)
@@ -441,13 +499,14 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
         //Method To Fetch All Transactions
-        public function get_transactions_info()
+        public function get_transactions_info($params)
         {
             //User Model
             $model_connect = new Admin();
+            $fillable = array_map("htmlspecialchars", $params);
 
             //Model Function Call
-            $actInfo = $model_connect->get_transactions_info();
+            $actInfo = $model_connect->get_transactions_info($fillable);
 
             $data = array(
                     'result_info' => array('code' => "200", 'type' => "success", 'message' => "Successful", ),
@@ -803,7 +862,90 @@ require_once __DIR__.'/../Models/Admin.php';
                          array(
                              'code' => "200",
                              'type' => "success",
-                             'message' => "User Status Updated",
+                             'message' => "User Post Status Updated",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+        //Method to Create New Blog Post Info
+        public function create_blog_post($params)
+        {
+            //Admin Model
+            $model_connect = new Admin();
+
+            // Generate the UniqueID, Hash and Code
+            $length = 5;
+            $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            $code = preg_replace('/\s+/', '', substr(str_shuffle(trim($chars)), 0, $length));
+            $postid = preg_replace('/\s+/', '', trim('blog').trim($code));
+
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->create_blog_post($fillable, $postid);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Blog Post Created Successfully!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Aborted!",
+                        ),
+                    'result_message' => $postAct,
+                );
+             }
+             
+             return $data; 
+        }
+        
+        //Method to Get All Blog Posts
+        public function blog_posts($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $postAct = $model_connect->blog_posts($fillable);
+
+            if ($postAct != false) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Blog Posts Records",
                          ),
                      'result_message' => $postAct,
                      );
@@ -826,8 +968,92 @@ require_once __DIR__.'/../Models/Admin.php';
 
 
 
+        //Method to Get Blog Post Details
+        public function blog_post_details($params)
+        {
+             //Admin Model
+             $model_connect = new Admin();
+             $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $postAct = $model_connect->blog_post_details($fillable);
+
+            if ($postAct != false) {
+ 
+                $data = array(
+                    'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Blog Post Details",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+            } else {
+ 
+                $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "401",
+                             'type' => "error",
+                             'message' => "Aborted!",
+                         ),
+                     'result_message' => "",
+                    );
+            }
+             
+            return $data; 
+        }
+
+
+
+        //Method to Update Blog Post Info
+        public function update_blog_post($params)
+        {
+            //Admin Model
+            $model_connect = new Admin();
+
+             $fillable = array_map("htmlspecialchars", $params);
+            //Model Function Call
+            $postAct = $model_connect->update_blog_post($fillable);
+
+             if ($postAct == true) {
+ 
+                 $data = array(
+                     'result_info' => 
+                         array(
+                             'code' => "200",
+                             'type' => "success",
+                             'message' => "Blog Post Updated Successfully!",
+                         ),
+                     'result_message' => $postAct,
+                     );
+ 
+             } else {
+ 
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "Aborted!",
+                        ),
+                    'result_message' => $postAct,
+                );
+             }
+             
+             return $data; 
+        }
         
-        
+
+
+
+
+
+
+
+
 
 
 

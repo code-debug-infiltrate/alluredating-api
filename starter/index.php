@@ -176,7 +176,7 @@ $endpoints["forgot-password"] = function (array $requestData): void {
 //Reset Password
 $endpoints["reset-password"] = function (array $requestData): void {
 
-    if ((!isset($requestData["email"])) || (!isset($requestData["password"])) || (!isset($requestData["key"]))) {
+    if ((!isset($requestData["email"])) || (!isset($requestData["password"])) || (!isset($requestData["code"]))) {
         
         $info = array(
             'result_info' => 
@@ -231,7 +231,7 @@ $endpoints["confirm-login"] = function (array $requestData): void {
 //Unlock User Dashboard
 $endpoints["unlock-dashboard"] = function (array $requestData): void {
 
-    if ((!isset($requestData["email"])) || (!isset($requestData["key"]))) {
+    if ((!isset($requestData["email"])) || (!isset($requestData["code"]))) {
         
         $info = array(
             'result_info' => 
@@ -384,6 +384,42 @@ $endpoints["user-activity"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+//Auto Update Transaction Expiry
+$endpoints["auto-update-transaction-status"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->auto_update_transaction_status($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get All User Myself Info
+$endpoints["user-myself-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->user_myself_info($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Get ALl Users Preferences Info
+$endpoints["user-preferences-info"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new AdminController();
+    $info = $api_connect->user_preferences($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
 
 
 
@@ -1052,6 +1088,58 @@ $endpoints["get-latest-posts-files"] = function (array $requestData): void {
 
 
 
+//Update Notofication Status
+$endpoints["update-notification-status"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["id"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_notification_status($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+//Update Activity Status
+$endpoints["update-activity-status"] = function (array $requestData): void {
+
+    if ((!isset($requestData["uniqueid"])) || (!isset($requestData["id"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->update_activity_status($requestData);
+    }
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
 
 //Count Users Activity 
 $endpoints["count-user-activity"] = function (array $requestData): void {
@@ -1149,6 +1237,31 @@ $endpoints["buddy-activity"] = function (array $requestData): void {
     }
 };
 
+
+
+
+//Get ALl Buddy Activity 
+$endpoints["buddy-activity"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. One Or More Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->buddy_activities($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
 
 
 //View User Profile
@@ -1885,7 +1998,7 @@ $endpoints["get-api-connect"] = function (array $requestData): void {
 $endpoints["get-transactions-info"] = function (array $requestData): void {
     //Connect to Controller
     $api_connect = new AdminController();
-    $info = $api_connect->get_transactions_info();
+    $info = $api_connect->get_transactions_info($requestData);
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
@@ -1911,6 +2024,33 @@ $endpoints["update-transaction-status"] = function (array $requestData): void {
         //Connect to Controller
         $api_connect = new AdminController();
         $info = $api_connect->update_transaction_status($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Update Transaction Information
+$endpoints["user-transaction-status"] = function (array $requestData): void {
+    
+    if (!isset($requestData["uniqueid"]) || (!isset($requestData["id"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_transaction_status($requestData);
 
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
@@ -2122,6 +2262,130 @@ $endpoints["users-posts"] = function (array $requestData): void {
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
 };
+
+
+
+
+//New Blog Post 
+$endpoints["create-blog-post"] = function (array $requestData): void {
+
+    if ((!isset($requestData["title"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->create_blog_post($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+//Blog Post Details
+$endpoints["blog-post-details"] = function (array $requestData): void {
+    
+    if (!isset($requestData["postid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->blog_post_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+$endpoints["blog-posts"] = function (array $requestData): void {
+    
+    if (!isset($requestData["status"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->blog_posts($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+//Update Blog Post 
+$endpoints["update-blog-post"] = function (array $requestData): void {
+
+    if ((!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new AdminController();
+        $info = $api_connect->update_blog_post($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+//Get Latest Blog Posts For Users
+$endpoints["get-latest-blog-posts"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new HomeController();
+    $info = $api_connect->get_latest_blog_posts($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+
+
+
 
 
 

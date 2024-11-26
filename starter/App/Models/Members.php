@@ -311,6 +311,74 @@ class Members extends Model
 
 
 
+
+    //Method to Update Notification Status
+    public function update_notification_status($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $a = array('uniqueid' => $params['uniqueid'], 'id' => $params['id'], );
+        try {
+            $query = "SELECT * FROM " . $this->uact_table ." WHERE uniqueid = :uniqueid AND id = :id LIMIT 1";
+            $bio = $this->fetch_row($a, $query); 
+            // Checking all User credentials...
+            if ($bio) {
+
+                $newParams = array('id' => $params['id'], 'status' => $params['status'], );
+                
+                $query0 = "UPDATE ". $this->uact_table ." SET status = :status WHERE id = :id LIMIT 1";
+                $this->update($newParams, $query0); 
+
+                return true;
+
+            } else {
+
+                return false;
+        }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+    //Method to Update Notification Status
+    public function update_activity_status($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $a = array('uniqueid' => $params['uniqueid'], 'id' => $params['id'], );
+        try {
+            $query = "SELECT * FROM " . $this->act_table ." WHERE uniqueid = :uniqueid AND id = :id LIMIT 1";
+            $bio = $this->fetch_row($a, $query); 
+            // Checking all User credentials...
+            if ($bio) {
+
+                $newParams = array('id' => $params['id'], 'status' => $params['status'], );
+                
+                $query0 = "UPDATE ". $this->act_table ." SET status = :status WHERE id = :id LIMIT 1";
+                $this->update($newParams, $query0); 
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+    
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+    
+
+
+
     //Method to Update Profile Photo
     public function update_profile_photo($params)
     {
@@ -405,7 +473,7 @@ class Members extends Model
 
         try {
             //Fetch User Credentials For Use!
-            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC LIMIT 20";
+            $query1 = "SELECT * FROM ". $this->act_table ." WHERE uniqueid = :uniqueid AND status != 'Trash' ORDER BY created DESC LIMIT 20";
             $activityInfo = $this->fetch_spec($newParams, $query1); 
 
             return $activityInfo;
@@ -2105,6 +2173,52 @@ public function get_exchange_info($params)
 
 
 
+//Create & Update Subscription Plan Information
+public function update_transaction_status($data = array())
+{
+    //Admin Model
+    $admin_model = new Admin();
+    $a = array('id' => $data['id'], );
+    $b = array('id' => $data['id'], 'status' => $data['status'], );
+
+    try {
+        $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
+        $check = $this->fetch_row($a, $query);
+
+        if ($check) {
+
+            if ($data['status'] != $check['status']) {
+
+                $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
+                $this->update($b, $query); 
+
+                //Record Activity
+                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$check['trancid'], ); 
+                $admin_model->record_activity($info);
+
+                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
+                $fin = $this->fetch_row($a, $query);
+
+                return $fin;
+
+            } else {
+
+                return false;
+            }
+        }
+
+    } catch (Exception $e) {
+
+        $data = array(
+            "type" => "error",
+            "message" => $e->getMessage()
+        ); 
+
+        return $data;  
+    }
+}
+
+
 
 
 
@@ -2314,7 +2428,7 @@ public function get_exchange_info($params)
         $newParams = array('uniqueid' => $params['uniqueid'], );
         
         try {
-            $query = "SELECT * FROM " . $this->uact_table ." WHERE uniqueid = :uniqueid ORDER BY created DESC";
+            $query = "SELECT * FROM " . $this->uact_table ." WHERE uniqueid = :uniqueid AND status != 'Trash' ORDER BY created DESC";
             $actview = $this->fetch_spec($newParams, $query);
 
             if ($actview) {
