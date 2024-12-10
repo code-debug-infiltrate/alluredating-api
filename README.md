@@ -37,7 +37,13 @@ Set Basic Info in the htaccess file
 [confirm-login] User Login to Dashboard (email, password)
 [confirm-subscriber] Subscribe To Newsletter (email, ip, user_agent)
 [contact-us] Send Contact Form (fname, lname, email, phone, subject, details, ip, user_agent)
-[get-latest-blog-posts] Get Latest Blog Posts Info ()
+[get-latest-blog-posts] Get Latest Blog Posts Info   ()
+[get-random-blog-posts] Get Random Blog Posts Info   ()
+[get-blog-posts-actions] Get Blog Posts Actions    ()
+[get-blog-post-details] Get Blog Post Details (postid)
+[blog-post-views] Blog Post Views      ()
+[blog-post-action] Blog Post Action    ()
+[search-blog-post] Search Blog Posts (title)
 
 ## User Dashboard
 [user-profile] User Profile (fname, lname, email, gender, dob, about)

@@ -126,8 +126,6 @@ class Admin extends Model
             return "There is some errors: " . $e->getMessage();
         }
     }
-     
-
 
 
     
@@ -155,12 +153,23 @@ class Admin extends Model
     public function users_posts($params)
     {
         try {
-            $data = array('status' => $params['status'], );
+            if ($params['status'] == "All") {
 
-            $query = "SELECT * FROM ". $this->post_table ." WHERE status = :status ORDER BY created DESC";
-            $api = $this->fetch_spec($data, $query);
+                $data = array('status' => "Trash", );
+                $query = "SELECT * FROM ". $this->post_table ." WHERE status != :status ORDER BY created DESC";
+                $api = $this->fetch_spec($data, $query);
 
-            return $api;
+                return $api;
+
+            } else {
+
+                $data = array('status' => $params['status'], );
+                $query = "SELECT * FROM ". $this->post_table ." WHERE status = :status ORDER BY created DESC";
+                $api = $this->fetch_spec($data, $query);
+
+                return $api;
+
+            }
 
         } catch (Exception $e) {
 
@@ -188,6 +197,8 @@ class Admin extends Model
         }
     }
      
+
+
 
     //Visitors Records
     public function recent_visitors()
@@ -624,6 +635,7 @@ class Admin extends Model
     }
 
 
+
     //Subscription Plan Record
     public function get_subscription_plan()
     {
@@ -687,6 +699,7 @@ class Admin extends Model
             return $data;  
         }
     }
+
 
 
     //Subscription Plan Record
@@ -979,7 +992,6 @@ class Admin extends Model
     }
 
 
-
     
     //Newsletters Subscribers Record
     public function get_newsletters_info()
@@ -995,6 +1007,7 @@ class Admin extends Model
             return "There is some errors: " . $e->getMessage();
         }
     }
+
 
 
     //All Messages Record
@@ -1024,21 +1037,22 @@ class Admin extends Model
     }
 
 
+
     //Create Blog Post Information
     public function create_blog_post($data, $postid)
     {
         //Admin Model
         $admin_model = new Admin();
         
-        $c = array('title' => $data['title'], );
+        $c = array('title' => $data['title'], 'postid' => $postid, );
 
         try {
-            $query = "SELECT * FROM ". $this->blog_table ." WHERE title = :title LIMIT 1";
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE postid = :postid OR title = :title LIMIT 1";
             $check = $this->fetch_row($c, $query);
 
             if ($check == NULL) {
                 
-                $b = array('uniqueid' => $data['uniqueid'], 'postid' => $postid, 'title' => $data['title'], 'subject' => $data['subject'], 'introduction' => $data['introduction'], 'category' => $data['category'], 'tags' => $data['tags'], 'url' => $data['url'].$postid, 'details' => $data['details'], 'conclusion' => $data['conclusion'], 'file' => $data['file'], 'file1' => $data['file1'], 'status' => $data['status'], );
+                $b = array('uniqueid' => $data['uniqueid'], 'postid' => $postid, 'title' => $data['title'], 'subject' => $data['subject'], 'introduction' => $data['introduction'], 'category' => $data['category'], 'tags' => $data['tags'], 'url' => trim('https://').trim($data['url']).$postid."/".str_replace(" ", "-", trim($data['category']))."/".str_replace(" ", "-", trim($data['title']))."/", 'details' => $data['details'], 'conclusion' => $data['conclusion'], 'file' => $data['file'], 'file1' => $data['file1'], 'status' => $data['status'], );
         
                 $query = "INSERT INTO ". $this->blog_table ."(uniqueid, postid, subject, title, introduction, category, tags, url, file, file1, details, conclusion, status) VALUES (:uniqueid, :postid, :subject, :title, :introduction, :category, :tags, :url, :file, :file1, :details, :conclusion, :status)";
                 $new = $this->insert($b, $query); 
@@ -1064,6 +1078,7 @@ class Admin extends Model
             return $data;  
         }
     }
+
 
 
     //All Blog Posts Record
@@ -1158,6 +1173,30 @@ class Admin extends Model
     }
 
 
+
+
+    //Create Blog Post Information
+    public function search_blog_post($data)
+    {
+        
+        $d = array('title' => "%".$data['title']."%", );
+        try {
+                $query = "SELECT * FROM ". $this->blog_table ." WHERE title LIKE :title AND status = 'Publish' OR status = 'New' ORDER BY RAND()";
+
+                $receiver = $this->fetch_spec($d, $query);
+
+                return $receiver;
+
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
 
 
 
@@ -1552,7 +1591,7 @@ class Admin extends Model
     {
         $d = array('status' => "New", );
         try {
-            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status = :status";
+            $query="SELECT count(*) FROM ". $this->blog_table ." WHERE status = :status";
 
             $count = $this->counter_spec($d, $query);
 
@@ -1575,7 +1614,7 @@ class Admin extends Model
     {
         $d = array('status' => "Trash", );
         try {
-            $query="SELECT count(*) FROM ". $this->post_table ." WHERE status != :status";
+            $query="SELECT count(*) FROM ". $this->blog_table ." WHERE status != :status";
 
             $count = $this->counter_spec($d, $query);
 

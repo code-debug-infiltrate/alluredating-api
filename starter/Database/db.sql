@@ -348,7 +348,7 @@ CREATE TABLE IF NOT EXISTS `app_blogposts_actions` (
 `dislikes` INT(11) DEFAULT '0',
 `views` INT(11) DEFAULT '0',
 `comments` INT(11) DEFAULT '0',
-`reports` INT(11) DEFAULT '0',
+`smile` INT(11) DEFAULT '0',
 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,    
 PRIMARY KEY  (`id`)
 ) ENGINE = InnoDB   DEFAULT CHARSET=latin1 ;

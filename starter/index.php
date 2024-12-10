@@ -2369,8 +2369,6 @@ $endpoints["update-blog-post"] = function (array $requestData): void {
 
 
 
-
-
 //Get Latest Blog Posts For Users
 $endpoints["get-latest-blog-posts"] = function (array $requestData): void {
     //Connect to Controller
@@ -2379,6 +2377,163 @@ $endpoints["get-latest-blog-posts"] = function (array $requestData): void {
 
     echo json_encode($info, JSON_FORCE_OBJECT);
 };
+
+
+
+//Get Random Blog Posts For Users
+$endpoints["get-random-blog-posts"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new HomeController();
+    $info = $api_connect->get_random_blog_posts($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Get Latest Blog Posts For Users
+$endpoints["get-blog-posts-actions"] = function (array $requestData): void {
+    //Connect to Controller
+    $api_connect = new HomeController();
+    $info = $api_connect->get_blog_posts_actions($requestData);
+
+    echo json_encode($info, JSON_FORCE_OBJECT);
+};
+
+
+
+
+//Fetch Blog Post Details
+$endpoints["get-blog-post-details"] = function (array $requestData): void {
+
+    if ((!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->get_blog_post_details($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+
+//Record Blog Post Views
+$endpoints["blog-post-views"] = function (array $requestData): void {
+
+    if ((!isset($requestData["postid"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->blog_post_views($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+//Record Blog Post Views
+$endpoints["blog-post-action"] = function (array $requestData): void {
+
+    if ((!isset($requestData["postid"])) || (!isset($requestData["status"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->blog_post_action($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+
+
+//Record Blog Post Views
+$endpoints["search-blog-post"] = function (array $requestData): void {
+
+    if ((!isset($requestData["title"]))) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new HomeController();
+        $info = $api_connect->search_blog_post($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

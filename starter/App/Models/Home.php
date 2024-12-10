@@ -46,12 +46,12 @@ class Home extends Model
 
 
 
-    //Company Record
+    //Blog Posts Records
     public function get_latest_blog_posts()
     {
         try {
             $data = array('status' => "Publish");
-            $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status ORDER BY created DESC";
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status ORDER BY created DESC LIMIT 60";
             $coy = $this->fetch_spec($data, $query);
             return $coy;
 
@@ -61,6 +61,179 @@ class Home extends Model
         }
     }
 
+
+
+    //Blog Posts Records
+    public function get_random_blog_posts($params)
+    {
+        try {
+            
+            if ($params['category'] == "all") {
+
+                $data = array('status' => "Publish", );
+                $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status ORDER BY RAND() DESC LIMIT 120";
+                $coy = $this->fetch_spec($data, $query);
+                return $coy;
+
+            } else {
+
+                $data = array('category' => $params['category'], 'status' => "Publish", );
+                $query = "SELECT * FROM ". $this->blog_table ." WHERE status = :status AND category = :category ORDER BY RAND() DESC LIMIT 120";
+                $coy = $this->fetch_spec($data, $query);
+                return $coy;
+
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+    //Blog Posts Records
+    public function get_blog_posts_actions()
+    {
+        try {
+            //$data = array('status' => "Publish");
+            $query = "SELECT * FROM ". $this->blog_action_table ." ORDER BY created DESC";
+            $coy = $this->fetch_all($query);
+
+            return $coy;
+
+        } catch (Exception $e) {
+
+        	return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+    //Get Blog Post Record Details
+    public function get_blog_post_details($params)
+    {
+        try {
+            $c = array('postid' => $params['postid'], );
+            $query = "SELECT * FROM ". $this->blog_table ." WHERE postid = :postid LIMIT 1";
+            $coy = $this->fetch_row($c, $query);
+
+        if ($coy) { return $coy; } else { return false; }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+ 
+
+
+
+
+    //Get Blog Post Record Details
+    public function blog_post_views($params)
+    {
+        try {
+            $c = array('postid' => $params['postid'], );
+            $query = "SELECT * FROM ". $this->blog_action_table ." WHERE postid = :postid LIMIT 1";
+            $check = $this->fetch_row($c, $query);
+
+            if ($check) {
+            
+                $e = array('postid' => $params['postid'], 'views' => $check['views'] + 1, );
+
+                $query = "UPDATE ". $this->blog_action_table ." SET `views` = :views WHERE postid = :postid LIMIT 1";
+
+                $this->update($e, $query);
+
+                return true;
+
+            } else {
+
+                $fill = array('postid' => $params['postid'], 'views' => "1",  ); 
+
+                $query1 = "INSERT INTO ". $this->blog_action_table ." (postid, views ) VALUES (:postid, :views )";
+
+                $this->insert($fill, $query1);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+ 
+
+
+
+
+        
+    //Get Blog Post Record Details
+    public function blog_post_action($params)
+    {
+        try {
+            $c = array('postid' => $params['postid'], );
+            $query = "SELECT * FROM ". $this->blog_action_table ." WHERE postid = :postid LIMIT 1";
+            $check = $this->fetch_row($c, $query);
+
+            if ($check) {
+            
+                if ($params['status'] == "likes") {
+                    $e = array('postid' => $params['postid'], 'likes' => $check['likes'] + 1, );
+                    $query = "UPDATE ". $this->blog_action_table ." SET `likes` = :likes WHERE postid = :postid LIMIT 1";
+                } elseif ($params['status'] == "dislikes") {
+                    $e = array('postid' => $params['postid'], 'dislikes' => $check['dislikes'] + 1, ); 
+                    $query = "UPDATE ". $this->blog_action_table ." SET `dislikes` = :dislikes WHERE postid = :postid LIMIT 1";
+                } elseif ($params['status'] == "smile") {
+                    $e = array('postid' => $params['postid'], 'smile' => $check['smile'] + 1, ); 
+                    $query = "UPDATE ". $this->blog_action_table ." SET `smile` = :smile WHERE postid = :postid LIMIT 1";
+                }
+                $this->update($e, $query);
+
+                return true;
+
+            } else {
+                
+                if ($params['status'] == "likes") {
+                    $fill = array('postid' => $params['postid'], 'likes' => "1",  );
+                    $query1 = "INSERT INTO ". $this->blog_action_table ." (postid, likes ) VALUES (:postid, :likes )";
+                } elseif ($params['status'] == "dislikes") {
+                    $fill = array('postid' => $params['postid'], 'dislikes' => "1",  );
+                    $query1 = "INSERT INTO ". $this->blog_action_table ." (postid, dislikes ) VALUES (:postid, :dislikes )";
+                } elseif ($params['status'] == "smile") {
+                    $fill = array('postid' => $params['postid'], 'smile' => "1",  );
+                    $query1 = "INSERT INTO ". $this->blog_action_table ." (postid, smile ) VALUES (:postid, :smile )";
+                }  
+                $this->insert($fill, $query1);
+
+                return true;
+            }
+
+        } catch (Exception $e) {
+
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+    
 
 
 
