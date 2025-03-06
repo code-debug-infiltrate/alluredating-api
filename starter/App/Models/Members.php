@@ -53,7 +53,7 @@ class Members extends Model
     public function user_profiles()
     {
         try {
-            $query = "SELECT uniqueid, fname, lname, dob, gender, address, city, country, number, occupation, profileimage, coverimage, details FROM ". $this->p_table ." ORDER BY created DESC";
+            $query = "SELECT * FROM ". $this->p_table ." ORDER BY created DESC";
             $check = $this->fetch_all($query);
 
             return $check;
@@ -845,9 +845,9 @@ class Members extends Model
             
             if ($myselfInfo) {
 
-                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'seeking' => $myselfInfo['seeking'], 'wantkids' => $myselfInfo['wantkids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
+                $prefMatch = array('uniqueid' => $param['uniqueid'],  );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND seeking = :seeking AND wantkids = :wantkids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND seeking = :seeking AND uniqueid != :uniqueid OR orientation = :orientation AND seeking = 'Any' AND wantkids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 30";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE uniqueid != :uniqueid ORDER BY RAND() DESC LIMIT 60";
                 $matchInfo = $this->fetch_spec($prefMatch, $query0); 
 
                 return $matchInfo;
@@ -1766,6 +1766,33 @@ class Members extends Model
 
 
 
+    //Method to Create Or Update Post Comment
+    public function send_buddy_poke($params)
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $new = array('uniqueid' => $params['buddyid'], 'user_uniqueid' => $params['uniqueid'], 'details' => $params['details'], );
+        
+        $query = "SELECT * FROM ". $this->uact_table ." WHERE uniqueid = :uniqueid AND user_uniqueid = :user_uniqueid AND details = :details";
+        $check = $this->fetch_spec($new, $query);
+        try {
+            if (count($check) < 3) { 
+                $query0 = "INSERT INTO ". $this->uact_table ." (uniqueid, user_uniqueid, details) VALUES (:uniqueid, :user_uniqueid, :details)";
+                $this->insert($new, $query0); 
+
+                return true;
+
+            } else {
+
+                return false;
+            }
+ 
+        } catch (Exception $e) {
+ 
+            return "There is some errors: " . $e->getMessage();
+        }
+    }
+
 
 
 
@@ -1981,10 +2008,10 @@ class Members extends Model
             $a = array('id' => "1", );
             $b = array('planid' => $params['planid'], );
             
-            $query = "SELECT * FROM ". $this->subplan_table ." WHERE planid = :planid ";
+            $query = "SELECT * FROM ". $this->subplan_table ." WHERE planid = :planid LIMIT 1";
             $plan = $this->fetch_row($b, $query);
 
-            $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id";
+            $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id LIMIT 1";
             $cur = $this->fetch_row($a, $query);
 
             $c = array('uniqueid' => $params['uniqueid'], 'type' => $plan['type'],  'status' => "Processing", );
@@ -1994,7 +2021,7 @@ class Members extends Model
 
             if ($userTranc == NULL) {
 
-                $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$params['type'], );
+                $d = array('trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$plan['type'], );
 
                 $query = "INSERT INTO ". $this->subpayment_table ." (trancid, uniqueid, type, currency, expiry, amount, details) VALUES (:trancid, :uniqueid, :type, :currency, :expiry, :amount, :details)";
                 $chatMsgs = $this->insert($d, $query);
@@ -2010,7 +2037,7 @@ class Members extends Model
 
             } else {
 
-                $pos = array('id' => $userTranc['id'], 'trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$params['type'], );
+                $pos = array('id' => $userTranc['id'], 'trancid' => $params['trancid'].$today, 'uniqueid' => $params['uniqueid'], 'type' => $plan['type'], 'currency' => $cur['currency'], 'amount' => $plan['amount'], 'expiry' => $plan['expiry'], 'details' => "Payment Of ".$cur['currency'].$plan['amount']." Was Initialized By ".$params['username']." For ".$plan['type'], );
 
                 $query = "UPDATE ". $this->subpayment_table ." SET trancid = :trancid, amount = :amount, currency = :currency, expiry = :expiry, type = :type, details = :details WHERE uniqueid = :uniqueid AND id = :id";
                 $chatMsgs = $this->update($pos, $query);

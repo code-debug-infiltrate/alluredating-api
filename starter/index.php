@@ -1886,6 +1886,32 @@ $endpoints["get-exchange-info"] = function (array $requestData): void {
 
 
 
+//Send User a Poke
+$endpoints["send-buddy-poke"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"]) || !isset($requestData["buddyid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->send_buddy_poke($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+
 //Create Subscription Priviledge Information
 $endpoints["create-subscription-info"] = function (array $requestData): void {
 

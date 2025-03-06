@@ -1766,7 +1766,7 @@ require_once __DIR__.'/../Models/Members.php';
                             'type' => "error",
                             'message' => "No Chat Record Found. Start a Conversation",
                         ),
-                    'user_chat_info' => "",
+                    'user_chat_info' => $chatInfo,
                 );
             }
             
@@ -1807,6 +1807,48 @@ require_once __DIR__.'/../Models/Members.php';
                             'message' => "No Chat Record Found. Start a Conversation",
                         ),
                     'user_chat_info' => "",
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+        //Method to Get User Chats 
+        public function send_buddy_poke($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $chatInfo = $model_connect->send_buddy_poke($fillable);
+
+            if ($chatInfo == true) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "Successfully Poked Buddy!",
+                        ),
+                    'poke_info' => $chatInfo,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "You Poked Earlier. Start a Conversation Instead",
+                        ),
+                    'poke_info' => $chatInfo,
                     );
             }
             
