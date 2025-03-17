@@ -806,12 +806,12 @@ class Members extends Model
             
             if ($myselfInfo) {
 
-                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'color' => $myselfInfo['color'], 'employment' => $myselfInfo['employment'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], 'wantkids' => $myselfInfo['wantkids'], 'havekids' => $myselfInfo['havekids'], 'maritalstatus' => $myselfInfo['maritalstatus'], );
+                $prefMatch = array('uniqueid' => $param['uniqueid'], 'orientation' => $myselfInfo['orientation'], 'ethnicity' => $myselfInfo['ethnicity'], 'religion' => $myselfInfo['religion'], 'seeking' => $myselfInfo['seeking'], 'smoking' => $myselfInfo['smoking'], 'drinking' => $myselfInfo['drinking'], );
 
-                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND havekids = :havekids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid ORDER BY created DESC";
+                $query0 = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND uniqueid != :uniqueid ORDER BY created DESC";
                 $veryClose = $this->fetch_spec($prefMatch, $query0); 
 
-                $query = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND color = :color AND employment = :employment AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND wantkids = :wantkids AND havekids = :havekids AND maritalstatus = :maritalstatus AND uniqueid != :uniqueid OR orientation = 'Any' AND uniqueid != :uniqueid OR ethnicity = 'Any' AND uniqueid != :uniqueid OR religion = 'Any' AND uniqueid != :uniqueid OR color = 'Any' AND uniqueid != :uniqueid OR employment = 'Any' AND uniqueid != :uniqueid OR seeking = 'Any' AND uniqueid != :uniqueid OR smoking = 'Any' AND uniqueid != :uniqueid OR drinking = 'Any' AND uniqueid != :uniqueid AND wantkids = 'Any' AND havekids = 'Any' AND maritalstatus = 'Any' AND uniqueid != :uniqueid ORDER BY created DESC";
+                $query = "SELECT * FROM ". $this->self_table ." WHERE orientation = :orientation AND ethnicity = :ethnicity AND religion = :religion AND seeking = :seeking AND smoking = :smoking AND drinking = :drinking AND uniqueid != :uniqueid OR orientation = 'Any' AND uniqueid != :uniqueid OR ethnicity = 'Any' AND uniqueid != :uniqueid OR religion = 'Any' AND uniqueid != :uniqueid OR seeking = 'Any' AND uniqueid != :uniqueid OR smoking = 'Any' AND uniqueid != :uniqueid OR drinking = 'Any' AND uniqueid != :uniqueid ORDER BY created DESC";
                 $slightlyClose = $this->fetch_spec($prefMatch, $query);
 
                 $matchInfo = array('veryClose' => $veryClose, 'slightlyClose' => $slightlyClose, );
@@ -1932,6 +1932,32 @@ class Members extends Model
    }
 
 
+
+   //User CHat Connections
+   public function user_chat_connect($params)
+   {
+       
+       try {
+
+            $c = array('uniqueid' => $params['uniqueid'], 'buddyid' => $params['uniqueid'], );
+            
+            $query = "SELECT * FROM ". $this->buddychats_table ." WHERE uniqueid = :uniqueid OR buddyid = :buddyid ORDER BY created DESC";
+            $chatUser = $this->fetch_spec($c, $query);
+
+            if ($chatUser) { return $chatUser; } else { return false; }
+
+       } catch (Exception $e) {
+
+           $data = array(
+               "type" => "error",
+               "message" => $e->getMessage()
+           ); 
+           return $data;  
+       }
+  }
+
+
+
     //User CHat Messages
     public function user_chat_messages($params)
     {
@@ -1948,7 +1974,7 @@ class Members extends Model
 
                     $d = array('sender' => $params['uniqueid'], 'receiver' => $params['buddyid'], 'chatid' => $chatUser['chatid'], 'status' => "Trash");
 
-                    $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status ORDER BY id DESC";
+                    $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver AND sender = :sender AND status != :status OR sender = :receiver AND receiver = :sender AND status != :status";
 
                     $chatMsgs = $this->fetch_spec($d, $query);
                     
@@ -1979,7 +2005,7 @@ class Members extends Model
 
                 $c = array('receiver' => $params['uniqueid'],  );
 
-                $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver  ORDER BY CREATED DESC";
+                $query = "SELECT * FROM ". $this->buddychatreply_table ." WHERE receiver = :receiver";
                 $chatUser = $this->fetch_spec($c, $query);
                 
                 return $chatUser;
@@ -2014,9 +2040,9 @@ class Members extends Model
             $query = "SELECT * FROM ". $this->cur_table ." WHERE id = :id LIMIT 1";
             $cur = $this->fetch_row($a, $query);
 
-            $c = array('uniqueid' => $params['uniqueid'], 'type' => $plan['type'],  'status' => "Processing", );
+            $c = array('uniqueid' => $params['uniqueid'], 'status' => "Paid", );
             
-            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND type = :type AND status = :status LIMIT 1";
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE uniqueid = :uniqueid AND status != :status LIMIT 1";
             $userTranc = $this->fetch_row($c, $query);
 
             if ($userTranc == NULL) {
@@ -2143,10 +2169,6 @@ class Members extends Model
     }
 
 
-
-
-
-
       
     
     //Post Views Count
@@ -2172,92 +2194,77 @@ class Members extends Model
     }
 
 
-//Get Exchange Rate Info When Paying With Card
-public function get_exchange_info($params)
-{
-   $d = array('currency' => $params['currency'], 'status' => "Publish", );
-
-    try {
-        $query="SELECT * FROM ". $this->exchange_table ." WHERE currency = :currency AND status = :status LIMIT 1";
-
-        $postDetail = $this->fetch_row($d, $query);
-
-        return $postDetail;
-
-    } catch (Exception $e) {
-
-        $data = array(
-            "type" => "error",
-            "message" => $e->getMessage()
-        ); 
-        return $data;  
-    }
-}
 
 
+    //Get Exchange Rate Info When Paying With Card
+    public function get_exchange_info($params)
+    {
+    $d = array('currency' => $params['currency'], 'status' => "Publish", );
 
+        try {
+            $query="SELECT * FROM ". $this->exchange_table ." WHERE currency = :currency AND status = :status LIMIT 1";
 
+            $postDetail = $this->fetch_row($d, $query);
 
+            return $postDetail;
 
+        } catch (Exception $e) {
 
-//Create & Update Subscription Plan Information
-public function update_transaction_status($data = array())
-{
-    //Admin Model
-    $admin_model = new Admin();
-    $a = array('id' => $data['id'], );
-    $b = array('id' => $data['id'], 'status' => $data['status'], );
-
-    try {
-        $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
-        $check = $this->fetch_row($a, $query);
-
-        if ($check) {
-
-            if ($data['status'] != $check['status']) {
-
-                $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
-                $this->update($b, $query); 
-
-                //Record Activity
-                $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$check['trancid'], ); 
-                $admin_model->record_activity($info);
-
-                $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
-                $fin = $this->fetch_row($a, $query);
-
-                return $fin;
-
-            } else {
-
-                return false;
-            }
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+            return $data;  
         }
-
-    } catch (Exception $e) {
-
-        $data = array(
-            "type" => "error",
-            "message" => $e->getMessage()
-        ); 
-
-        return $data;  
     }
-}
 
 
 
 
+    //Create & Update Subscription Plan Information
+    public function update_transaction_status($data = array())
+    {
+        //Admin Model
+        $admin_model = new Admin();
+        $a = array('id' => $data['id'], );
+        $b = array('id' => $data['id'], 'status' => $data['status'], );
 
+        try {
+            $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
+            $check = $this->fetch_row($a, $query);
 
+            if ($check) {
 
+                if ($data['status'] != $check['status']) {
 
+                    $query = "UPDATE ". $this->subpayment_table ." SET `status` = :status WHERE `id` = :id LIMIT 1";
+                    $this->update($b, $query); 
 
+                    //Record Activity
+                    $info = array('uniqueid' => $data['uniqueid'], 'username' => $data['username'], 'category' => "Settings", 'details' => $data['username']." Updated Transaction Status For ".$check['trancid'], ); 
+                    $admin_model->record_activity($info);
 
+                    $query = "SELECT * FROM ". $this->subpayment_table ." WHERE id = :id LIMIT 1";
+                    $fin = $this->fetch_row($a, $query);
 
+                    return $fin;
 
+                } else {
 
+                    return false;
+                }
+            }
 
+        } catch (Exception $e) {
+
+            $data = array(
+                "type" => "error",
+                "message" => $e->getMessage()
+            ); 
+
+            return $data;  
+        }
+    }
 
 
 
@@ -2265,17 +2272,18 @@ public function update_transaction_status($data = array())
     //Fetch Subscription Plan Record
     public function user_subscription_plan($params)
     {
+        $a = array('uniqueid' => $params['uniqueid'], 'status' => "Paid");
         try {
-            $query = "SELECT * FROM " . $this->subpayment_table ." WHERE uniqueid = :uniqueid LIMIT 1";
-            $actview = $this->fetch_row($params, $query); 
+            $query = "SELECT * FROM " . $this->subpayment_table ." WHERE uniqueid = :uniqueid AND status = :status LIMIT 1";
+            $actview = $this->fetch_row($a, $query); 
             
-            if($actview){
+            if($actview != NULL){
                 
                 return $actview;
 
             } else {
 
-            return false;
+                return false;
             }
 
         } catch (Exception $e) {

@@ -90,6 +90,8 @@ Set Basic Info in the htaccess file
 [new-message-count] New Message Count (uniqueid)
 [new-message-details] New Message Count (uniqueid)
 [new-chat-count] New Message Count (uniqueid)
+[user-chat-connect] Get Chat Details For User (uniqueid)
+[user-chat-messages] Get Chat messages For User (uniqueid, buddyinfo)
 [new-chat-details] New Message Count (uniqueid)
 [all-user-messages] Get all User Emails/Comments (uniqueid)
 [all-comment-chats] Get all Post Comments Chats (uniqueid, buddyid, postid, commentid, )

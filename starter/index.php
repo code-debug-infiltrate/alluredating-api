@@ -1075,7 +1075,6 @@ $endpoints["new-chat-details"] = function (array $requestData): void {
 
 
 
-
 //Get All User Profiles
 $endpoints["get-latest-posts-files"] = function (array $requestData): void {
     //Connect to Controller
@@ -1404,6 +1403,31 @@ $endpoints["user-buddies-list"] = function (array $requestData): void {
         //Connect to Controller
         $api_connect = new UserController();
         $info = $api_connect->user_buddies_list($requestData);
+
+        echo json_encode($info, JSON_FORCE_OBJECT);
+    }
+};
+
+
+
+//User Chat Connect
+$endpoints["user-chat-connect"] = function (array $requestData): void {
+
+    if (!isset($requestData["uniqueid"])) {
+        
+        $info = array(
+            'result_info' => 
+                array(
+                    'code' => "401",
+                    'type' => "error",
+                    'message' => "Declined. Required Fields Cannot Be Empty",
+                ),
+            );
+
+    } else {
+        //Connect to Controller
+        $api_connect = new UserController();
+        $info = $api_connect->user_chat_connect($requestData);
 
         echo json_encode($info, JSON_FORCE_OBJECT);
     }
@@ -2932,7 +2956,7 @@ $endpoints["deactivate-account"] = function (array $requestData): void {
  * @return void
  */
 $endpoints["/"] = function (array $requestData): void {
-    $app_name = getenv('APP_NAME');
+    $app_name = "Allure-D";
     echo json_encode("You're Welcome To ". $app_name ." API End-Points!", JSON_FORCE_OBJECT);
 };
 

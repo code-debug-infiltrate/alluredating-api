@@ -1124,16 +1124,16 @@ require_once __DIR__.'/../Models/Members.php';
             //Model Function Call
             $member = $model_connect->user_create_post($fillable, $images);
 
-            if ($member != false) {
+            if ($member == true) {
 
                 $data = array(
                     'result_info' => 
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "Successfully Posted.",
+                            'message' => "Successfully Posted."
                         ),
-                    //'post_info' => $member,
+                    'post_info' => $member,
                 );
             
                 return $data; 
@@ -1145,8 +1145,9 @@ require_once __DIR__.'/../Models/Members.php';
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "Sorry, This Post Already Exists In Our Records, Be More Creative.",
+                            'message' => "Sorry, This Post Already Exists In Our Records, Be More Creative."
                         ),
+                        'post_info' => $member,
                 );
             
                 return $data; 
@@ -1752,7 +1753,7 @@ require_once __DIR__.'/../Models/Members.php';
                         array(
                             'code' => "200",
                             'type' => "success",
-                            'message' => "",
+                            'message' => "Message Sent Successfully",
                         ),
                     'user_chat_info' => $chatInfo,
                     );
@@ -1764,7 +1765,7 @@ require_once __DIR__.'/../Models/Members.php';
                         array(
                             'code' => "401",
                             'type' => "error",
-                            'message' => "No Chat Record Found. Start a Conversation",
+                            'message' => "Continue Your Conversation In Chats",
                         ),
                     'user_chat_info' => $chatInfo,
                 );
@@ -1785,7 +1786,7 @@ require_once __DIR__.'/../Models/Members.php';
             //Model Function Call
             $chatInfo = $model_connect->user_chat_messages($fillable);
 
-            if ($chatInfo == true) {
+            if ($chatInfo) {
 
                 $data = array(
                     'result_info' => 
@@ -1807,6 +1808,50 @@ require_once __DIR__.'/../Models/Members.php';
                             'message' => "No Chat Record Found. Start a Conversation",
                         ),
                     'user_chat_info' => "",
+                    );
+            }
+            
+            return $data; 
+        }
+
+
+
+
+
+
+
+        //Method to Get User Chats 
+        public function user_chat_connect($params)
+        {
+            //Member Model
+            $model_connect = new Members();
+            $fillable = array_map("htmlspecialchars", $params);
+
+            //Model Function Call
+            $chatInfo = $model_connect->user_chat_connect($fillable);
+
+            if ($chatInfo != false) {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "200",
+                            'type' => "success",
+                            'message' => "",
+                        ),
+                    'user_chat_connect' => $chatInfo,
+                    );
+
+            } else {
+
+                $data = array(
+                    'result_info' => 
+                        array(
+                            'code' => "401",
+                            'type' => "error",
+                            'message' => "No Chat Record Found. Start a Conversation",
+                        ),
+                    'user_chat_connect' => "",
                     );
             }
             
@@ -1867,7 +1912,7 @@ require_once __DIR__.'/../Models/Members.php';
             $postAct = $model_connect->user_subscription_plan($fillable);
             
  
-             if ($postAct == true) {
+             if ($postAct != false) {
  
                  $data = array(
                      'result_info' => 
@@ -1888,7 +1933,7 @@ require_once __DIR__.'/../Models/Members.php';
                              'type' => "error",
                              'message' => "No Result Found",
                          ),
-                     'result_message' => "",
+                     'result_message' => $postAct,
                      );
              }
              
